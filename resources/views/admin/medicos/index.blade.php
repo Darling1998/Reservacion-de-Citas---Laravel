@@ -1,7 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Especialidades')
-
+@section('title', 'Médicos')
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -10,63 +9,76 @@
     
 @stop
 
-
 @section('content_header')
     <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="mb-0">Especialidades</h3>
+                <h3 class="mb-0">Médicos</h3>
             </div>
             <div class="col text-right">
-                <a href="{{url('especialidades/create')}}" class="btn btn-sm btn-primary">Agregar Especialidad</a>
+                <a href="{{url('medicos/create')}}" class="btn btn-sm btn-primary">Agregar médico</a>
             </div>
         </div>
     </div>
 @stop
 
 @section('content')
-@if (session('info'))
-        <div class="alert alert-success">
-        {{session('info')}}
-        </div>
-    @endif
-
     <div class="card">
+        <div class="card-body">
+            @if (session('notificacion'))
+            <div class="alert alert-success" role="alert">
+              {{ session('notificacion') }}
+            </div>
+            @endif
+        </div> 
+
        <div class="card-body">
-            <table class=" table1 table align-items-center table-flush" id="especialidades">
+            <!-- Projects table -->
+            <table class="table align-items-center table-flush" id="medicos">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Descripcion</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col">Apellidos</th>
+                        <th scope="col">Cédula</th>
+                        <th scope="col">E-mail</th>
                         <th scope="col">Opciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($especialidades as $especialidad)
-                        <tr>
-                            <td>{{$especialidad->nombre}}</td>
-                            <td>{{$especialidad->descripcion}}</td>
-                            <td>
-                                <a href="{{route('admin.especialidades.edit',$especialidad)}}" class="btn btn-sm btn-primary">Editar</a>
-                            </td>
-                            <td>
-                                <form action="{{route('admin.especialidades.destroy',$especialidad)}}" method="POST">
-                                   @csrf
-                                   @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    @foreach( $medicos as $medico)
+                    <tr>
+                        <th scope="row">
+                            {{$medico->nombres}}
+                        </th>
+                        <th scope="row">
+                            {{$medico->apellidos}}
+                        </th>
+                        <td>
+                            {{$medico->cedula}}
+                        </td>
+                        <td>
+                            {{$medico->email}}
+                        </td>
+                        <td>
+                            
+                            <form action="{{url('/medicos/'.$medico->id)}}" method="POST">
+                                @csrf
+                                @method('DELETE')                            
+                                <a href="{{url('/medicos/'.$medico->id.'/edit')}}" class="btn btn-sm btn-success">Editar</a>
+                            <button href="" class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
                     @endforeach
-                </tbody>
+                </tbody> 
             </table>
        </div> 
     </div>
 
 @stop
+
+
 
 @section('js')
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> --}}
@@ -79,7 +91,7 @@
 
 
     <script>
-         $('#especialidades').DataTable({
+         $('#medicos').DataTable({
              responsive:true,
              autoWidth:false,
              "language": {

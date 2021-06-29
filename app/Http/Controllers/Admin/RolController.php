@@ -8,22 +8,13 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 class RolController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $roles= Role::all();
          return view('admin.roles.index',compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $permissions = Permission::all();

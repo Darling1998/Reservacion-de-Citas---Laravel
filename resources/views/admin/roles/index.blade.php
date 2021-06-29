@@ -4,7 +4,15 @@
 
 @section('content_header')
     <a class="btn btn-secondary btn-sm float-right" href="{{route('admin.roles.create')}}">Nuevo Rol</a>
-    <h1>Lista de Roles</h1>
+    <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Administrar Roles</h1>
+            </div>
+          </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -45,12 +53,4 @@
             </table>
         </div>
     </div>
-@stop
-
-@section('css')
-   {{--  <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-@stop
-
-@section('js')
-    <script> console.log('Hi!'); </script>
 @stop

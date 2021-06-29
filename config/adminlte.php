@@ -255,6 +255,11 @@ return [
                     'text' => 'Especialidades',
                     'url'  => 'especialidades',
                     'icon'=>'fas fa-stethoscope'
+                ],
+                [
+                    'text' => 'Horarios',
+                    'url'  => 'horarios',
+                    'icon'=>'fas fa-clock'
                 ]
             ],
         ],

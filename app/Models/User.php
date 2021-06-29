@@ -47,4 +47,9 @@ class User extends Authenticatable
     public function persona(){
         return $this->belongsTo(Person::class);
     }
+
+    public function scopeMedicos($query){
+        return $query->join('medicos','medicos.persona_id','=','people.id');
+    }
+    
 }

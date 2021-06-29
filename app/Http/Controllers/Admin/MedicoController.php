@@ -1,37 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
+use Illuminate\Http\Request;
 use App\Models\Person;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Medico;
+use App\Models\Especialidad;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller
+class MedicoController extends Controller
 {
- 
-
-    use RegistersUsers;
-
-   
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-    
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'nombres' => ['required', 'string', 'max:255'],
+            'nombres'=>'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
             'cedula'=>[
                 'unique:people',
                 function ($attribute, $value, $fail) {
@@ -68,7 +54,7 @@ class RegisterController extends Controller
                                 $numero_validador = 0;
                             }
                             if($numero_validador == $num10){
-                               return ;
+                            return ;
                             }else{
                                 $fail('La '.$attribute.' es invalida');
                                 //exit;
@@ -80,32 +66,75 @@ class RegisterController extends Controller
 
                     }else{
                         $fail('La '.$attribute.' es invalida');
-                        //exit;
                     }
                 }
-          
             ]
         ]);
     }
+   
+    public function index()
+    {
+        $medicos = Person::doctores()->get();
+        return view('admin.medicos.index',compact('medicos'));
+    }
 
-    
-    protected function create(array $data)
+
+    public function create(Request $request)
+    {
+        $especialidades = Especialidad::all();
+        return view('admin.medicos.create',compact('especialidades'));
+    }
+
+
+
+    public function store(Request $request)
     {
         $persona = Person::create([
-            'nombres'=>  $data['nombres'],
-            'apellidos'=>  $data['apellidos'],
-            'cedula'=>  $data['cedula'],
-            'telefono'=>  $data['telefono'],
-            'direccion'=>  $data['direccion'],
+            'nombres'=>  $request['nombres'],
+            'apellidos'=>  $request['apellidos'],
+            'cedula'=>  $request['cedula'],
+            'telefono'=>  $request['telefono'],
+            'direccion'=>  $request['direccion'],
         ]);
  
-        $usuario= User::create([
-             'persona_id'=>$persona['id'], 
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ])->assignRole('paciente');;
+        $user= User::create([
+            'persona_id'=>$persona['id'], 
+            'email' => $request['email'],
+            'password' =>bcrypt($request->input('password')),
+        ])->assignRole('doctor');
 
-        return $usuario;
+        $medico=Medico::create([
+            'persona_id'=>$persona['id'], 
+        ]);
 
+        $user->save();
+        $medico->save();
+
+        $notificacion = 'El médico se ha registrado correctamente.';
+        return redirect('/medicos')->with(compact('notificacion'));
+    }
+
+    
+    public function show($id)
+    {
+        
+    }
+
+    
+    public function edit($id)
+    {
+        
+    }
+
+    
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    
+    public function destroy($id)
+    {
+        
     }
 }

@@ -4,24 +4,55 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Especialidad;
 
 class EspecialidadController extends Controller
 {
-    public function index(){
-        return view('admin.especialidades.index');
+    public function index()
+    {
+        $especialidades= Especialidad::all();
+         return view('admin.especialidades.index',compact('especialidades'));
     }
-    public function create(){
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
         return view('admin.especialidades.create');
     }
 
-    public function edit(/* Especialidad */ $especialidad){
-        
-        return view('admin.especialidades.edit',compact('especialidad'));
+
+    public function store(Request $request)
+    {
+        $request->validate(['nombre'=>'required']);
+
+        $especialidade=Especialidad::create($request->all());
+
+    
+        return redirect()->route('admin.especialidades.edit',$especialidade)->with('info','Especialidad creada exitosamente');
     }
 
-    public function store(Request $request){
+    
+    public function show(Especialidad $especialidade)
+    {
+        return view('admin.especialidades.show',compact('especialidade'));
+    }
+
+   
+    public function edit(Especialidad $especialidade)
+    {
+        
+        return view('admin.especialidades.edit',compact('especialidade'));
+    }
+
+   
+    public function update(Request $request,Especialidad $especialidade){
+
         $reglas=[
-            'nombre'=>'required|min:4|unique:especialidads,nombre'
+            'nombre'=>'required|min:4'
         ];
 
         $alertas=[
@@ -30,13 +61,18 @@ class EspecialidadController extends Controller
         ];
 
         $this->validate($request,$reglas,$alertas);
-        //$especialidad = new Especialidad();
-/*         $especialidad->nombre = $request->input('nombre');
-        $especialidad->descripcion = $request->input('descripcion');
-        $especialidad->save(); */
 
-        $notificacion = 'La especialidad se ha registrado correctamente.';
-        return redirect('/especialidades')->with(compact('notificacion'));
-    
+        $especialidade->nombre = $request->input('nombre');
+        $especialidade->descripcion = $request->input('descripcion');
+        $especialidade->save();
+        return redirect()->route('admin.especialidades.edit',$especialidade)->with('info','La especialidad se ha actualizado correctamente');
     }
+
+    
+    public function destroy(Especialidad $especialidade)
+    {
+        $especialidade->delete();
+        return redirect()->route('admin.especialidades.index')->with('info','Especialidad eliminada correctamente');
+    }
+
 }
