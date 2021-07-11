@@ -18,18 +18,41 @@ use App\Http\Controllers\Medico\HorarioController;
 */
 
 Route::get('/', function () {
-    /* return view('home'); */
     return redirect('/home');
 });
 
 Auth::routes();
 
-Route::resource('users', UserController::class)->names('admin.users');
-Route::resource('roles', RolController::class)->names('admin.roles');
-Route::resource('especialidades', EspecialidadController::class)->names('admin.especialidades');
-Route::resource('horarios', HorarioController::class)->names('admin.horaris');
-
-
-Route::resource('medicos', MedicoController::class)->names('admin.medicos');
-Route::get('/citas',[App\Http\Controllers\CitaController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::middleware(['auth', /* 'admin' */])->group(function () {
+    Route::resource('users', UserController::class)->names('admin.users');
+    Route::resource('roles', RolController::class)->names('admin.roles');
+    Route::resource('especialidades', EspecialidadController::class)->names('admin.especialidades');
+    Route::resource('medicos', MedicoController::class)->names('admin.medicos');
+});
+
+/* Route::resource('horarios', HorarioController::class)->names('admin.horaris'); */
+
+
+//medicos
+Route::middleware(['auth'/* , 'doctor' */])->group(function () {
+    Route::get('horarios',[App\Http\Controllers\Medico\HorarioController::class, 'edit']);
+    Route::post('horarios',[App\Http\Controllers\Medico\HorarioController::class, 'store']);
+});
+
+
+///para reservar DE LADO DE PACIENTE
+Route::middleware(['auth'])->group(function () {
+    Route::get('reserva',[App\Http\Controllers\CitaController::class, 'create']);
+    Route::post('reserva',[App\Http\Controllers\CitaController::class, 'store']);
+});
+
+
+
+//JSON
+Route::get('/especialidades/{especialidad}/medicos',[App\Http\Controllers\Api\EspecialidadController::class, 'medicos']);
+Route::get('/horarios/horas',[App\Http\Controllers\Api\HorarioController::class, 'horas']);
+
+

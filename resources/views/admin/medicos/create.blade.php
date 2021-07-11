@@ -85,7 +85,7 @@
                         <div class="form-group row">
                             <label for="telefono" class="col-sm-4 col-form-label">Teléfono</label>
                             <div class="col-sm-8">
-                            <input type="text" class="form-control soloNumeros" placeholder="4515095-0986653745"
+                            <input type="text" class="form-control" placeholder="4515095-0986653745"
                                 maxlength="10" minlength="7"  name="telefono" required value="{{ old('telefono')}}">
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                         <div class="form-group row">
                             <label for="password" class="col-sm-4 col-form-label">Contraseña</label>
                             <div class="col-sm-8">
-                            <input type="text" class="form-control soloNumeros" placeholder="minimo 8 caracteres" minlength="8"  name="password" required  value="{{ old('contra',Str::random(8))}}">
+                            <input type="text" class="form-control" placeholder="minimo 8 caracteres" minlength="8"  name="password" required  value="{{ old('contra',Str::random(8))}}">
                             </div>
                         </div>
                     </div>
@@ -102,18 +102,23 @@
                 </div>
 
 
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <textarea class="form-control" rows="3" placeholder="Ingrese su dirección" 
-                    id="cliente-direccion"></textarea>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group row">
+                            <label for="direccion" class="col-sm-4 col-form-label">Dirección</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control"
+                                maxlength="10" minlength="10"  name="direccion" required value="{{ old('direccion')}}">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="form-group">
                     <label for="especialidades">Especialidades</label>
-                    <select name="especialidades[]"  class="form-control selectpicker" data-style="btn-secondary" multiple title="Asigne una o más médicos">
+                    <select name="especialidades[]" id="especialidades" class="form-control selectpicker" data-style="btn-primary" multiple title="Asigne una o más especialidades">
                         @foreach ($especialidades as $item)
                             <option value="{{$item->id}}">{{$item->nombre}}</option>
-                        @endforeach 
+                        @endforeach
                     </select>
                 </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Paciente;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Person;
@@ -99,6 +100,10 @@ class RegisterController extends Controller
             'direccion'=>  $data['direccion'],
         ]);
  
+        $paciente=Paciente::create([
+            'persona_id'=>$persona['id'], 
+        ]);
+
         $usuario= User::create([
              'persona_id'=>$persona['id'], 
             'email' => $data['email'],

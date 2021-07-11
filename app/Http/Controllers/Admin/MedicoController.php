@@ -8,6 +8,7 @@ use App\Models\Person;
 use App\Models\User;
 use App\Models\Medico;
 use App\Models\Especialidad;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class MedicoController extends Controller
@@ -89,6 +90,7 @@ class MedicoController extends Controller
 
     public function store(Request $request)
     {
+       // dd($request);
         $persona = Person::create([
             'nombres'=>  $request['nombres'],
             'apellidos'=>  $request['apellidos'],
@@ -109,9 +111,10 @@ class MedicoController extends Controller
 
         $user->save();
         $medico->save();
-
+       
+        $medico->especialidades()->attach($request->input('especialidades'));
         $notificacion = 'El médico se ha registrado correctamente.';
-        return redirect('/medicos')->with(compact('notificacion'));
+        return redirect()->route('admin.medicos.index')->with(compact('notificacion'));
     }
 
     
@@ -124,12 +127,53 @@ class MedicoController extends Controller
     public function edit($id)
     {
         
+        $medico = DB::table('medicos')
+            ->join('people',   'medicos.persona_id','=','people.id')
+            ->join('users',   'people.id','=','users.persona_id')->where('people.id','=',$id)
+            ->select('people.*', 'medicos.id as id_medico')
+            ->get()->first();
+    
+        $especialidades = Especialidad::all();
+       
+        $id_especialidades = DB::table('especialidads')
+                ->join('especialidad_medico','especialidads.id','=','especialidad_medico.especialidad_id')
+                ->where('especialidad_medico.medico_id',$medico->id_medico)
+                ->select('especialidad_medico.especialidad_id as id')
+                ->get()->pluck('id');
+
+              //  dd($id_especialidades);
+        $notificacion = 'El médico se ha registrado correctamente.';
+        
+        return view('admin.medicos.edit' ,compact('medico','especialidades','id_especialidades'));
     }
 
     
     public function update(Request $request, $id)
     {
-        //
+        
+        $reglas=[
+            'nombres'=>'required|min:3',
+            'apellidos'=>'required|min:3',
+            'cedula'=>'nullable|digits:10',
+            'telefono'=>'nullable|min:7',
+        ];
+
+
+        $this->validate($request,$reglas);
+        $medico=Medico::where('persona_id',$id)->first();
+       //dd($request,$medico);
+
+        
+        $data = $request->only('nombres','apellidos','cedula','telefono','email');
+      
+        
+        $medico->fill($data);
+        $medico->save(); 
+        $medico->especialidades()->sync($request->input('especialidades'));
+        
+        $notificacion = 'La información del médico se ha actualizado correctamente.';
+    
+        return redirect()->route('admin.medicos.index')->with(compact('notificacion'));
     }
 
     

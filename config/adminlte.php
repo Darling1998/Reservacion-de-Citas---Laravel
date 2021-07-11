@@ -246,15 +246,16 @@ return [
             'text'    => 'Registro',
             'icon'    => 'fas fa-address-book',
             'submenu' => [
-                [
-                    'text' => 'Médicos',
-                    'url'  => 'medicos',
-                    'icon'=>'fas fa-user-nurse'
-                ],
+
                 [
                     'text' => 'Especialidades',
                     'url'  => 'especialidades',
                     'icon'=>'fas fa-stethoscope'
+                ],
+                [
+                    'text' => 'Médicos',
+                    'url'  => 'medicos',
+                    'icon'=>'fas fa-user-nurse'
                 ],
                 [
                     'text' => 'Horarios',
@@ -286,11 +287,16 @@ return [
             'submenu' => [
                 [
                     'text' => 'Reservar',
-                    'url'  => 'reserva',
+                    'url'  => 'total',
                     'icon'=>'fas fa-user-nurse'
                 ]
             ],
         ],
+       /*  [
+            'text'    => 'Cerrar Sesión',
+            'icon'    => 'fas fa-print',
+            
+        ], */
 
     ],
 

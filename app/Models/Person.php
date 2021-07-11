@@ -18,6 +18,12 @@ class Person extends Model
         'telefono',
         'direccion',
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+       
+    ];
+
 
     public function usuario(){
         return $this->hasMany(User::class);
