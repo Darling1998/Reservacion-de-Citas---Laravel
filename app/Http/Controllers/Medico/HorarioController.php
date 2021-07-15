@@ -68,7 +68,7 @@ class HorarioController extends Controller
 
    public function edit()
    {
-      if(auth()->user()->hasRole('doctor')){
+      //if(auth()->user()->hasRole('doctor')){
          
          $per_medi=auth()->user()->id;
          $user = DB::table('medicos')
@@ -98,7 +98,7 @@ class HorarioController extends Controller
 
          $dias = $this->dias;
          return view('medico.horarios.horario',compact('dias_trabajo','dias'));
-      }
+      //}
 
    }
    

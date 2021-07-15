@@ -19,7 +19,7 @@
       </div>
       @endif
 
-      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <ul class="nav nav-tabs" id="pills-tab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" data-toggle="pill" href="#citas-confirmadas" role="tab" >
             Mis próximas citas
@@ -47,10 +47,10 @@
         @include('citas.tablas.pendientes')
       
       </div>
-      {{-- <div class="tab-pane fade" id="historial-citas" role="tabpanel">
+       <div class="tab-pane fade" id="historial-citas" role="tabpanel">
          @include('citas.tablas.historial')
       
-      </div> --}}
+      </div> 
     </div> 
     
   </div>

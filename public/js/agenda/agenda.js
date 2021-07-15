@@ -1,9 +1,9 @@
+let $modal;
+
 
 let $doctor,$date,$horas;
 let iRadio;
-const alertaHoras=`<div class="alert alert-danger" role="alert">
-<strong>Lo sentimos!</strong> No se encontraron horas disponibles para el médico en el día seleccionado.
-</div>`;
+
 
 $(function () {
     $especialidad = $('#especialidad');
@@ -23,16 +23,58 @@ $(function () {
 
   });    
   
-/*   function cargarMedicos(medicos) {
-    let htmlOptions = '';
-    medicos.forEach(doctor => {
-        htmlOptions += `<option value="${doctor.id}">${doctor.nombres}</option>`;
-    });
-    $doctor.html(htmlOptions);
-    cargarHoras();
-  }  */
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('agenda');
+    let formulario = document.querySelector("form");
+    $modal=$('#citaM');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale:"es",
+      headerToolbar:{
+          left: 'prev,next today',
+          center:'title',
+          right:'dayGridMonth,timeGridWeek,listWeek'
+      },
 
-  function cargarMedicos(medicos) {
+
+      
+      events: "http://127.0.0.1:8000/agenda/mostrar" ,
+        
+        
+       /*  const url = "/agenda/mostrar"
+        fetch(url)
+          .then(response => response.json()).then(data => {
+            console.log(data)
+              for (var i=0; i<data.length;i++){
+                [{
+                  start:'data[i].fecha_cita'
+                }]
+              }
+          });   */
+       //},
+
+
+
+       dateClick:function(info){
+        formulario.reset();
+
+        formulario.fecha_cita=info.date;
+        $modal.modal("show");
+      } 
+
+     
+    });
+
+
+    calendar.render();
+
+    document.getElementById("btnGuardar").addEventListener("click",function(){
+        $modal.modal("hide");
+    });
+});
+
+  
+function cargarMedicos(medicos) {
     let htmlOptions = '';
     medicos.forEach(medico => {
       htmlOptions += `<option value="${medico.id}">${medico.apellidos}</option>`;
@@ -41,13 +83,7 @@ $(function () {
     cargarHoras();
   }
 
-  $.fn.datepicker.defaults.format = "yyyy-mm-dd"; 
-
-  $('.datepicker').datepicker({startDate:0});
-
-  
-  
-  function cargarHoras(){
+function cargarHoras(){
     const selectFecha= $date.val();
     const medicoId=$doctor.val();
     const url = `/horarios/horas?fecha=${selectFecha}&medico_id=${medicoId}`;

@@ -13,4 +13,9 @@ class Paciente extends Model
     protected $fillable=[
         'persona_id',
     ];
+
+    public function persona(){
+        return $this->belongsTo(People::class);
+    }
+
 }

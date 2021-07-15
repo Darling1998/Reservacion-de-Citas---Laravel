@@ -13,8 +13,42 @@ use Illuminate\Support\Facades\Validator;
 class CitaController extends Controller
 {
     public function index(){
-         return view('citas.index');
+        $per_medi=auth()->user()->id;
+
+        if (auth()->user()->hasRole('admin')) {
+            $citasPendientes = Cita::where('estado','R')->paginate(10);
+            $citasConfirmadas = Cita::where('estado','C')->paginate(10);
+            $citasViejas= Cita::whereIn('estado',['C','A'])->orderby('fecha_cita','DESC')->paginate(10);
+
+        }elseif (auth()->user()->hasRole('doctor')){
+            
+            $user = DB::table('medicos')
+                ->join('people', 'medicos.persona_id', '=', 'people.id')
+                ->where('people.id', '=', $per_medi)
+                ->select('medicos.id as id_medico')
+                ->first();
+            $citasPendientes = Cita::where('estado','R')->where('medico_id',$user->id_medico)->paginate(1);
+            $citasConfirmadas = Cita::where('estado','C')->where('medico_id',$user->id_medico)->paginate(1);
+            $citasViejas= Cita::whereIn('estado',['Cancelada','A'])->where('medico_id',$user->id_medico)->paginate(1);
+
+        } elseif (auth()->user()->hasRole('paciente')){
+            $user = DB::table('pacientes')
+            ->join('people', 'pacientes.persona_id', '=', 'people.id')
+            ->where('people.id', '=', $per_medi)
+            ->select('pacientes.id as id_paciente')
+            ->first();
+
+            $citasPendientes = Cita::where('estado','R')->where('paciente_id',$user->id_paciente)->paginate(1);
+            $citasConfirmadas = Cita::where('estado','C')->where('paciente_id',$user->id_paciente)->paginate(1);
+            $citasViejas= Cita::whereIn('estado',['C','A'])->where('paciente_id',$user->id_paciente)->paginate(1);
+
+        } 
+
+        //dd($citasConfirmadas,$citasPendientes,$citasViejas);
+        return view('citas.index',compact('citasConfirmadas','citasPendientes','citasViejas'));
     }
+
+
     public function create(HorarioServicioInterface $horarioServ)
     {
         $especialidades=Especialidad::all();
