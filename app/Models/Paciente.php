@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Person;
 
 class Paciente extends Model
 {
@@ -12,10 +13,11 @@ class Paciente extends Model
     
     protected $fillable=[
         'persona_id',
+        'fecha_nacimiento'
     ];
 
     public function persona(){
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Person::class);
     }
 
 }

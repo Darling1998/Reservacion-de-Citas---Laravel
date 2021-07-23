@@ -30,7 +30,7 @@ class RolSeeder extends Seeder
        Permission::create(['name'=>'admin.especialidades.edit','descripcion'=>'Editar Especialidad'])->syncRoles($rol1);
        Permission::create(['name'=>'admin.especialidades.destroy','descripcion'=>'Eliminar Especialidad'])->syncRoles($rol1);
 
-       Permission::create(['name'=>'admin.medicos.index','descripcion'=>'Ver Listado Médicos'])->syncRoles($rol1); 
+       Permission::create(['name'=>'admin.medicos.index','descripcion'=>'Ver Listado Médicos'])->syncRoles($rol1,$rol2); 
        Permission::create(['name'=>'admin.medicos.create','descripcion'=>'Crear Médico'])->syncRoles($rol1);
        Permission::create(['name'=>'admin.medicos.edit','descripcion'=>'Editar Médico'])->syncRoles($rol1);
        Permission::create(['name'=>'admin.medicos.destroy','descripcion'=>'Eliminar Medico'])->syncRoles($rol1);

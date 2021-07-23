@@ -6,9 +6,9 @@
             <th scope="col"></th>
           <th scope="col">Descripción</th>
           <th scope="col">Especialidad</th>
-         {{--  @if ($role == 2) 
+          @if (auth()->user()->hasRole('doctor'))
             <th scope="col">Paciente</th>
-           @endif  --}}
+           @endif  
           <th scope="col">Fecha</th>
           <th scope="col">Hora</th>
           <th scope="col">Opciones</th>
@@ -29,9 +29,9 @@
             <td>
               {{ $cita->especialidad->nombre }}
             </td>
-            {{--@if ($role == 2)
-              <td>{{ $cita->paciente->name }}</td>
-            @endif --}}
+            @if (auth()->user()->hasRole('doctor'))
+              <td>{{ $cita->paciente->persona->nombres}} {{ $cita->paciente->persona->apellidos }}</td>
+            @endif 
             <td>
               {{ $cita->fecha_cita }}
             </td>
@@ -50,6 +50,13 @@
                 href="{{ url('/citas/'.$cita->id.'/cancelar') }}">
                   Cancelar
               </a>
+
+              @if (auth()->user()->hasRole('doctor') || auth()->user()->hasRole('asistente')) 
+              <a class="btn btn-sm btn-primary" title="Ir a Consulta"  href="{{url('/consulta/'.$cita->id.'/edit')}}">
+                Ir a Consulta
+              </a> 
+             @endif  
+
             </td>
           </tr>
         @endforeach  

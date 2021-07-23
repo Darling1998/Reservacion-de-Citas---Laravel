@@ -32,7 +32,7 @@ class EspecialidadController extends Controller
         $especialidade=Especialidad::create($request->all());
 
     
-        return redirect()->route('admin.especialidades.edit',$especialidade)->with('info','Especialidad creada exitosamente');
+        return redirect()->route('admin.especialidades.index')->with('info','Especialidad creada exitosamente');
     }
 
     

@@ -29,7 +29,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="">
-                        <div class="card card-danger">
+                        <div class="card ">
                             <div class="card-header">
                               <h3 class="card-title">Información del Paciente</h3>
                             </div>

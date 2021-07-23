@@ -33,28 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
       headerToolbar:{
           left: 'prev,next today',
           center:'title',
-          right:'dayGridMonth,timeGridWeek,listWeek'
+          right:'dayGridMonth,timeGridWeek,listWeek,agendaWeek'
       },
 
 
       
       events: "http://127.0.0.1:8000/agenda/mostrar" ,
         
-        
-       /*  const url = "/agenda/mostrar"
-        fetch(url)
-          .then(response => response.json()).then(data => {
-            console.log(data)
-              for (var i=0; i<data.length;i++){
-                [{
-                  start:'data[i].fecha_cita'
-                }]
-              }
-          });   */
-       //},
-
-
-
        dateClick:function(info){
         formulario.reset();
 

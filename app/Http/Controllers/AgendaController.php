@@ -27,7 +27,7 @@ class AgendaController extends Controller
 
      public function show(Cita $citas){
 
-        $todas= new Cita;
+        $todas= new Cita();
         
         
         return $todas->getAllCitas();;

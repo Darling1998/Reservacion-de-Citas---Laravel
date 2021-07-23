@@ -44,7 +44,7 @@ class CitaController extends Controller
 
         } 
 
-        //dd($citasConfirmadas,$citasPendientes,$citasViejas);
+       // dd($citasConfirmadas,$citasPendientes,$citasViejas);
         return view('citas.index',compact('citasConfirmadas','citasPendientes','citasViejas'));
     }
 
@@ -145,4 +145,18 @@ class CitaController extends Controller
         return back()->with(compact('notificacion'));
 
     }
+
+    public function postConfirmar(Cita $cita){
+
+    
+        $cita->estado='C';
+        
+        $guardado = $cita->save();
+      
+ 
+        $notificacion='La cita se ha confirmado correctamente';
+      
+        return redirect('/citas')->with(compact('notificacion'));
+    }
+ 
 }

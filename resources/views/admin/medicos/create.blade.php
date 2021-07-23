@@ -112,6 +112,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group row">
+                            <label for="genero" class="col-sm-4 col-form-label">Género</label>
+                            <div class="col-md-6">
+                                <div class="checkbox icheck">
+                                    <label >
+                                      <input type="radio" name="genero" value="M" > Masculino&nbsp;&nbsp;
+                                      <input type="radio" name="genero" value="F"> Femenino
+                                    </label>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="especialidades">Especialidades</label>

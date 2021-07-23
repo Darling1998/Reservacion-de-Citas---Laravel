@@ -40,16 +40,32 @@
             </td>
 
             <td>
-              {{--  @if ($role == 1) 
+
+              @if(auth()->user()->hasRole('admin'))
                 <a class="btn btn-sm btn-primary" title="Ver cita" 
-                  href="{{ url('/citas/'.$cita->id) }}">
-                    Ver
-                </a> 
-              @endif  --}}
+                href="{{ url('/reserva/'.$cita->id) }}">
+                  Ver
+              </a> 
+              @endif
+              
+              @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('doctor')) 
+              <form action="{{ url('/reserva/'.$cita->id.'/confirmar') }}"
+                method="POST" class="d-inline-block">
+                @csrf
+                <button class="btn btn-sm btn-success" type="submit" 
+                  data-toggle="tooltip" title="Confirmar cita">
+                  Confirmar
+                </button>
+              </form>
+             @endif    
+
               <a class="btn btn-sm btn-danger" title="Cancelar cita" 
-                href="{{ url('/citas/'.$cita->id.'/cancelar') }}">
+                href="{{ url('/reserva/'.$cita->id.'/cancelar') }}">
                   Cancelar
               </a>
+
+ 
+
             </td>
           </tr>
         @endforeach  

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Paciente;
 class Cita extends Model
 {
     use HasFactory;
@@ -36,6 +36,10 @@ class Cita extends Model
      ->join('people', 'pacientes.persona_id', '=', 'people.id')
         ->get();
         return $citas;
+    }
+
+    public function paciente(){
+        return $this->belongsTo(Paciente::class);
     }
 
 

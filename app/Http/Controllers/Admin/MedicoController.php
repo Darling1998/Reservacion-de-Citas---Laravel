@@ -97,6 +97,7 @@ class MedicoController extends Controller
             'cedula'=>  $request['cedula'],
             'telefono'=>  $request['telefono'],
             'direccion'=>  $request['direccion'],
+            'genero'=>$request['genero'],
         ]);
  
         $user= User::create([

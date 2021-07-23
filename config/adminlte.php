@@ -65,7 +65,7 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
@@ -266,11 +266,16 @@ return [
                     'icon'=>'fas fa-user-nurse'
                 ],
                 [
+                    'text' => 'Pacientes',
+                    'url'  => 'pacientes',
+                    'icon'=>'fas fa-user-injured',
+                ],
+                [
                     'text' => 'Horarios',
                     'url'  => 'horarios',
                     'icon'=>'fas fa-clock',
                     
-                ]
+                ],
             ],
         ],
         [
@@ -292,6 +297,22 @@ return [
                     'text' => 'Agenda',
                     'url'  => 'agenda',
                     'icon'=>'fas fa-calendar-alt'
+                ],
+                [
+                    'text' => 'Consulta',
+                    'url'  => 'consulta',
+                    'icon'=>''
+                ],
+                [
+                    'text' => 'Recetas',
+                    'submenu' => [
+
+                        [
+                            'text' => 'Crear Receta',
+                            'url'  => 'receta',
+                            'icon'=>''
+                        ],
+                    ]
                 ]
             ],
         ],
@@ -307,9 +328,10 @@ return [
                 ]
             ],
         ],
-         [
+        [
             'text'    => 'Cerrar Sesión',
-            'icon'    => 'fas fa-print',
+            'icon'    => 'fas fa-sign-out-alt',
+            'url'=>'logout'
             
         ]
 
