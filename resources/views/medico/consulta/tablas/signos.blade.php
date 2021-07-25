@@ -3,6 +3,10 @@
       <div class="card-body">
         <form action="{{ url('consulta/signos') }}" method="post"> 
           @csrf
+
+          
+          <input  name="cita_id" type="hidden" value="{{$citas->cita_id}}">
+          <input  name="hce" type="hidden" value="{{$citas->hce}}">
           <div class="form-row">
             <div class="form-group col-md-3">
               <label class="col-form-label"><strong>Talla:</strong></label>
@@ -12,7 +16,7 @@
                     <img src="https://image.flaticon.com/icons/png/512/3209/3209114.png" {{-- class="rounded-circle" --}} width="30px" height="30px">
                   </span>
                 </div>
-                <input type="text" class="form-control" placeholder="12 Cm" id="talla" name="talla" minlength="1" maxlength="6" pattern="\S[0-9A-Za-z, ]{1,6}" required="">
+                <input type="text" class="form-control" placeholder="12 Cm" id="talla" name="talla" required="" value="{{ old('talla',$consulta->talla)}}" >
               </div>
             </div>
             <div class="form-group col-md-3">
@@ -23,7 +27,7 @@
                     <img src="https://image.flaticon.com/icons/png/512/2865/2865378.png" {{-- class="rounded-circle" --}} width="30px" height="30px">
                   </span>
                 </div>
-                <input type="text" class="form-control" placeholder="55,5 Kg" id="peso" name="peso" minlength="1" maxlength="8" pattern="\S[A-Za-z0-9,. ]{1,8}" required="">
+                <input type="text" class="form-control" placeholder="55,5 Kg" id="peso" name="peso"  value="{{ old('peso',$consulta->peso)}}">
               </div>
             </div>
             <div class="form-group col-md-3">
@@ -34,7 +38,7 @@
                     <img src="https://image.flaticon.com/icons/png/512/884/884028.png" {{-- class="rounded-circle" --}} width="30px" height="30px">
                   </span>
                 </div>
-                <input type="text" class="form-control" name="ta"  required="">
+                <input type="text" class="form-control" name="presion"  required="" value="{{ old('presion',$consulta->presion)}}" >
               </div>
             </div>
             <div class="form-group col-md-3">
@@ -45,17 +49,17 @@
                     <img src="https://image.flaticon.com/icons/png/512/2316/2316581.png" {{-- class="rounded-circle" --}} width="30px" height="30px">
                   </span>
                 </div>
-                <input type="text" class="form-control" placeholder="36°" name="temperatura" minlength="1" maxlength="6" pattern="\S[A-Za-z0-9,. ]{1,6}" required="">
+                <input type="text" class="form-control" placeholder="36°" name="temperatura"  required="" value="{{ old('temperatura',$consulta->temperatura)}}">
               </div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-12">
               <label class="col-form-label"><strong>Observación:</strong></label>
-              <textarea class="form-control"  name="dexamen"></textarea>
+              {!! Form::textarea('observacion', $consulta->observacion, ['class'=>'form-control']) !!}
             </div>
           </div>
-          @if ( auth()->user()->hasRole('asistente')) 
+         {{--  @if ( auth()->user()->hasRole('asistente'))  --}}
           <div class="container">
             <div class="row">
               <div class="col text-center">
@@ -63,7 +67,9 @@
               </div>
             </div>
           </div>
-          @endif
+         {{--  @endif --}}
+
+         
         </form>
       </div>
     </div>

@@ -1,13 +1,13 @@
 <div class="card">
     <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
       <div class="card-body">
-        <form action="{{ url('') }}" method="post"> 
+        <form action="{{ url('consulta/diagnostico') }}" method="post"> 
           @csrf
-
+          <input  name="consulta_id" type="hidden" value="{{$consulta->id}}">
             <div class="row ">
                 <div class="form-group col-md-6 col-lg-6">
                     <label class="col-form-label"><strong>Motivo Consulta:</strong></label>
-                    <textarea class="form-control" id="motivo" name="motivo"></textarea>
+                    {!! Form::textarea('motivo', $citas->motivo, ['class'=>'form-control']) !!}
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-6">
@@ -22,9 +22,9 @@
                 <div class="form-group col-md-12">
                     <label class="select-diagnostico"><strong>Diagnostico:</strong></label>
                     <div class="search_select_box">
-                        <select class="select"  name="diagnosticos[]" id="select-diagnostico">
+                        <select class="form-control multiple-select"  name="diagnosticos[]" id="select-diagnostico" multiple>
                             @foreach ($diagnosticos as $item)
-                                <option value="{{$item->codigo}}"> {{$item->codigo}}- {{$item->descripcion}}</option>
+                                <option value="{{$item->id}}"> {{$item->codigo}}- {{$item->descripcion}}</option>
                             @endforeach
                            
                           </select>
@@ -35,34 +35,22 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label class="col-form-label"><strong>Observación:</strong></label>
-                    <textarea class="form-control" id="observacion" name="observacion"></textarea>
+                    {!! Form::textarea('observacion',null, ['class'=>'form-control']) !!}
                 </div>
             </div>
+
+            
+            @if ( auth()->user()->hasRole('doctor')) 
+            <div class="container">
+              <div class="row">
+                <div class="col text-center">
+                  <button type="submit" class="btn btn-primary"> Guardar</button>
+                </div>
+              </div>
+            </div>
+            @endif
         </form>
       </div>
     </div>
   </div>
 
-
-
-{{-- 
- --}}
-{{-- 
-<div class="card direct-chat direct-chat-primary">
-    <div class="card-header ui-sortable-handle" style="cursor: move;">
-        <h3 class="card-title">Crear Receta</h3>
-
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-    </div>
-    
-    <div class="card-body" style="display: block;">
-
-    </div>
-
-    
-</div>
- --}}

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetalleRecetaTable extends Migration
+class CreateConsultaDiagnosticoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,16 @@ class CreateDetalleRecetaTable extends Migration
      */
     public function up()
     {
-        Schema::create('detalle_receta', function (Blueprint $table) {
+        Schema::create('consulta_diagnostico', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('id_indicacion');
-            $table->foreign('id_indicacion')->references('id')->on('indicaciones_medicamentos')->onDelete('cascade');
-
-            $table->unsignedBigInteger('id_descripcion');
-            $table->foreign('id_descripcion')->references('id')->on('descripcion_medicamentos')->onDelete('cascade');
-
-
+            //consula
             $table->unsignedBigInteger('consulta_id');
             $table->foreign('consulta_id')->references('id')->on('consulta')->onDelete('cascade');
 
-
-            
+            //receta_Detalle
+            $table->unsignedBigInteger('diagnostico_id');
+            $table->foreign('diagnostico_id')->references('id')->on('diagnosticos')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -40,6 +35,6 @@ class CreateDetalleRecetaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detalle_receta');
+        Schema::dropIfExists('consulta_diagnostico');
     }
 }

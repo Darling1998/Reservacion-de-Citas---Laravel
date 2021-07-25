@@ -54,6 +54,7 @@ Route::middleware(['auth' /* ,'doctor' */ ])->group(function () {
 //Guardar Antecedentes
  /* Route::post('antecedentes', [App\Http\Controllers\Medico\ConsultaController::class,]); */
  Route::post('consulta/signos', [App\Http\Controllers\Medico\ConsultaController::class,'guardarSignos']);
+ Route::post('consulta/diagnostico', [App\Http\Controllers\Medico\ConsultaController::class,'guardarDiagnostico']);
 
 ///para reservar DE LADO DE PACIENTE
 Route::middleware(['auth'/* ,'paciente' */])->group(function () {

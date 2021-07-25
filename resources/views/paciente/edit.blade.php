@@ -8,7 +8,7 @@
         <div class="card-header p-0 pt-1 border-bottom-0">
             <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active show"  data-toggle="pill" href="#editar" role="tab">Editar</a>
+                <a class="nav-link active"  data-toggle="pill" href="#editar" role="tab">Editar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"  data-toggle="pill" href="#antecedentes" role="tab" >Antecedentes</a>
@@ -19,7 +19,7 @@
         <div class="card-body">
             <div class="tab-content" id="custom-tabs-three-tabContent">
                 {{-- Primer TAB --}}
-                <div class="tab-pane fade" id="editar" role="tabpanel">
+                <div class="tab-pane fade show active" id="editar" role="tabpanel">
                    <div class="card">
                         <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
                             <form action="{{url('pacientes/'.$paciente->id)}}" method="POST">
@@ -139,11 +139,13 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label" for="ante_per"><strong>Antecedentes Personales:</strong> <small>Clínicos, Quirúrgicos</small></label>
-                                        <textarea class="form-control" name="ante_per"></textarea>
+                                        {!! Form::textarea('antecedentes_personales', $paciente->antecedentes_personales, ['class'=>'form-control']) !!}
+                                       {{--  <textarea class="form-control" name="antecedentes_personales" value="{{ old('antecedentes_personales',)}}"></textarea> --}}
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label"><strong>Historia Personal:</strong> <small>Causa muerte padre, madre o hijos</small></label>
-                                        <textarea class="form-control" name="historia_personal"></textarea>
+                                        {!! Form::textarea('historia_personal', $paciente->historia_personal, ['class'=>'form-control']) !!}
+                                        {{-- <textarea class="form-control" name="historia_personal" value="{{ old('historia_personal',$paciente->historia_personal)}}"></textarea> --}}
                                     </div>
                                 </div>
                                 {{-- @if ($item->sexo=="F") --}}
@@ -152,7 +154,7 @@
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Ciclos:</strong></label>
                                         <div class="input-group">
-                                        <input type="text" class="form-control"   name="ciclos">
+                                        <input type="text" class="form-control"   name="ciclos" value="{{ old('ciclos',$paciente->ciclos)}}">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
@@ -163,21 +165,21 @@
                                             </div>
                             
                                             <input class="form-control datepicker" 
-                                                name="fecha_menstr"
-                                                value="{{old('fecha_menstr')}}">
+                                                name="fecha_ultima_menstruacion"
+                                                value="{{old('fecha_ultima_menstruacion',$paciente->fecha_ultima_menstruacion)}}">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Gestas:</strong></label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="gestas"  required="">
+                                            <input type="text" class="form-control" name="gestas" value="{{ old('gestas',$paciente->gestas)}}">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Parto:</strong></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control"  name="parto" required="">
-                                        </div>
+                                      {{--   <div class="input-group">
+                                            <input type="text" class="form-control"  name="parto"  value="{{ old('parto',$paciente->parto)}}" >
+                                        </div> --}}
                                     </div>
                                 </div>
                                 
@@ -185,25 +187,25 @@
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label"><strong>Menarquia:</strong></label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" required="" name="menarquia">
+                                            <input type="text" class="form-control"  name="menarquia" value="{{ old('menarquia',$paciente->menarquia)}}">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Cesáreas:</strong></label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" required="" name="numCesa">
+                                            <input type="text" class="form-control"  name="cesareas" value="{{ old('cesareas',$paciente->cesareas)}}">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Abortos:</strong></label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" required="" name="numAbortos" >
+                                            <input type="text" class="form-control"  name="abortos" value="{{ old('abortos',$paciente->abortos)}}"  >
                                         </div>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="col-form-label"><strong>Hijos:</strong></label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" required="" name="numHijos">
+                                            <input type="text" class="form-control"  name="hijos" value="{{ old('hijos',$paciente->hijos)}}" >
                                         </div>
                                     </div>
                                     <div class="form-group col-md-2">
@@ -226,12 +228,14 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label"><strong>Hábitos Psicobiologicos:</strong> <small>Uso de drogas, Alcohol</small></label>
-                                        <textarea class="form-control"  name="habiPsicobiologicos"></textarea>
+                                        {!! Form::textarea('habitos_toxicos', $paciente->habitos_toxicos, ['class'=>'form-control']) !!}
+                                        {{-- <textarea class="form-control"  name="habitos_toxicos" ></textarea> --}}
                                     </div>
                     
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label"><strong>Examen Funcional:</strong></label>
-                                        <textarea class="form-control"  name="v" required></textarea>
+                                        {!! Form::textarea('examen_funcional', $paciente->examen_funcional, ['class'=>'form-control']) !!}
+                                       {{--  <textarea class="form-control"  name="examen_funcional" ></textarea> --}}
                                     </div>
                                 </div>
                                 <div class="container">
@@ -243,6 +247,7 @@
                                 </div>
                              
                             </form>
+                            <br>
                             </div>
                         </div>
                     </div>

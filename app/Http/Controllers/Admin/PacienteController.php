@@ -66,8 +66,9 @@ class PacienteController extends Controller
         $paciente = DB::table('pacientes')
         ->join('hce','pacientes.id','=','hce.paciente_id')
         ->join('people',   'pacientes.persona_id','=','people.id')
+        ->join('antecedentes','pacientes.id','=','hce.paciente_id')
         ->join('users',   'people.id','=','users.persona_id')->where('people.id','=',$id)
-        ->select('people.*', 'pacientes.id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his')
+        ->select('people.*', 'pacientes.id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his','antecedentes.*')
         ->get()->first();
 
         //dd($id,$paciente);
@@ -84,18 +85,18 @@ class PacienteController extends Controller
                'paciente_id'=>$request->paciente_id
             ],
             [  
-                'antecedentes_personales'=>$request->ante_per,
+                'antecedentes_personales'=>$request->antecedentes_personales,
                 'historia_personal'=>$request->historia_personal,
                 'menarquia'=>$request->menarquia,
                 'ciclos'=>$request->ciclos,
-                'fecha_ultima_menstruacion'=>$request->fecha_menstr,
+                'fecha_ultima_menstruacion'=>$request->fecha_ultima_menstruacion,
                 'gestas'=>$request->gestas,
-                'cesareas'=>$request->numCesa,
-                'abortos'=>$request->numAbortos,
-                'hijos'=>$request->numHijos,
+                'cesareas'=>$request->cesareas,
+                'abortos'=>$request->abortos,
+                'hijos'=>$request->hijos,
                 'activo'=>$request->activo,
-                'habitos_toxicos'=>$request->habiPsicobiologicos,
-                'examen_funcional'=>$request->habiPsicobiologicos,
+                'habitos_toxicos'=>$request->habitos_toxicos,
+                'examen_funcional'=>$request->examen_funcional,
 
             ]
          );

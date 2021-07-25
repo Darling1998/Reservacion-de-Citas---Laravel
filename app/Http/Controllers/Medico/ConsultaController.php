@@ -6,31 +6,41 @@ use App\Http\Controllers\Controller;
 use App\Models\Antecedentes;
 use Illuminate\Http\Request;
 use App\Models\Cita;
+use App\Models\Consulta;
 use App\Models\Diagnostico;
+use COM;
 use Illuminate\Support\Facades\DB;
 class ConsultaController extends Controller
 {
 
     public function edit($id){
 
-        $diagnosticos= Diagnostico::all();
-       // dd($id);
-/*         $paciente = DB::table('pacientes')
+        $citas = DB::table('citas')
+        ->join('pacientes','citas.paciente_id','=','pacientes.id')
         ->join('hce','pacientes.id','=','hce.paciente_id')
-        ->join('people',   'pacientes.persona_id','=','people.id')
-        ->join('users',   'people.id','=','users.persona_id')->where('people.id','=',$id)
-        ->select('people.*', 'pacientes.id as id_medico','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his')
+        ->where('citas.id','=',$id)
+        ->select('citas.id as cita_id','hce.id as hce', 'citas.descripcion as motivo')
         ->get()->first();
 
-       // dd($id); */
-        return view('medico.consulta.index',compact('diagnosticos'));
+        $consulta=DB::table('consulta')
+        ->where('cita_id','=',$id)
+        ->get()->first();;
+        //cargarmos el select con CIE-10
+        $diagnosticos= Diagnostico::all();
+
+        $id_diagnosticos = DB::table('diagnosticos')
+        ->join('consulta_diagnostico','diagnosticos.id','=','consulta_diagnostico.diagnostico_id')
+        ->where('consulta_diagnostico.consulta_id',$consulta->id)
+        ->select('consulta_diagnostico.diagnostico_id as id')
+        ->get()->pluck('id');
+        return view('medico.consulta.index',compact('diagnosticos','citas','consulta','id_diagnosticos'));
     }
 
 /* 
     public function show( $id){
 
         $info= DB::table('citas')
-        ->select('people.nombres as nombres','people.apellidos as apellidos','people.genero as sexo','pacientes.id as paciente_id')
+        ->select('people.cita_id as cita_id','people.hce as hce','people.motivo as sexo','pacientes.id as paciente_id')
         ->join('pacientes',   'citas.paciente_id','=','pacientes.id')
         ->join('people',   'people.id','=','pacientes.persona_id')
         ->where('citas.id','=',$id)
@@ -56,6 +66,32 @@ class ConsultaController extends Controller
 
 
     public function guardarSignos(Request $request){
-        dd($request);
+
+        //dd($request);
+        $consulta = Consulta::create([
+            'cita_id'=>  $request['cita_id'],
+            'hce_id'=>  $request['hce'],
+            'presion'=>  $request->presion,
+            'peso'=>  $request['peso'],
+            'temperatura'=>  $request['temperatura'],
+            'observacion'=>$request->observacion,
+            'talla'=>$request['talla'],
+            
+        ]);
+
+       
+    }
+
+    public function guardarDiagnostico(Request $request){
+        //dd($request);
+        $consulta= Consulta::findorFail($request->consulta_id);
+        $consulta->diagnosticos()->attach($request->input('diagnosticos'));
+        $notificacion = 'Diagnosticos asignados correctamente';
+        return back()->with(compact('notificacion'));
+      
+    }
+
+    public function store(Request $request){
+
     }
 }

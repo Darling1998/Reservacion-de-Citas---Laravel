@@ -10,6 +10,15 @@
 
 @section('content')
 
+  <div class="card">
+    <div class="card-body">
+      @if (session('notificacion'))
+      <div class="alert alert-success" role="alert">
+        {{ session('notificacion') }}
+      </div>
+      @endif
+    </div> 
+
     <div class="card card-primary card-outline card-tabs">
       <div class="card-header p-0 pt-1 border-bottom-0">
         <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -28,23 +37,24 @@
 
       <div class="card-body">
         <div class="tab-content" id="custom-tabs-three-tabContent">
+          @if (auth()->user()->hasRole('doctor') || auth()->user()->hasRole('asistente')) 
             <div class="tab-pane fade" id="signos" role="tabpanel" >
-              @if (auth()->user()->hasRole('doctor') || auth()->user()->hasRole('asistente')) 
                 @include('medico.consulta.tablas.signos')
-              @endif
             </div>
-
-            @if (auth()->user()->hasRole('doctor')) 
-              <div class="tab-pane fade" id="consulta" role="tabpanel" >
+          @endif
+             @if (auth()->user()->hasRole('doctor')) 
+              <div class="tab-pane fade active" id="consulta" role="tabpanel" >
                 @include('medico.consulta.tablas.consulta')
               </div>
                <div class="tab-pane fade " id="tratamiento" role="tabpanel" >
                 @include('medico.consulta.tablas.tratamiento')
               </div> 
-            @endif
+             @endif 
         </div>
       </div>
     </div>
+  </div>
+  
 
 @endsection
 
@@ -54,11 +64,76 @@
   <script>
     
       $(document).ready(function() {
-          $('.select').select2({
+       
+          $('.multiple-select').select2({
             placeholder: 'Seleccione Cie-10',
             width: '100%',
+            theme: "classic",
             dropdownAutoWidth : true
           });
-      });
+        });
+ 
+        $('#select-diagnostico').val(@json($id_diagnosticos));
+        $('#select-diagnostico').trigger('change');
+        
+   
   </script>
+  <script>
+
+    $( document ).ready(function(){
+      $("#btnNuevoMedicamento").on('click',funcNuevoMedicamento);
+      $("table").on('click',".btn-danger",functEliminarFila)
+    })
+  
+    function functEliminarFila(){
+      $(this).parent().parent().remove();
+    }
+
+    function funcNuevoMedicamento(){
+      $("#tableReceta")
+      .append
+      (
+        $('<tr>')
+        .append
+        (
+          $('<td>')
+          .append
+          (
+            $('<input>').attr('type','text').addClass('form-control')
+          )
+        )
+        .append
+        (
+          $('<td>')
+          .append
+          (
+            $('<input>').attr('type','text').addClass('form-control')
+          )
+        )
+        .append
+        (
+          $('<td>')
+          .append
+          (
+            $('<input>').attr('type','text').addClass('form-control')
+          )
+        )
+        .append
+        (
+          $('<td>').addClass('text-center')
+          .append
+          (
+            $('<div>').addClass('btn btn-primary').text('Guardar')
+          )
+          .append
+          (
+            $('<div>').addClass('btn btn-danger').text('Eliminar')
+          )
+        )
+      );
+    }
+  
+  </script>
+
+
 @stop

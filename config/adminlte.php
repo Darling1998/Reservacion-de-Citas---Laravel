@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>ServiNatal</b>',
+    'logo_img' => 'vendor/adminlte/dist/img/logo.jpg',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    'logo_img_alt' => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-lime elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -231,7 +231,7 @@ return [
         
         [
             'text'    => 'Seguridad',
-            'icon'    => 'fas fa-shield-alt',
+            'icon'    => 'fas fa-shield-alt text-info',
             
             'submenu' => [
                 [
@@ -250,7 +250,7 @@ return [
         ],
         [
             'text'    => 'Registro',
-            'icon'    => 'fas fa-address-book',
+            'icon'    => 'fas fa-address-book text-teal',
             
             'submenu' => [
 
@@ -280,7 +280,7 @@ return [
         ],
         [
             'text'    => 'Gestión',
-            'icon'    => 'fas fa-address-book',
+            'icon'    => 'fas fa-address-book text-purple',
             'submenu' => [
 
                 [
@@ -299,11 +299,6 @@ return [
                     'icon'=>'fas fa-calendar-alt'
                 ],
                 [
-                    'text' => 'Consulta',
-                    'url'  => 'consulta',
-                    'icon'=>''
-                ],
-                [
                     'text' => 'Recetas',
                     'submenu' => [
 
@@ -318,7 +313,7 @@ return [
         ],
         [
             'text'    => 'Reportes',
-            'icon'    => 'fas fa-chart-line',
+            'icon'    => 'fas fa-chart-line text-orange',
             
             'submenu' => [
                 [
@@ -330,7 +325,7 @@ return [
         ],
         [
             'text'    => 'Cerrar Sesión',
-            'icon'    => 'fas fa-sign-out-alt',
+            'icon'    => 'fas fa-sign-out-alt text-red',
             'url'=>'logout'
             
         ]

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDescripcionMedicamentosTable extends Migration
+class CreateDetalleRecetaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateDescripcionMedicamentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('descripcion_medicamentos', function (Blueprint $table) {
+        Schema::create('detalle_receta', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad');
-            $table->string('medicamento');
+            $table->string('cantidad');
+            $table->string('nombre_medicamento');
+            $table->text('indicaciones');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateDescripcionMedicamentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descripcion_medicamentos');
+        Schema::dropIfExists('detalle_receta');
     }
 }

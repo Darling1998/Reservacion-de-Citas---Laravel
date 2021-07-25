@@ -19,7 +19,7 @@ class CreateConsultaTable extends Migration
             $table->float('peso')->nullable();
             $table->string('presian_arterial')->nullable();
             $table->float('talla')->nullable();
-            $table->string('frecuencia_cardiaca')->nullable();
+            $table->integer('temperatura')->nullable();
 
            
             $table->unsignedBigInteger('cita_id');

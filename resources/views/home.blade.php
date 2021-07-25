@@ -11,8 +11,7 @@
         <div class="card-body">
             <h5 class="card-title"></h5>
             <p class="card-text"><strong>Bienvendos al sistema ServiNatal.</strong></p>
-            <img src="https://pbs.twimg.com/profile_images/1109133989141532678/kgt0l0lk.jpg" class="img-fluid" alt="Responsive image">
-            
+                        
         </div>
     </div>
   
