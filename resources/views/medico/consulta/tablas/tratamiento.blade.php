@@ -1,8 +1,24 @@
 <div class="card">
+
+  <div class="card-body">
+    @if (session('alerta'))
+    <div class="alert alert-success" role="alert">
+      {{ session('alerta') }}
+      <a href="{{ url('receta/imprimir/'.$consulta->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-print fa-sm text-white-50"></i>
+        Imprimir
+      </a>
+    </div>
+    @endif
+  </div> 
+
+
     <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
       <div class="card-body">
-        <form action="{{ url('') }}" method="post"> 
+        <form action="{{ url('consulta/receta') }}" method="post" class="formulario-receta"> 
+          
           @csrf
+          
             <div class="form-group card-body table-responsive">
                 <label for="receta">
                     Receta Médica
@@ -17,17 +33,18 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" class="form-control">
+                          <input  name="consulta_id" type="hidden" value="{{$consulta->id}}"> 
+                            <input type="text" class="form-control" name="descripcion[]">
                         </td>
 
                         <td>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="cantidad[]">
                         </td>
                         <td>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" name="indicaciones[]">
                         </td>
                         <td class="text-center">
-                            <div class=" btn btn-primary">Guardar </div>
+                            
                             <div class=" btn btn-danger">Eliminar </div>
                         </td>
                     </tr>
@@ -48,8 +65,27 @@
     </div>
   </div>
 
-{{--   <script
-  src="https://code.jquery.com/jquery-3.6.0.js"
-  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-  crossorigin="anonymous"></script>
+{{--   <div class="modal fade" id="myModal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Default Modal</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center">Formula Medica Registrada</h5>
+          <span class="alert-success" role="alert">  </span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" onclick="imprimirreceta('129323','2021-08-04','12:35:17');">IMPRIMIR</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetearNuevo();">CERRAR</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
  --}}
+ 

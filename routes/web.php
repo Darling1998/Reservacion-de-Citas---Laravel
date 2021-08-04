@@ -6,8 +6,11 @@ use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\EspecialidadController;
 use App\Http\Controllers\Admin\MedicoController;
 use App\Http\Controllers\Admin\PacienteController;
+use App\Http\Controllers\Asistente\SignosController;
 use App\Http\Controllers\ExamenController;
 use App\Http\Controllers\Medico\ConsultaController;
+use App\Mail\ReservadaMailable;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +27,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+
 Route::get('logout' ,[App\Http\Controllers\HomeController::class, 'logout']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -39,6 +44,9 @@ Route::middleware(['auth',/*  'admin' */])->group(function () {
 });
 
 
+Route::post('signos', [App\Http\Controllers\Asistente\SignosController::class, 'guardarSignos']);
+Route::get('signos/consulta/{id}/create', [App\Http\Controllers\Asistente\SignosController::class,'create']);
+Route::get('receta/imprimir/{id}' ,[App\Http\Controllers\Medico\ConsultaController::class,'imprimir']);
 
 
 //medicos
@@ -55,6 +63,7 @@ Route::middleware(['auth' /* ,'doctor' */ ])->group(function () {
  /* Route::post('antecedentes', [App\Http\Controllers\Medico\ConsultaController::class,]); */
  Route::post('consulta/signos', [App\Http\Controllers\Medico\ConsultaController::class,'guardarSignos']);
  Route::post('consulta/diagnostico', [App\Http\Controllers\Medico\ConsultaController::class,'guardarDiagnostico']);
+ Route::post('consulta/receta', [App\Http\Controllers\Medico\ConsultaController::class,'guardarReceta']);
 
 ///para reservar DE LADO DE PACIENTE
 Route::middleware(['auth'/* ,'paciente' */])->group(function () {
@@ -72,4 +81,5 @@ Route::get('/horarios/horas',[App\Http\Controllers\Api\HorarioController::class,
 
 Route::get('agenda',[App\Http\Controllers\AgendaController::class, 'index']);
 Route::get('agenda/mostrar',[App\Http\Controllers\AgendaController::class, 'show']);
+
 

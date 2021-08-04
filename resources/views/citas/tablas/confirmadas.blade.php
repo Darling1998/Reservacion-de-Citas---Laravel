@@ -51,7 +51,13 @@
                   Cancelar
               </a>
 
-              @if (auth()->user()->hasRole('doctor') || auth()->user()->hasRole('asistente')) 
+              @if (auth()->user()->hasRole('asistente') ) 
+              <a class="btn btn-sm btn-primary" title="Registrar Signos" href="{{url('signos/consulta/'.$cita->id.'/create')}}">
+                Registrar Signos
+              </a> 
+             @endif  
+
+              @if (auth()->user()->hasRole('doctor') ) 
               <a class="btn btn-sm btn-primary" title="Ir a Consulta"  href="{{url('/consulta/'.$cita->id.'/edit')}}">
                 Ir a Consulta
               </a> 

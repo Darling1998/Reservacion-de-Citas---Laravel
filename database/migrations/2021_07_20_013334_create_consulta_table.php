@@ -15,9 +15,9 @@ class CreateConsultaTable extends Migration
     {
         Schema::create('consulta', function (Blueprint $table) {
             $table->id();
-            $table->text('motivo')->nullable();
+            $table->text('observacion')->nullable();
             $table->float('peso')->nullable();
-            $table->string('presian_arterial')->nullable();
+            $table->string('presion')->nullable();
             $table->float('talla')->nullable();
             $table->integer('temperatura')->nullable();
 

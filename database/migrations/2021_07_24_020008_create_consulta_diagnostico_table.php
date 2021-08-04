@@ -16,6 +16,7 @@ class CreateConsultaDiagnosticoTable extends Migration
         Schema::create('consulta_diagnostico', function (Blueprint $table) {
             $table->id();
 
+            $table->text('observacion')->nullable();
             //consula
             $table->unsignedBigInteger('consulta_id');
             $table->foreign('consulta_id')->references('id')->on('consulta')->onDelete('cascade');

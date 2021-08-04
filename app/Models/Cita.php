@@ -19,6 +19,7 @@ class Cita extends Model
         'paciente_id',
         'especialidad_id',
         'estado',
+        
     ];
     
     public function especialidad(){

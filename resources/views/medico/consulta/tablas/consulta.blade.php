@@ -3,7 +3,7 @@
       <div class="card-body">
         <form action="{{ url('consulta/diagnostico') }}" method="post"> 
           @csrf
-          <input  name="consulta_id" type="hidden" value="{{$consulta->id}}">
+           <input  name="consulta_id" type="hidden" value="{{$consulta->id}}"> 
             <div class="row ">
                 <div class="form-group col-md-6 col-lg-6">
                     <label class="col-form-label"><strong>Motivo Consulta:</strong></label>
@@ -25,7 +25,7 @@
                         <select class="form-control multiple-select"  name="diagnosticos[]" id="select-diagnostico" multiple>
                             @foreach ($diagnosticos as $item)
                                 <option value="{{$item->id}}"> {{$item->codigo}}- {{$item->descripcion}}</option>
-                            @endforeach
+                            @endforeach 
                            
                           </select>
                     </div>
@@ -35,7 +35,9 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label class="col-form-label"><strong>Observación:</strong></label>
-                    {!! Form::textarea('observacion',null, ['class'=>'form-control']) !!}
+                   
+                      {!! Form::textarea('observacion',$item->observacion, ['class'=>'form-control']) !!}
+
                 </div>
             </div>
 

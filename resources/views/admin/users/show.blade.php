@@ -16,7 +16,16 @@
           </div>
           <div class="col-sm-3 invoice-col">
             <strong>Tipo de usuario</strong><br>
-            {{ $user->hasrole('admin') ? 'Administrador' : 'Usuario' }}
+           
+            @if ( $user->hasRole('admin') )
+                'Administrador'
+            @elseif ($user->hasRole('asistente') )
+                'Asistente Médico'
+            @elseif($user->hasRole('doctor'))
+                ' Médico'
+            @else
+            ' Paciente'                              
+            @endif
           </div>
         </div>
         <br>

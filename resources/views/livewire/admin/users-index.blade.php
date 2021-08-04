@@ -56,7 +56,17 @@
                                 <td style=" color:rgb(71, 165, 189)" ><i class="fas fa-male fa-2x blue-text"></i></td>
                             @endif
 
-                            <td>{!! $user->hasRole('admin') ? '<b>Administrador</b>' : '' !!}</td>
+                            <td>
+                                @if ( $user->hasRole('admin') )
+                                    <b>Administrador</b>
+                                @elseif ($user->hasRole('asistente') )
+                                    <b>Asistente Médico</b>
+                                @elseif($user->hasRole('doctor'))
+                                    <b> Médico</b>
+                                @else
+                                <b> Paciente</b>                              
+                                @endif
+                            </td>
                             <td>{{ $user->email  }}</td>
                             <td width="10px">
                                 <a class="btn btn-primary btn-rounded" href="{{route('admin.users.show',$user->id)}}"><i class="fas fa-eye" style="color: white;"></i></a>

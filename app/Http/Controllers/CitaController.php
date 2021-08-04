@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\HorarioServicioInterface;
+use App\Mail\ConfirmadaMailable;
+use App\Mail\ReservadaMailable;
 use App\Models\Cita;
 use App\Models\Especialidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CitaController extends Controller
@@ -16,9 +19,9 @@ class CitaController extends Controller
         $per_medi=auth()->user()->id;
 
         if (auth()->user()->hasRole('admin')) {
-            $citasPendientes = Cita::where('estado','R')->paginate(10);
-            $citasConfirmadas = Cita::where('estado','C')->paginate(10);
-            $citasViejas= Cita::whereIn('estado',['C','A'])->orderby('fecha_cita','DESC')->paginate(10);
+            $citasPendientes = Cita::where('estado','R')->paginate(20);
+            $citasConfirmadas = Cita::where('estado','C')->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['C','A'])->orderby('fecha_cita','DESC')->paginate(20);
 
         }elseif (auth()->user()->hasRole('doctor')){
             
@@ -27,9 +30,9 @@ class CitaController extends Controller
                 ->where('people.id', '=', $per_medi)
                 ->select('medicos.id as id_medico')
                 ->first();
-            $citasPendientes = Cita::where('estado','R')->where('medico_id',$user->id_medico)->paginate(1);
-            $citasConfirmadas = Cita::where('estado','C')->where('medico_id',$user->id_medico)->paginate(1);
-            $citasViejas= Cita::whereIn('estado',['Cancelada','A'])->where('medico_id',$user->id_medico)->paginate(1);
+            $citasPendientes = Cita::where('estado','R')->where('medico_id',$user->id_medico)->paginate(100);
+            $citasConfirmadas = Cita::where('estado','C')->where('medico_id',$user->id_medico)->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['Cancelada','A'])->where('medico_id',$user->id_medico)->paginate(20);
 
         } elseif (auth()->user()->hasRole('paciente')){
             $user = DB::table('pacientes')
@@ -38,11 +41,16 @@ class CitaController extends Controller
             ->select('pacientes.id as id_paciente')
             ->first();
 
-            $citasPendientes = Cita::where('estado','R')->where('paciente_id',$user->id_paciente)->paginate(1);
-            $citasConfirmadas = Cita::where('estado','C')->where('paciente_id',$user->id_paciente)->paginate(1);
-            $citasViejas= Cita::whereIn('estado',['C','A'])->where('paciente_id',$user->id_paciente)->paginate(1);
+            $citasPendientes = Cita::where('estado','R')->where('paciente_id',$user->id_paciente)->paginate(20);
+            $citasConfirmadas = Cita::where('estado','C')->where('paciente_id',$user->id_paciente)->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['C','A'])->where('paciente_id',$user->id_paciente)->paginate(20);
 
-        } 
+        }else if (auth()->user()->hasRole('asistente')) {
+            $citasPendientes = Cita::where('estado','R')->paginate(20);
+            $citasConfirmadas = Cita::where('estado','C')->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['C','A'])->orderby('fecha_cita','DESC')->paginate(20);
+        }
+   
 
        // dd($citasConfirmadas,$citasPendientes,$citasViejas);
         return view('citas.index',compact('citasConfirmadas','citasPendientes','citasViejas'));
@@ -113,18 +121,20 @@ class CitaController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-    /*     select p.id as paciente_id FROM pacientes p 
+        /*     select p.id as paciente_id FROM pacientes p 
         inner join people pe on p.persona_id=pe.id
          WHERE pe.id=3 */
 
         $res= DB::table('pacientes')
         ->join('people',   'pacientes.persona_id','=','people.id')
+        ->join('users','people.id','=','users.persona_id')
         ->where('people.id','=',$id_ses_paci)
-        ->select('pacientes.id as paciente_id')
+        ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_paciente"),'pacientes.id as paciente_id','users.email as email')
         ->get()->first();
 
         $id_pa = json_decode($res->paciente_id);
-  
+       
+
         $data= $request->only([
             'descripcion',
             'fecha_cita',
@@ -140,6 +150,34 @@ class CitaController extends Controller
         $data['hora_cita']=$carbonTime->format('H:i:s');
         Cita::create($data);
 
+        //ENVIAR EMAIL DE RESERVA CORRECTA
+        
+        $medico_id=$request->input('medico_id');
+        
+        $infomedico=DB::table('medicos')
+            ->join('people',   'medicos.persona_id','=','people.id')
+            ->where('medicos.id','=',$medico_id)
+            ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_medico"))
+            ->get()->first();
+
+           
+        $infoEsp=DB::table('especialidads')
+            ->where('especialidads.id','=',$request->input('especialidad_id'))
+            ->select('especialidads.nombre as especialidad')
+            ->get()->first();
+
+
+        $infoCita =[];
+        $infoCita['medico']=$infomedico->nombre_medico;
+        $infoCita['especialidad']=$infoEsp->especialidad;
+        $infoCita['paciente']=$res->nombre_paciente;
+        $infoCita['fecha']=$request->input('fecha_cita'); 
+        $infoCita['hora']=$request->input('hora_cita');
+
+        //dd($infoCita);
+        $correo = new ReservadaMailable($infoCita);
+        Mail::to($res->email)->send($correo);
+
 
         $notificacion="La cita se ha registrado correctamente";
         return back()->with(compact('notificacion'));
@@ -148,10 +186,14 @@ class CitaController extends Controller
 
     public function postConfirmar(Cita $cita){
 
+        //dd($cita);
     
         $cita->estado='C';
         
         $guardado = $cita->save();
+
+        $correo = new ConfirmadaMailable;
+        Mail::to('darlingbsc@gmail.com')->send($correo);
       
  
         $notificacion='La cita se ha confirmado correctamente';
