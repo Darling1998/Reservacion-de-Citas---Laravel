@@ -15,7 +15,9 @@ class ConsultaReceta extends Model
         'consulta_id',	
         'cantidad'	
         ,'nombre_medicamento'
-        ,'indicaciones'
+        ,'indicaciones',
+        'fecha',
+        'hora',
     ];
 
     

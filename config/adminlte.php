@@ -232,48 +232,51 @@ return [
         [
             'text'    => 'Seguridad',
             'icon'    => 'fas fa-shield-alt text-info',
-            
+            'can'=> 'admin.users.index',
             'submenu' => [
                 [
                     'text' => 'Usuarios',
                     'url'  => 'users',
                     'icon'=>'fas fa-users-cog',
-                    
+                    'can'=>'admin.users.index'
                 ],
                 [
                     'text' => 'Roles',
                     'url'  => 'roles',
                     'icon'=>'fas fa-user-tag',
-                    
+                    'can'=>'admin.users.index'
                 ]
             ],
         ],
         [
             'text'    => 'Registro',
             'icon'    => 'fas fa-address-book text-teal',
-            
+            'can'=> 'admin.especialidades.index',
             'submenu' => [
 
                 [
                     'text' => 'Especialidades',
                     'url'  => 'especialidades',
                     'icon'=>'fas fa-stethoscope',
-                    
+                    'can'=> 'admin.especialidades.index',
                 ],
                 [
                     'text' => 'Médicos',
                     'url'  => 'medicos',
-                    'icon'=>'fas fa-user-nurse'
+                    'icon'=>'fas fa-user-nurse',
+                    'can'=> 'admin.medicos.index',
                 ],
                 [
                     'text' => 'Pacientes',
                     'url'  => 'pacientes',
                     'icon'=>'fas fa-user-injured',
+                    'can'=> 'admin.especialidades.create',
                 ],
                 [
                     'text' => 'Horarios',
                     'url'  => 'horarios',
                     'icon'=>'fas fa-clock',
+                    'can'=> 'medicos.horarios.edit',
                     
                 ],
             ],
@@ -286,19 +289,23 @@ return [
                 [
                     'text' => 'Reservar',
                     'url'  => 'reserva/create',
-                    'icon'=>'fas fa-user-nurse'
+                    'icon'=>'fas fa-user-nurse',
+                    'can'=> 'pacientes.reserva.index',
                 ],
                 [
                     'text' => 'Mis Citas',
                     'url'  => 'citas',
-                    'icon'=>'fas fa-user-nurse'
+                    'icon'=>'fas fa-user-nurse',
+                    'can'=> 'citas.listar',
+                   
                 ],
                 [
                     'text' => 'Agenda',
                     'url'  => 'agenda',
-                    'icon'=>'fas fa-calendar-alt'
+                    'icon'=>'fas fa-calendar-alt',
+                    'can'=> 'agenda.index',
                 ],
-                [
+                /* [
                     'text' => 'Recetas',
                     'submenu' => [
 
@@ -308,13 +315,13 @@ return [
                             'icon'=>''
                         ],
                     ]
-                ]
+                ] */
             ],
         ],
         [
             'text'    => 'Reportes',
             'icon'    => 'fas fa-chart-line text-orange',
-            
+            'can'=> 'admin.reportes.barra',
             'submenu' => [
                 [
                     'text' => 'Total Citas',

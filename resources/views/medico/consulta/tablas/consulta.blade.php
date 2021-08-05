@@ -13,7 +13,7 @@
                 <div class="col-12 col-md-6 col-lg-6">
                     <label class="col-form-label"><strong>Exámen Adjunto:</strong></label>
                     <div class="card">
-                        <iframe src="http://www.previs.es:8080/fdecontrol/documents/2814anamnesis_cas.pdf" frameborder="0"></iframe>
+                        <img src="{{asset($citas->examen)}}" alt="">
                     </div>
                 </div>
             </div>

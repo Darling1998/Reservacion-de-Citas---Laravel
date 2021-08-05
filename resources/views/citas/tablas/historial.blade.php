@@ -26,9 +26,12 @@
             {{ $cita->hora_cita }}
           </td>
           <td>
-            @if ( $cita->estado  == "C")                
+            @if ( $cita->estado  == "C")
+              Confirmada 
+            @elseif($cita->estado  == "A")  
+              Atendida
             @endif
-            Confrimada
+          
           </td>
           <td>
               <a class="btn btn-sm btn-primary" title="Ver cita" 

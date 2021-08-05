@@ -19,6 +19,8 @@ class Cita extends Model
         'paciente_id',
         'especialidad_id',
         'estado',
+        'tipo',
+        'examen'
         
     ];
     

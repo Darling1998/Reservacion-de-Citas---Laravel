@@ -12,14 +12,18 @@ class ConfirmadaMailable extends Mailable
     use Queueable, SerializesModels;
 
     public $subject="Cita Médica Confirmada";
+    public $info;
+    
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(array $data)
     {
-        //
+        $this->info=array();
+        $this->info=$data;
+    
     }
 
     /**

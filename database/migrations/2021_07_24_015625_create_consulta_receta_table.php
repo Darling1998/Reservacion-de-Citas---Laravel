@@ -16,6 +16,11 @@ class CreateConsultaRecetaTable extends Migration
         Schema::create('consulta_receta', function (Blueprint $table) {
             $table->id();
 
+
+            $table->date('fecha');
+            $table->time('hora');
+
+
              //consula
              $table->unsignedBigInteger('consulta_id');
              $table->foreign('consulta_id')->references('id')->on('consulta')->onDelete('cascade');

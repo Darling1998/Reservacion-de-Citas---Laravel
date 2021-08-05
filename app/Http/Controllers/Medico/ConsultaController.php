@@ -28,7 +28,7 @@ class ConsultaController extends Controller
         ->join('pacientes','citas.paciente_id','=','pacientes.id')
         ->join('hce','pacientes.id','=','hce.paciente_id')
         ->where('citas.id','=',$id)
-        ->select('citas.id as cita_id','hce.id as hce', 'citas.descripcion as motivo')
+        ->select('citas.id as cita_id','hce.id as hce', 'citas.descripcion as motivo' ,'citas.examen as examen')
         ->get()->first();
 
         
@@ -124,5 +124,15 @@ class ConsultaController extends Controller
         return $pdf->stream();
 
         
+    }
+
+
+    public function terminarConsulta(Request $request){
+
+        $cita= Cita::findOrFail($request->cita_id);
+        $cita->estado='A';
+        $cita->save();
+        $notificacion='Cita Atendida';
+        return redirect('/citas')->with(compact('notificacion'));
     }
 }

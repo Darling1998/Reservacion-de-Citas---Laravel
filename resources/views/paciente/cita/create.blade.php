@@ -9,6 +9,14 @@
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" integrity="sha512-TQQ3J4WkE/rwojNFo6OJdyu6G8Xe9z8rMrlF9y7xpFbQfW5g8aSWcygCQ4vqRiJqFsDsE1T6MoAOMJkFXlrI9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+  #section-radio-no,
+	#section-radio-si{
+		display: none;
+	}
+
+</style>
 @endsection
 
 @section('content')
@@ -37,7 +45,7 @@
         </div>
       @endif
 
-      <form action="{{ url('reserva') }}" method="post">
+      <form action="{{ url('reserva') }}" method="post" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group">
@@ -60,8 +68,8 @@
                 <label for="medico">Médico</label>
                 <select name="medico_id" id="medico" class="form-control" required>
                   @foreach ($medicos as $medico)
-                  <option value="{{ $medico->id }}" @if(old('medico_id') == $medico->id) selected @endif> {{ $medico->nombres }} {{$medico->apellidos}}</option>
-              @endforeach 
+                    <option value="{{ $medico->id }}" @if(old('medico_id') == $medico->id) selected @endif> {{ $medico->nombres }} {{$medico->apellidos}}</option>
+                  @endforeach 
                 </select>
             </div>
         </div>
@@ -108,14 +116,25 @@
             </div>
         </div>
 
-       {{--  <div class="form-group">
-            <label for="type">Tipo de consulta</label>
-            <div class="custom-control custom-radio mb-3">
-                <input name="type" class="custom-control-input" id="type1" type="radio"
-               @if(old('type', 'Consulta') == 'Consulta') checked @endif  value="Consulta">
-                <label class="custom-control-label" for="type1">Consulta</label>
-            </div>
-        </div> --}}
+        <div class="form-group">
+          <label>Tipo <b class="required" title="Campos Requeridos">*</b> </label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="tipo" value="Consulta">
+            <label class="form-check-label" for="consulta">Consulta</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="tipo"  value="Examen">
+            <label class="form-check-label" for="examen">Examen</label>
+          </div>
+        </div>
+
+        <div class="card-body" id="section-radio-no">
+          <input type="file" name="examen" accept="image/*">
+          @error('examen')
+              <small class="text-danger">{{$mensajes}}</small>
+          @enderror
+        </div>
+      
         <button type="submit" class="btn btn-primary">
           Guardar
         </button>
@@ -130,5 +149,18 @@
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="{{ asset('/js/citas/create.js') }}"></script>
-  
+  <script>
+    $(".form-check-input").click( function(){
+		 if($(this).val() == 'Consulta'){
+			$('#section-radio-si').show();
+			$('#section-radio-no').hide();
+		 }
+		 else if($(this).val() == 'Examen'){
+			$('#section-radio-si').hide();
+			$('#section-radio-no').show();
+		 }
+		
+		
+	})
+  </script>
 @stop

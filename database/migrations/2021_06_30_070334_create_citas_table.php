@@ -36,6 +36,11 @@ class CreateCitasTable extends Migration
             //Reservada,cancelada,confirmada,atendida,cancelada
             $table->string('estado')->default('R');
 
+            $table->string('tipo')->nullable();
+
+            $table->string('examen')->nullable();
+
+
             $table->timestamps();
         });
     }

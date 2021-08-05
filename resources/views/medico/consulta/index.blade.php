@@ -29,7 +29,13 @@
             @endforeach
         </h3>
         <div class="col text-right">
-          <a href="" class="btn btn-sm btn-primary">Terminar Consulta</a>
+          <form action="{{ url('consulta/terminar') }}" method="post"> 
+              @csrf
+            <input type="hidden" name="cita_id" value="{{$citas->cita_id}}">
+             <button type="submit" class="btn btn-sm btn-danger">
+                 Terminar Consulta
+             </button>
+         </form>
         </div>
       </div>
 

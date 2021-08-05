@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class CitaController extends Controller
 {
@@ -21,7 +22,7 @@ class CitaController extends Controller
         if (auth()->user()->hasRole('admin')) {
             $citasPendientes = Cita::where('estado','R')->paginate(20);
             $citasConfirmadas = Cita::where('estado','C')->paginate(20);
-            $citasViejas= Cita::whereIn('estado',['C','A'])->orderby('fecha_cita','DESC')->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['CL','A'])->orderby('fecha_cita','DESC')->paginate(20);
 
         }elseif (auth()->user()->hasRole('doctor')){
             
@@ -32,7 +33,7 @@ class CitaController extends Controller
                 ->first();
             $citasPendientes = Cita::where('estado','R')->where('medico_id',$user->id_medico)->paginate(100);
             $citasConfirmadas = Cita::where('estado','C')->where('medico_id',$user->id_medico)->paginate(20);
-            $citasViejas= Cita::whereIn('estado',['Cancelada','A'])->where('medico_id',$user->id_medico)->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['CL','A'])->where('medico_id',$user->id_medico)->paginate(20);
 
         } elseif (auth()->user()->hasRole('paciente')){
             $user = DB::table('pacientes')
@@ -43,7 +44,7 @@ class CitaController extends Controller
 
             $citasPendientes = Cita::where('estado','R')->where('paciente_id',$user->id_paciente)->paginate(20);
             $citasConfirmadas = Cita::where('estado','C')->where('paciente_id',$user->id_paciente)->paginate(20);
-            $citasViejas= Cita::whereIn('estado',['C','A'])->where('paciente_id',$user->id_paciente)->paginate(20);
+            $citasViejas= Cita::whereIn('estado',['CL','A'])->where('paciente_id',$user->id_paciente)->paginate(20);
 
         }else if (auth()->user()->hasRole('asistente')) {
             $citasPendientes = Cita::where('estado','R')->paginate(20);
@@ -92,10 +93,12 @@ class CitaController extends Controller
             'hora_cita'=>'required',
             'medico_id'=>'exists:medicos,id',
             'especialidad_id'=>'exists:especialidads,id',
+            'examen'=>'image|max:2048'
         ];
 
         $mensajes=[
-            'hora_cita.required'=>'Selecciona una hora válida para su cita'
+            'hora_cita.required'=>'Selecciona una hora válida para su cita',
+            'examen.image'=>'Formato no permitido'
         ];
         
         $validator=Validator::make($request->all(),$reglas,$mensajes);
@@ -143,15 +146,26 @@ class CitaController extends Controller
             'paciente_id',
             'especialidad_id',
             'estado',
+            'tipo',
+            'examen'
         ]);
 
+        $url='';
+        if(!empty($request->examen)){
+            $examen= $request->file('examen')->store('public/examenes');
+            $url= Storage::url($examen);
+        }
+      
+
+
         $data['paciente_id']=$id_pa;
+        $data['examen']=$url;
         $carbonTime= Carbon::createFromFormat('g:i A',$data['hora_cita']);
         $data['hora_cita']=$carbonTime->format('H:i:s');
+        
         Cita::create($data);
 
-        //ENVIAR EMAIL DE RESERVA CORRECTA
-        
+        //******************ENVIAR EMAIL DE RESERVA CORRECTA***********************///
         $medico_id=$request->input('medico_id');
         
         $infomedico=DB::table('medicos')
@@ -159,13 +173,11 @@ class CitaController extends Controller
             ->where('medicos.id','=',$medico_id)
             ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_medico"))
             ->get()->first();
-
-           
+  
         $infoEsp=DB::table('especialidads')
             ->where('especialidads.id','=',$request->input('especialidad_id'))
             ->select('especialidads.nombre as especialidad')
             ->get()->first();
-
 
         $infoCita =[];
         $infoCita['medico']=$infomedico->nombre_medico;
@@ -186,14 +198,43 @@ class CitaController extends Controller
 
     public function postConfirmar(Cita $cita){
 
-        //dd($cita);
-    
         $cita->estado='C';
         
-        $guardado = $cita->save();
+        $cita->save();
 
-        $correo = new ConfirmadaMailable;
-        Mail::to('darlingbsc@gmail.com')->send($correo);
+        //****ENVIAR CORREO AL CONFIRMAR CITA* */
+        $infomedico=DB::table('medicos')
+        ->join('people',   'medicos.persona_id','=','people.id')
+        ->where('medicos.id','=',$cita->medico_id)
+        ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_medico"))
+        ->get()->first();
+
+        
+        $infoEsp=DB::table('especialidads')
+            ->where('especialidads.id','=',$cita->especialidad_id)
+            ->select('especialidads.nombre as especialidad')
+            ->get()->first();
+
+
+
+
+
+        $res= DB::table('pacientes')
+        ->join('people',   'pacientes.persona_id','=','people.id')
+        ->join('users','people.id','=','users.persona_id')
+        ->where('pacientes.id','=',$cita->paciente_id)
+        ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_paciente"),'users.email as email')
+        ->get()->first();
+
+        $infoCita =[];
+        $infoCita['medico']=$infomedico->nombre_medico;
+        $infoCita['especialidad']=$infoEsp->especialidad;
+        $infoCita['fecha']=$cita->fecha_cita; 
+        $infoCita['hora']=$cita->hora_cita;
+        $infoCita['paciente']=$res->nombre_paciente;
+
+        $correo = new ConfirmadaMailable($infoCita);
+        Mail::to($res->email)->send($correo);
       
  
         $notificacion='La cita se ha confirmado correctamente';
@@ -201,4 +242,29 @@ class CitaController extends Controller
         return redirect('/citas')->with(compact('notificacion'));
     }
  
+    public function cancel(Cita $cita,Request $request){
+
+        if($request->has('justificacion')){
+         /*   $cancell = new CitaCL(); 
+           $cancell->justificacion = $request->input('justificacion');
+           $cancell->cancelado_por_id= auth()->id();
+       
+           $cita->cancelacion()->save($cancell);*/
+       }
+      
+       $cita->estado='CL';
+
+       $guardado = $cita->save();
+
+       if ($guardado){
+        $cita->paciente->enviarFCM('Su cita ha sido CL');
+       }
+      
+
+
+       $notificacion='La cita se ha cancelado correctamente';
+      // dd($cita,$request);
+       return redirect('/citas')->with(compact('notificacion'));
+   }
+
 }
