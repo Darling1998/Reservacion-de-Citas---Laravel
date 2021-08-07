@@ -33,21 +33,21 @@ Route::get('logout' ,[App\Http\Controllers\HomeController::class, 'logout']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-
+Route::post('correo/comunicar', [App\Http\Controllers\HomeController::class, 'notificar']); 
 
 Route::middleware(['auth', 'admin' ])->group(function () {
     Route::resource('users', UserController::class)->names('admin.users');
     Route::resource('roles', RolController::class)->names('admin.roles');
     Route::resource('especialidades', EspecialidadController::class)->names('admin.especialidades');
     Route::resource('medicos', MedicoController::class)->names('admin.medicos');
-    Route::resource('pacientes', PacienteController::class)->names('admin.pacientes');
+   
     Route::get('/reportes/citas/lineas',[App\Http\Controllers\Admin\ReporteController::class, 'reporteBarras'])->name('admin.reportes.barra');
 });
 
 
-Route::middleware(['doctor', 'asistente','auth'])->group(function () {
-    Route::get('signos/consulta/{id}/create', [App\Http\Controllers\Asistente\SignosController::class,'create'])->name('medico.consulta.create');
-    Route::get('receta/imprimir/{id}' ,[App\Http\Controllers\Medico\ConsultaController::class,'imprimir'])->name('medico.consulta.receta');;
+Route::middleware(['doctor','auth'])->group(function () {
+   
+    Route::get('receta/imprimir/{id}' ,[App\Http\Controllers\Medico\ConsultaController::class,'imprimir'])->name('medico.consulta.receta');
 
 });
 
@@ -64,13 +64,16 @@ Route::middleware(['auth'  ,'doctor'])->group(function () {
     Route::post('consulta/receta', [App\Http\Controllers\Medico\ConsultaController::class,'guardarReceta'])->name('medico.guardarReceta');
     Route::post('consulta/terminar',[App\Http\Controllers\Medico\ConsultaController::class,'terminarConsulta'])->name('medico.terminarConsulta');
     Route::post('/reserva/{cita}/confirmar', [App\Http\Controllers\CitaController::class, 'postConfirmar'])->name('medico.comfirmarCita'); 
+    Route::resource('consulta', ConsultaController::class)->names('medicos.citas');
 });
  
 //Guardar Antecedentes
  /* Route::post('antecedentes', [App\Http\Controllers\Medico\ConsultaController::class,]); */
- /* Route::post('consulta/signos', [App\Http\Controllers\Medico\ConsultaController::class,'guardarSignos']); */
+  Route::post('consulta/signos', [App\Http\Controllers\Medico\ConsultaController::class,'guardarSignos']); 
 
-
+  
+  /* Route::post('correo/comunicar', [App\Http\Controllers\Admin\DashboardController::class,'notificar']);  */
+  
 
  ///para reservar DE LADO DE PACIENTE
 Route::middleware(['auth' ,'paciente'])->group(function () {
@@ -79,10 +82,12 @@ Route::middleware(['auth' ,'paciente'])->group(function () {
 });
 
 
-Route::middleware(['doctor', 'paciente','admin','asistente','auth'])->group(function () {
-    Route::get('citas',[App\Http\Controllers\CitaController::class, 'index'])->name('citas.listar');
+Route::middleware(['auth', 'asistente','admin'])->group(function () {
+   
 });
 
+Route::resource('pacientes', PacienteController::class)->names('admin.pacientes');
+Route::get('citas',[App\Http\Controllers\CitaController::class, 'index'])->name('citas.listar');
 //JSON
 Route::get('/especialidades/{especialidad}/medicos',[App\Http\Controllers\Api\EspecialidadController::class, 'medicos']);
 Route::get('/horarios/horas',[App\Http\Controllers\Api\HorarioController::class, 'horas']);
@@ -93,5 +98,18 @@ Route::get('agenda/mostrar',[App\Http\Controllers\AgendaController::class, 'show
 
 
 
+Route::middleware(['auth', 'asistente'])->group(function () {
+    Route::get('signos/consulta/{id}/create', [App\Http\Controllers\Asistente\SignosController::class,'create'])->name('medico.consulta.create');
+});
 
+///REPORTES
+Route::get('reportes',[App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('admin.reportes');
+Route::get('/reportes/medicos/barras/infor',[App\Http\Controllers\Admin\ReporteController::class, 'medicosJson']);
+
+Route::get('/reportes/especialidades/barras',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadas']);
+Route::get('/reportes/especialidades/barras/infor',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadasJson']);
+
+Route::get('/reportes/hola',[App\Http\Controllers\Admin\ReporteController::class, 'hola']);
+
+/* Route::get('/dashboard',[App\Http\Controllers\Admin\DashboardController::class, 'index']); */
 

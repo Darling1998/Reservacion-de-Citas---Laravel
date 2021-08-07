@@ -53,4 +53,8 @@ class User extends Authenticatable
         return $query->join('medicos','medicos.persona_id','=','people.id');
     }
     
+
+    public function adminlte_image(){
+        return 'https://picsum.photos/536/354';
+    }
 }

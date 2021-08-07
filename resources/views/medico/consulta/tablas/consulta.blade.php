@@ -36,7 +36,7 @@
                 <div class="form-group col-md-12">
                     <label class="col-form-label"><strong>Observación:</strong></label>
                    
-                      {!! Form::textarea('observacion',$item->observacion, ['class'=>'form-control']) !!}
+                      {!! Form::textarea('observacion',null, ['class'=>'form-control']) !!}
 
                 </div>
             </div>

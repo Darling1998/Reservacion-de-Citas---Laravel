@@ -1,6 +1,7 @@
-<div class="table-responsive">
-    <table class="table align-items-center table-flush">
-      <thead class="thead-light">
+<div class="card">
+  <div class="card-body">
+    <table class="table align-items-center table-flush" id="historial">
+      <thead class="thead-light" >
         <tr>
           <th scope="col">Especialidad</th>
           <th scope="col">Fecha</th>
@@ -14,33 +15,34 @@
         </tr>
       </thead>
       <tbody>
-         @foreach ($citasViejas as $cita)
-        <tr>
-          <td>
-            {{ $cita->especialidad->nombre }}
-          </td>
-          <td>
-            {{ $cita->fecha_cita }}
-          </td>
-          <td>
-            {{ $cita->hora_cita }}
-          </td>
-          <td>
-            @if ( $cita->estado  == "C")
-              Confirmada 
-            @elseif($cita->estado  == "A")  
-              Atendida
-            @endif
-          
-          </td>
-          <td>
-              <a class="btn btn-sm btn-primary" title="Ver cita" 
-                href="{{ url('/citas/'.$cita->id) }}">
-                  Ver
-              </a>
-          </td>
-        </tr>
-        @endforeach 
-      </tbody>
+        @foreach ($citasViejas as $cita)
+       <tr>
+         <td>
+           {{ $cita->especialidad->nombre }}
+         </td>
+         <td>
+           {{ $cita->fecha_cita }}
+         </td>
+         <td>
+           {{ $cita->hora_cita }}
+         </td>
+         <td>
+           @if ( $cita->estado  == "C")
+             Confirmada 
+           @elseif($cita->estado  == "A")  
+             Atendida
+           @endif
+         
+         </td>
+         <td>
+             <a class="btn btn-sm btn-primary" title="Ver cita" 
+               href="{{ url('/citas/'.$cita->id) }}">
+                 Ver
+             </a>
+         </td>
+       </tr>
+       @endforeach 
+     </tbody>
     </table>
   </div>
+</div>

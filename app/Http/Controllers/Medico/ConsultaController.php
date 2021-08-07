@@ -11,6 +11,8 @@ use App\Models\ConsultaReceta;
 use App\Models\Diagnostico;
 use PDF;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 class ConsultaController extends Controller
 {
 
@@ -90,6 +92,9 @@ class ConsultaController extends Controller
 
     public function guardarReceta(Request $request){
         
+        $dateh = Carbon::now();
+        $date = $dateh->format('Y-m-d');
+
         $descripcion = $request->descripcion;
         $cantidad = $request->cantidad;
         $indicaciones = $request->indicaciones;
@@ -100,7 +105,9 @@ class ConsultaController extends Controller
         'consulta_id'=>$consulta_id,
         'nombre_medicamento' => $descripcion[$count],
         'cantidad'  => $cantidad[$count],
-        'indicaciones'=>$indicaciones[$count]
+        'indicaciones'=>$indicaciones[$count],
+        'fecha'=>$date,
+        'hora'=> $date = Carbon::now()->toDateTimeString()
        );
        $insert_data[] = $data; 
       } 

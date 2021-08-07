@@ -37,10 +37,14 @@ class RolSeeder extends Seeder
        Permission::create(['name'=>'admin.medicos.destroy','descripcion'=>'Eliminar Medico'])->syncRoles($rol1);
        Permission::create(['name'=>'admin.reportes.barra','descripcion'=>'Ver Reportes'])->syncRoles($rol1);
     
+       Permission::create(['name'=>'admin.pacientes.index','descripcion'=>'Ver Listado Pacientes'])->syncRoles($rol1,$rol4); 
+       Permission::create(['name'=>'admin.pacientes.create','descripcion'=>'Crear Paciente'])->syncRoles($rol1,$rol4);
+       Permission::create(['name'=>'admin.pacientes.edit','descripcion'=>'Editar Paciente'])->syncRoles($rol1,$rol4);
+       Permission::create(['name'=>'admin.pacientes.destroy','descripcion'=>'Eliminar Paciente'])->syncRoles($rol1);
 
        //medicos
-       Permission::create(['name'=>'medicos.horarios.edit','descripcion'=>'Editar Horario'])->syncRoles($rol2); 
-       Permission::create(['name'=>'medicos.horarios.store','descripcion'=>'Guardar Horario'])->syncRoles($rol2);
+       Permission::create(['name'=>'medicos.horarios.edit','descripcion'=>'Editar Horario'])->syncRoles($rol3); 
+       Permission::create(['name'=>'medicos.horarios.store','descripcion'=>'Guardar Horario'])->syncRoles($rol3);
        Permission::create(['name'=>'medico.guardarDiagnostico','descripcion'=>'GuardarDiagnostico'])->syncRoles($rol3);
        Permission::create(['name'=>'medico.guardarReceta','descripcion'=>'Generar Receta'])->syncRoles($rol3); 
        Permission::create(['name'=>'medico.terminarConsulta','descripcion'=>'Terminar Consulta'])->syncRoles($rol3);
@@ -61,7 +65,7 @@ class RolSeeder extends Seeder
 
 
        //medicos - asistentes
-       Permission::create(['name'=>'medico.consulta.create','descripcion'=>'Crear Consulta'])->syncRoles($rol4); 
+       Permission::create(['name'=>'medico.consulta.create','descripcion'=>'Crear Consulta'])->syncRoles($rol4,$rol3); 
        
        
 

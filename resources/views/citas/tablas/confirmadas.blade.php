@@ -1,21 +1,23 @@
+<div class="card">
 
-<div class="table-responsive">
-    <table class="table align-items-center table-flush">
+  <div class="card-body">
+    <table class="table align-items-center table-flush" id="confirmadas">
       <thead class="thead-light">
         <tr>
-            <th scope="col"></th>
+          <th scope="col"></th>
           <th scope="col">Descripción</th>
           <th scope="col">Especialidad</th>
           @if (auth()->user()->hasRole('doctor'))
             <th scope="col">Paciente</th>
-           @endif  
+          @endif  
           <th scope="col">Fecha</th>
           <th scope="col">Hora</th>
           <th scope="col">Opciones</th>
         </tr>
       </thead>
+
       <tbody>
-         @foreach ($citasConfirmadas as $cita)
+        @foreach ($citasConfirmadas as $cita)
           <tr>
             <td>
               <label  class="custom-control custom-checkbox">
@@ -55,17 +57,18 @@
               <a class="btn btn-sm btn-primary" title="Registrar Signos" href="{{url('signos/consulta/'.$cita->id.'/create')}}">
                 Registrar Signos
               </a> 
-             @endif  
+              @endif  
 
               @if (auth()->user()->hasRole('doctor') ) 
               <a class="btn btn-sm btn-primary" title="Ir a Consulta"  href="{{url('/consulta/'.$cita->id.'/edit')}}">
                 Ir a Consulta
               </a> 
-             @endif  
+              @endif  
 
             </td>
           </tr>
-        @endforeach  
-      </tbody>
+       @endforeach  
+     </tbody>
     </table>
+  </div>
 </div>

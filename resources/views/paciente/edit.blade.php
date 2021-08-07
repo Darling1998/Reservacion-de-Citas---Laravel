@@ -157,7 +157,7 @@
                                         <input type="text" class="form-control"   name="ciclos" value="{{ old('ciclos',$paciente->ciclos)}}">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3">
+{{--                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Fecha Ultima Menstruación:</strong></label>
                                         <div class="input-group date" data-provide="datepicker">
                                             <div class="input-group-prepend">
@@ -168,7 +168,7 @@
                                                 name="fecha_ultima_menstruacion"
                                                 value="{{old('fecha_ultima_menstruacion',$paciente->fecha_ultima_menstruacion)}}">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label"><strong>Gestas:</strong></label>
                                         <div class="input-group">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Medico extends Model
 {
@@ -44,4 +45,28 @@ class Medico extends Model
         
     }
 
+    public function citasAtendidas(){
+        return $this->citasPorDoctor()->where([
+            ['estado', '=', 'A'],//atendidas
+            ['estado', '<>', 'C'],//canceladas
+
+        ]);
+    }
+    public function citasPorDoctor(){
+        return $this->hasMany(Cita::class,'medico_id');
+    }
+
+    public function citasCanceladas()
+    {
+        return $this->citasPorDoctor()->where('estado','C');
+    }
+
+    public function scopeDoctores($query)
+    {
+        $users = User::role('doctor')->get();
+       /*  return DB::table('medicos')->join('people',   'people.id','=','medicos.persona_id')
+                ->join('users',   'people.id','=','users.persona_id')
+                ->select('medicos.id as id_medico','people.*')
+                ->get(); */
+    }
 }

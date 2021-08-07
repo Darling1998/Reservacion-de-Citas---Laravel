@@ -11,6 +11,8 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Hce;
+use App\Models\Antecedentes;
+use Illuminate\Support\Facades\Date;
 
 class RegisterController extends Controller
 {
@@ -114,10 +116,26 @@ class RegisterController extends Controller
         $hce=Hce::create([
             'paciente_id'=>$paciente['id'],
         ]);
+         $antecedentes= Antecedentes::create([
+            'antecedentes_personales'=>'',
+            'historia_personal'=>'',
+            'menarquia'=>0,
+            'ciclos'=>0,
+            'gestas'=>0,
+            'cesareas'=>0,
+            'abortos'=>0,
+            'hijos'=>0,
+            'activo'=>0,
+            'habitos_toxicos'=>'',
+            'examen_funcional'=>'',
+            'paciente_id'=>$paciente['id']
+        ]); 
 
-        $hce->save();
+    
 
         $paciente->save();
+        $hce->save();
+        $antecedentes->save(); 
         return $usuario;
 
     }

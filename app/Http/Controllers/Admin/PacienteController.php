@@ -54,8 +54,13 @@ class PacienteController extends Controller
             'paciente_id'=>$paciente['id'],
         ]);
 
-        $hce->save();
+        
+
+       
+       
         $paciente->save();
+        $hce->save();
+       
         return $usuario;
 
 
@@ -67,7 +72,7 @@ class PacienteController extends Controller
         ->join('hce','pacientes.id','=','hce.paciente_id')
         ->join('people',   'pacientes.persona_id','=','people.id')
         ->join('antecedentes','pacientes.id','=','hce.paciente_id')
-        ->join('users',   'people.id','=','users.persona_id')->where('people.id','=',$id)
+        ->join('users',   'people.id','=','users.persona_id')->where('pacientes.persona_id','=',$id)
         ->select('people.*', 'pacientes.id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his','antecedentes.*')
         ->get()->first();
 
@@ -89,7 +94,7 @@ class PacienteController extends Controller
                 'historia_personal'=>$request->historia_personal,
                 'menarquia'=>$request->menarquia,
                 'ciclos'=>$request->ciclos,
-                'fecha_ultima_menstruacion'=>$request->fecha_ultima_menstruacion,
+             /*    'fecha_ultima_menstruacion'=>$request->fecha_ultima_menstruacion, */
                 'gestas'=>$request->gestas,
                 'cesareas'=>$request->cesareas,
                 'abortos'=>$request->abortos,

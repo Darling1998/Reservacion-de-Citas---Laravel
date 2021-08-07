@@ -1,21 +1,24 @@
 
-<div class="table-responsive">
-    <table class="table align-items-center table-flush">
-      <thead class="thead-light">
+
+<div class="card">
+  <div class="card-body">
+    <table class="table align-items-center table-flush" id="reservadas">
+      <thead class="thead-light" >
         <tr>
-            <th scope="col"></th>
+          <th scope="col"></th>
           <th scope="col">Descripción</th>
           <th scope="col">Especialidad</th>
-         {{--  @if ($role == 2) 
+        {{--  @if ($role == 2) 
             <th scope="col">Paciente</th>
-           @endif  --}}
+          @endif  --}}
           <th scope="col">Fecha</th>
           <th scope="col">Hora</th>
           <th scope="col">Opciones</th>
         </tr>
       </thead>
+
       <tbody>
-         @foreach ($citasPendientes as $cita)
+        @foreach ($citasPendientes as $cita)
           <tr>
             <td>
               <label  class="custom-control custom-checkbox">
@@ -57,18 +60,19 @@
                   Confirmar
                 </button>
               </form>
-             @endif    
+            @endif    
 
               <a class="btn btn-sm btn-danger" title="Cancelar cita" 
                 href="{{ url('/reserva/'.$cita->id.'/cancelar') }}">
                   Cancelar
               </a>
 
- 
+
 
             </td>
           </tr>
         @endforeach  
       </tbody>
     </table>
+  </div>
 </div>

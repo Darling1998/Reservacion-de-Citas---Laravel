@@ -20,4 +20,8 @@ class Paciente extends Model
         return $this->belongsTo(Person::class);
     }
 
+    public function scopePacientes($query)
+    {
+        $users = User::role('paciente')->get();
+    }
 }

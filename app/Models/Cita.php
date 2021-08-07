@@ -24,6 +24,11 @@ class Cita extends Model
         
     ];
     
+    public function medico(){
+        return $this->belongsTo(Medico::class);
+    }
+
+
     public function especialidad(){
         return $this->belongsTo(Especialidad::class);
     }

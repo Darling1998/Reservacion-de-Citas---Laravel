@@ -67,7 +67,7 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
+    'usermenu_image' => true,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
 
@@ -251,7 +251,7 @@ return [
         [
             'text'    => 'Registro',
             'icon'    => 'fas fa-address-book text-teal',
-            'can'=> 'admin.especialidades.index',
+            'can'=> '',
             'submenu' => [
 
                 [
@@ -270,7 +270,7 @@ return [
                     'text' => 'Pacientes',
                     'url'  => 'pacientes',
                     'icon'=>'fas fa-user-injured',
-                    'can'=> 'admin.especialidades.create',
+                    'can'=> 'admin.pacientes.index',
                 ],
                 [
                     'text' => 'Horarios',
@@ -281,6 +281,21 @@ return [
                 ],
             ],
         ],
+        /* [
+            'text'    => 'Registro',
+            'icon'    => 'fas fa-address-book text-teal',
+            'can'=> 'admin.pacientes.index',
+            'submenu' => [
+
+                [
+                    'text' => 'Pacientes',
+                    'url'  => 'pacientes',
+                    'icon'=>'fas fa-user-injured',
+                    'can'=> 'admin.pacientes.index',
+                    
+                ],
+            ],
+        ], */
         [
             'text'    => 'Gestión',
             'icon'    => 'fas fa-address-book text-purple',
