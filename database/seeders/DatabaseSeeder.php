@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(
             [
-                RolSeeder::class,
-                CitaTableSeeder::class
+                 RolSeeder::class, 
+                /* CitaTableSeeder::class */
             ]
         );
        

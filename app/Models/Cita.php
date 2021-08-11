@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Paciente;
+use App\Models\Consulta;
 class Cita extends Model
 {
     use HasFactory;
@@ -32,6 +33,12 @@ class Cita extends Model
     public function especialidad(){
         return $this->belongsTo(Especialidad::class);
     }
+
+    public function consulta() {
+        return $this->hasOne(Consulta::class);
+      }
+
+
 
     //json para fullcalendar
     public function getAllCitas()

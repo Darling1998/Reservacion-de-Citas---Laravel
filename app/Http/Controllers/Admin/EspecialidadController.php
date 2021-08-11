@@ -71,8 +71,32 @@ class EspecialidadController extends Controller
     
     public function destroy(Especialidad $especialidade)
     {
+       /*  dd($especialidade->citas);
         $especialidade->delete();
-        return redirect()->route('admin.especialidades.index')->with('info','Especialidad eliminada correctamente');
+        return redirect()->route('admin.especialidades.index')->with('info','Especialidad eliminada correctamente'); */
+
+
+        $status='';
+        $count=0;
+       
+    
+        // Contamos los registros en las relaciones
+        $count+=count($especialidade->citas);
+        // Comprobamos si existen registros 
+        if($count>0) {
+            $status =  'No se puede Eliminar existen registros relacionados';
+           
+        } else {
+            // si no hay registros eliminamos
+            $especialidade->delete();
+            $status =  'Eliminado correctamente';
+          
+        }
+    
+        return redirect()->route('admin.especialidades.index')
+            ->with('info', $status);
+
+
     }
 
 }

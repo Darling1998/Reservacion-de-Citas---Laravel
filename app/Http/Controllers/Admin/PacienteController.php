@@ -18,8 +18,10 @@ class PacienteController extends Controller
 {
     public function index(){
 
-        $pacientes = Person::paciente()->get();
-        //dd($pacientes);
+        $pacientes = DB::table('pacientes')
+        ->join('people','pacientes.persona_id','people.id')
+        ->join('users','people.id','=','users.persona_id')->where('pacientes.estado','=','A')->get()->toArray();
+         //dd($pacientes); 
         return view('paciente.index',compact('pacientes'));
     }
 
@@ -30,6 +32,67 @@ class PacienteController extends Controller
     }
 
     public function store(Request $request){
+        $yesterday = date('Y-m-d', strtotime('-1 days'));
+
+        
+        $request->validate( [
+            'nombres'=>'required',
+            'apellidos'=>'required',
+            'genero'=>'required',
+            'fecha_nacimiento'=>'required|date_format:Y-m-d|after:'.$yesterday,
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'cedula'=>[
+                'unique:people',
+                function ($attribute, $value, $fail) {
+                    $num1 = substr($value,0,1);
+                    $num2 = substr($value,1,1);
+                    $num3 = substr($value,2,1);
+                    $num4 = substr($value,3,1);
+                    $num5 = substr($value,4,1);
+                    $num6 = substr($value,5,1);
+                    $num7 = substr($value,6,1);
+                    $num8 = substr($value,7,1);
+                    $num9 = substr($value,8,1);
+                    $num10 = substr($value,9,1);
+                    $pares = $num2 + $num4 + $num6 + $num8;
+                    // echo $pares;
+                    if(strlen($value) == 10){
+                        if(substr($value,0,2) >= 01 && substr($value,0,2) <= 24){
+                            $num1 = $num1 * 2;
+                            if(($num1) > 9){$num1 = $num1 - 9;}
+                            $num3 = $num3 * 2;
+                            if($num3 > 9){$num3 = $num3 - 9;}
+                            $num5 = $num5 * 2;
+                            if($num5 > 9){$num5 = $num5 - 9;}
+                            $num7 = $num7 * 2;
+                            if($num7 > 9){$num7 = $num7 - 9;}
+                            $num9 = $num9 * 2;
+                            if($num9 > 9){$num9 = $num9 - 9;}
+                            $impares = $num1 + $num3 + $num5 + $num7 + $num9;
+                            $total = $pares + $impares;
+                            $mod = $total % 10;
+                            $numero_validador = 10 - $mod;
+                            // echo $numero_validador;
+                            if($numero_validador == 10){
+                                $numero_validador = 0;
+                            }
+                            if($numero_validador == $num10){
+                            return ;
+                            }else{
+                                $fail('La '.$attribute.' es invalida');
+                                //exit;
+                            }
+                        }else{
+                            $fail('La '.$attribute.' es invalida');
+                            //exit;
+                        }
+
+                    }else{
+                        $fail('La '.$attribute.' es invalida');
+                    }
+                }
+            ]
+        ]);
 
         $persona = Person::create([
             'nombres'=>  $request->nombres,
@@ -40,13 +103,14 @@ class PacienteController extends Controller
              'fecha_nacimiento'=>$request->fecha_nacimiento,
         ]);
  
+
         $paciente=Paciente::create([
             'persona_id'=>$persona['id'], 
         ]);
 
         $usuario= User::create([
             'persona_id'=>$persona['id'], 
-            'email' => $request->correo,
+            'email' => $request->email,
             'password' => Hash::make('password'),
         ])->assignRole('paciente');
 
@@ -54,29 +118,36 @@ class PacienteController extends Controller
             'paciente_id'=>$paciente['id'],
         ]);
 
+        $antecedentes= Antecedentes::create([
+          'paciente_id'=>$paciente['id']
+        ]); 
+
         
 
-       
-       
         $paciente->save();
         $hce->save();
+        $antecedentes->save();
        
-        return $usuario;
+        return redirect()->route('admin.pacientes.index');
 
 
     }
 
     public function edit($id){
 
+        //obetenr id paciente 
+        $idP= DB::table('pacientes')->where('pacientes.persona_id','=',$id)->select('pacientes.id as paci_id')->first();
+    
+        //dd($id);
         $paciente = DB::table('pacientes')
         ->join('hce','pacientes.id','=','hce.paciente_id')
         ->join('people',   'pacientes.persona_id','=','people.id')
-        ->join('antecedentes','pacientes.id','=','hce.paciente_id')
-        ->join('users',   'people.id','=','users.persona_id')->where('pacientes.persona_id','=',$id)
-        ->select('people.*', 'pacientes.id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his','antecedentes.*')
+        ->join('antecedentes','pacientes.id','=','antecedentes.paciente_id')
+        ->join('users',   'people.id','=','users.persona_id')->where('pacientes.id','=',$idP->paci_id)
+        ->select('people.*', 'pacientes.id as pac_id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his','antecedentes.*')
         ->get()->first();
 
-        //dd($id,$paciente);
+        //dd($id,$paciente,$idP->paci_id);
         return view('paciente.edit',compact('paciente'));
     }
 
@@ -105,36 +176,107 @@ class PacienteController extends Controller
 
             ]
          );
-         $notificacion ='Registro guardado correctamente';
-            return back()->with(compact('notificacion'));
+            $notificacion ='Antecedentes registrados correctamente';
+            return redirect()->route('admin.pacientes.index')->with(compact('notificacion'));
     }
 
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
     {
         
-        $reglas=[
-            'nombres'=>'required|min:3',
-            'apellidos'=>'required|min:3',
-            'cedula'=>'nullable|digits:10',
-            'telefono'=>'nullable|min:7',
-        ];
+        $request->validate( [
+            'nombres'=>'required',
+            'apellidos'=>'required',
+            'genero'=>'required',
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'cedula'=>[
+                'unique:people',
+                function ($attribute, $value, $fail) {
+                    $num1 = substr($value,0,1);
+                    $num2 = substr($value,1,1);
+                    $num3 = substr($value,2,1);
+                    $num4 = substr($value,3,1);
+                    $num5 = substr($value,4,1);
+                    $num6 = substr($value,5,1);
+                    $num7 = substr($value,6,1);
+                    $num8 = substr($value,7,1);
+                    $num9 = substr($value,8,1);
+                    $num10 = substr($value,9,1);
+                    $pares = $num2 + $num4 + $num6 + $num8;
+                    // echo $pares;
+                    if(strlen($value) == 10){
+                        if(substr($value,0,2) >= 01 && substr($value,0,2) <= 24){
+                            $num1 = $num1 * 2;
+                            if(($num1) > 9){$num1 = $num1 - 9;}
+                            $num3 = $num3 * 2;
+                            if($num3 > 9){$num3 = $num3 - 9;}
+                            $num5 = $num5 * 2;
+                            if($num5 > 9){$num5 = $num5 - 9;}
+                            $num7 = $num7 * 2;
+                            if($num7 > 9){$num7 = $num7 - 9;}
+                            $num9 = $num9 * 2;
+                            if($num9 > 9){$num9 = $num9 - 9;}
+                            $impares = $num1 + $num3 + $num5 + $num7 + $num9;
+                            $total = $pares + $impares;
+                            $mod = $total % 10;
+                            $numero_validador = 10 - $mod;
+                            // echo $numero_validador;
+                            if($numero_validador == 10){
+                                $numero_validador = 0;
+                            }
+                            if($numero_validador == $num10){
+                            return ;
+                            }else{
+                                $fail('La '.$attribute.' es invalida');
+                                //exit;
+                            }
+                        }else{
+                            $fail('La '.$attribute.' es invalida');
+                            //exit;
+                        }
 
+                    }else{
+                        $fail('La '.$attribute.' es invalida');
+                    }
+                }
+            ],
+            'telefono'=>'required'
+        ]);
 
-        $this->validate($request,$reglas);
-        $paciente=Paciente::where('persona_id',$id)->first();
-       //dd($request,$paciente);
+        $person=Person::paciente()->findOrFail($id);
+        //dd($request,$person);
 
-        
-        $data = $request->only('nombres','apellidos','cedula','telefono','email');
-      
-        
-        $paciente->fill($data);
-        $paciente->save(); 
-        $paciente->especialidades()->sync($request->input('especialidades'));
-        
-        $notificacion = 'La información del médico se ha actualizado correctamente.';
+        $data = $request->only('nombres','apellidos','cedula','telefono','genero','direccion');
+        $person->fill($data);
+        $person->save(); // UPDATE
+
+        $notificacion = 'La información del paciente se ha actualizado correctamente.';
     
-        return redirect()->route('admin.medicos.index')->with(compact('notificacion'));
-    }
+        return redirect()->route('admin.pacientes.index')->with(compact('notificacion'));
+    } 
 
+    public function destroy($id)//persona_id
+    {
+      // $infoP= DB::table('pacientes')->where('persona_id','=',$id)->select('pacientes.id as pac_id')->first(); //idpaciente
+
+       //dd($infoP->pac_id);
+
+       $us= DB::table('users')->where('users.persona_id','=',$id)->select('users.id as user_id')->first();
+       $pac= DB::table('pacientes')->where('pacientes.persona_id','=',$id)->select('pacientes.id as paci_id')->first();
+       dd($us->user_id,$pac->paci_id);
+
+       $persona= Person::findOrFail($id);
+       $persona->estado='I';
+       $persona->save();
+
+       $user=User::findOrFail($us->user_id);
+       $user->estado='I';
+       $user->save();
+
+       $pacienteId= Paciente::findOrFail($pac->paci_id);
+       $pacienteId->estado='I';
+       $pacienteId->save();
+
+        $notificacion = "Paciente eliminado Correctamente";
+        return redirect('/pacientes')->with(compact('notificacion'));
+       } 
 }

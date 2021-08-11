@@ -22,18 +22,6 @@
 
 @section('content')
     <div class="card">
-        @if( $errors->any())
-            <div class="alert alert-danger" role="alert">
-                <ul>
-                    @foreach($errors->all() as $error)
-                    <li>
-                        {{$error}}
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         <form action="{{url('medicos')}}" method="POST">
             @csrf
             <div class="card-body">
@@ -44,6 +32,9 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control danger letras-vd" placeholder="Darling"
                                 maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres')}}" >
+                                @error('nombres')
+                                    <small class="text-danger">*{{$message}}</small>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -54,6 +45,9 @@
                         <div class="col-sm-8">
                         <input type="text" class="form-control letras-vd" placeholder="De La Cruz"
                         maxlength="150" minlength="4"  required name="apellidos" value="{{ old('apellidos')}}">
+                        @error('apellidos')
+                            <small class="text-danger">*{{$message}}</small>
+                        @enderror
                         </div>
                     </div>
                     </div>
@@ -64,8 +58,11 @@
                         <div class="form-group row">
                             <label for="cedula" class="col-sm-4 col-form-label @error('cedula') is-invalid @enderror">Cédula</label>
                             <div class="col-sm-8">
-                            <input id="cedula" type="text" class="form-control @error('cedula') is-invalid @enderror" name="cedula" 
+                            <input id="cedula" type="number" class="form-control @error('cedula') is-invalid @enderror" name="cedula" 
                             value="{{ old('cedula') }}" required autocomplete="cedula" autofocus placeholder="092816837" maxlength="10" minlength="10">
+                            @error('cedula')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
                         </div>
                         </div>
                     </div>
@@ -75,6 +72,9 @@
                             <label for="email" class="col-sm-4 col-form-label">Correo</label>
                             <div class="col-sm-8">
                             <input type="email" class="form-control" placeholder="correo@ejemplo.com" name="email" required value="{{ old('email')}}">
+                            @error('email')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
                             </div>
                         </div>
                     </div>
@@ -87,6 +87,9 @@
                             <div class="col-sm-8">
                             <input type="text" class="form-control" placeholder="4515095-0986653745"
                                 maxlength="10" minlength="7"  name="telefono" required value="{{ old('telefono')}}">
+                                @error('telefono')
+                                    <small class="text-danger">*{{$message}}</small>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -95,6 +98,9 @@
                             <label for="password" class="col-sm-4 col-form-label">Contraseña</label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control" placeholder="minimo 8 caracteres" minlength="8"  name="password" required  value="{{ old('contra',Str::random(8))}}">
+                            @error('password')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
                             </div>
                         </div>
                     </div>
@@ -108,7 +114,7 @@
                             <label for="direccion" class="col-sm-4 col-form-label">Dirección</label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control"
-                                maxlength="10" minlength="10"  name="direccion" required value="{{ old('direccion')}}">
+                                 name="direccion" required value="{{ old('direccion')}}">
                             </div>
                         </div>
                     </div>

@@ -27,19 +27,18 @@
             @method('PUT')
             <div class="card-body">
 
-                
-                        <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group row">
-                                <label for="nombres" class="col-sm-4 col-form-label">Id Medico</label>
-                                <div class="col-3">
-                                    <input type="text" class="form-control" value="{{$medico->id_medico}}" disabled>
-                                </div>
+            
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group row">
+                            <label for="nombres" class="col-sm-4 col-form-label">Id Medico</label>
+                            <div class="col-3">
+                                <input type="text" class="form-control" value="{{$medico->id_medico}}" disabled>
                             </div>
                         </div>
                     </div>
-               
-
+                </div>
+            
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <div class="form-group row">
@@ -70,7 +69,7 @@
                         <div class="form-group row">
                             <label for="cedula" class="col-sm-4 col-form-label">Cédula</label>
                             <div class="col-sm-8">
-                            <input type="text" class="form-control"
+                            <input type="number" class="form-control"
                                 maxlength="10" minlength="10"  name="cedula" required value="{{ old('cedula',$medico->cedula)}}">
                             </div>
                         </div>

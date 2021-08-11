@@ -16,88 +16,156 @@
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-line-primary">
-                <div class="card-body">
-                    <form action="{{url('users/'.$useru->id)}}" method="POST"method="POST">
-                        @csrf
-                        @method('PUT')   
-                        <div class="box-body">
-                            <div class="form-group pading">
-                                <label for="nombres">Nombres</label>
-                                <input type="nombres" class="form-control @error('nombres') is-invalid @enderror" name="nombres" value="{{ $useru->nombres }}"  autofocus >
-                                    @error('nombres')
-                                        <span class="invalid-feedback text-center" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                            </div>
+    <div class="card">
+        <form action="{{url('users/'.$useru->id)}}" method="POST"method="POST">
+            @csrf
+            @method('PUT')   
 
-                            <div class="form-group">
-                                <label for="apellidos">Apellidos</label>
-                                <input id="apellidos" type="apellidos" class="form-control @error('apellidos') is-invalid @enderror" name="apellidos" value="{{ $useru->apellidos }}" autofocus>
-                                    @error('apellidos')
-                                        <span class="invalid-feedback text-center" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label class="font-weight-bolder" for="status">Género</label>
-                                <div class="checkbox icheck">
-                                    <label class="font-weight-bolder">
-                                        @if ($useru->genero == 'F')
-                                            <input type="radio" name="genero" value="F" checked> Femenino &nbsp;&nbsp;
-                                            <input type="radio" name="genero" value="M"> Masculino
-                                        @else
-                                        <input type="radio" name="genero" value="F" > Femenino &nbsp;&nbsp;
-                                        <input type="radio" name="genero" value="M" checked> Masculino
-                                        @endif
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="last_name">Cédula</label>
-                                <input  type="text" class="form-control @error('cedula') is-invalid @enderror"name="cedula" value="{{ $useru->cedula }}" autofocus>
-                                    @error('cedula')
-                                        <span class="invalid-feedback text-center" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email">Correo Electrónico</label>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"name="email" value="{{ $useru->email }}"  autocomplete="email" autofocus placeholder="Contraseña">
-                                    @error('email')
-                                        <span class="invalid-feedback text-center" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="password">Nueva Contraseña</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"name="password" value="{{ old('password') }}"  autocomplete="password" autofocus placeholder="Contraseña">
-                                    @error('password')
-                                        <span class="invalid-feedback text-center" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                            </div>
-
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-success">
-                                <i id="ajax-icon" class="fa fa-edit"></i> Guardar Cambios
-                            </button>
+            <input  name="user_id" type="hidden" value="{{$useru->id}}"> 
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="nombres">Nombres</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="nombres" required  value="{{ $useru->nombres }}" >
+                            @error('nombres')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
                         </div>
+                    </div>
 
-                    </form>
-                 </div>
+                    <div class="form-group col-md-6">
+                        <label for="apellidos">Apellidos</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="apellidos" required  value="{{ $useru->apellidos }}" >
+                            @error('apellidos')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cedula">Cédula</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="cedula" required  value="{{ $useru->cedula }}" >
+                            @error('cedula')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="telefono">Teléfono</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="telefono" required  value="{{ $useru->telefono }}">
+                            @error('telefono')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="email">Correo</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="email" required  value="{{ $useru->email }}" >
+                            @error('email')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="password">Contraseña</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                            maxlength="150" minlength="4" name="password" >
+                            <p>Modifica este campo si quieres cambiar la contraseña</p>
+                            @error('telefono')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="genero">Género</label>
+                        <div class="col-sm-9">
+                            
+                            <select class="form-control" name="genero" required>
+                                @if ($useru->genero=='M')
+                                <option value="M" selected>Masculino</option>
+                                <option value="F">Femenino</option>                                 
+                                @else
+                                <option value="M" >Masculino</option>
+                                <option value="F" selected>Femenino</option>         
+                                @endif
+                              </select>
+                              @error('genero')
+                              <small class="text-danger">*{{$message}}</small>
+                          @enderror
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="estado">Estado</label>
+                        <div class="col-sm-6">
+                            <div class="checkbox icheck">
+                                <label >
+                                    @if ($useru->nombres=='A')
+                                    <input type="radio" name="estado" value="A" checked>Activo&nbsp;&nbsp;
+                                    <input type="radio" name="estado" value="I"> Inactivo
+                                    @else
+                                    <input type="radio" name="estado" value="A" >Activo&nbsp;&nbsp;
+                                    <input type="radio" name="estado" value="I" checked> Inactivo
+                                    @endif
+                                    
+                                
+                                </label>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="password">Rol</label>
+                        <div class="col-sm-9">
+                            <div class="checkbox icheck">
+                                <label >
+                                  
+                                  <input type="radio" name="role" value="admin"  {{ $user->hasRole('admin') ? 'checked' : '' }}> Administrador&nbsp;&nbsp;
+                                  <input type="radio" name="role" value="doctor"  {{ $user->hasRole('doctor') ? 'checked' : '' }}> Médico
+                                  <input type="radio" name="role" value="asistente" {{ $user->hasRole('asistente') ? 'checked' : '' }}> asistente
+                                  <input type="radio" name="role" value="paciente" {{ $user->hasRole('paciente') ? 'checked' : '' }}> Paciente
+                                </label>
+                              </div>
+                            @error('telefono')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+                </div> 
+
             </div>
-        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                    <button type="submit" class="btn btn-primary"> Guardar</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </form>
     </div>
+
 @stop

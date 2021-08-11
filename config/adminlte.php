@@ -67,7 +67,7 @@ return [
     'usermenu_enabled' => true,
     'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => true,
+    'usermenu_image' => false,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
 
@@ -308,6 +308,12 @@ return [
                     'can'=> 'pacientes.reserva.index',
                 ],
                 [
+                    'text' => 'Reserva',
+                    'url'  => '/asistente/reservar',
+                    'icon'=>'fas fa-user-nurse',
+                    'can'=> 'asistente.reserva.create',
+                ],
+                [
                     'text' => 'Mis Citas',
                     'url'  => 'citas',
                     'icon'=>'fas fa-user-nurse',
@@ -320,17 +326,20 @@ return [
                     'icon'=>'fas fa-calendar-alt',
                     'can'=> 'agenda.index',
                 ],
-                /* [
-                    'text' => 'Recetas',
-                    'submenu' => [
+                [
+                    'text' => 'Consulta Historial Clinico',
+                    'url'  => 'historia-clinico',
+                    'icon'=>'fas fa-notes-medical',
+                    'can'=> 'agenda.index',
+                   /*  'submenu' => [
 
                         [
                             'text' => 'Crear Receta',
                             'url'  => 'receta',
                             'icon'=>''
                         ],
-                    ]
-                ] */
+                    ] */
+                ] 
             ],
         ],
         [
@@ -339,9 +348,9 @@ return [
             'can'=> 'admin.reportes.barra',
             'submenu' => [
                 [
-                    'text' => 'Total Citas',
-                    'url'  => 'total',
-                    'icon'=>'fas fa-user-nurse'
+                    'text' => 'General',
+                    'url'  => 'reportes',
+                    'icon'=>'fas fa-tachometer-alt'
                 ]
             ],
         ],

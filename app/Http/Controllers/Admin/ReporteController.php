@@ -35,19 +35,36 @@ class ReporteController extends Controller
         $inicioEspe = $actual->subYear()->format('Y-m-d');
         $finEspe=$actual->format('Y-m-d');
 
-        return view('admin.reportes.index',compact('cantidades','inicio','fin','inicioEspe','finEspe'));
+        $fecha_actual=date('Y-m-d');
+        $desde =  date('Y-m-d',strtotime($fecha_actual." -6 month")); ;
+        $citas = DB::table('citas')
+            ->join('especialidads', 'citas.especialidad_id', '=', 'especialidads.id')
+            ->select( array('especialidads.nombre',DB::raw('count(especialidad_id) as total')))
+            ->whereBetween('fecha_cita',[$desde,$fecha_actual])
+            ->groupBy('especialidad_id','especialidads.nombre')
+            ->get(); 
+
+            $array = json_decode(json_encode($citas), true);
+            
+           // dd(json_encode($citas));
+         $especial =[];
+          foreach($array as $cita){
+            $especial[]=['name'=>$cita['nombre'],'y'=>$cita['total']];
+          }
+
+        return view('admin.reportes.index',compact('cantidades','inicio','fin','inicioEspe','finEspe','especial'));
     }
 
 
     public function medicosJson(Request $request){
         $inicio=$request->input('inicio');
         $fin=$request->input('fin');;
-        /*   $nombres= DB::table('medicos')
+/*           $nombres= DB::table('medicos')
                  ->join('people',   'medicos.persona_id','=','people.id')
                 ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_medico"))
-                ->take(3)->get(); */
-
-         $medicos = Medico::doctores()->select( )
+                ->take(3)->get();  */
+                /* DB::raw("( SELECT people.nombres FROM people where people.id= persona_id) as nombres") */
+         $medicos = Medico::doctores()->select(DB::raw("( SELECT people.nombres FROM people where people.id= persona_id) as nombres"))
             ->withCount([
                 'citasAtendidas'=>function($query) use ($inicio,$fin){
                 $query->whereBetween('fecha_cita',[$inicio,$fin]);
@@ -60,19 +77,9 @@ class ReporteController extends Controller
             ->orderBy('citas_atendidas_count','desc')
             ->take(3)->get();
 
-        /*         dd(DB::table('medicos')->join('people','medicos.persona_id','people.id')
-        ->where('medicos.persona_id','=',15)
-        ->select('people.nombres')->get()); */
-       
-        /*      
-        foreach ($medicos as $aux=>  $item) {
-            $nombres= DB::table('medicos')->join('people', 'medicos.persona_id', 'people.id')
-            ->where('medicos.persona_id', '=', $item->persona_id)
-            ->select('people.nombres')->get()->toArray();
-        } */
 
         $data =[];
-        $data['categorias']=$medicos->pluck('name');
+        $data['categorias']=$medicos->pluck('nombres');
         $series=[];
         //citas atendidas
         $series1['name']='Citas Atendidas';
@@ -84,61 +91,53 @@ class ReporteController extends Controller
 
         $series[] = $series1;
         $series[] = $series2;
-        $data['series']=$series;
+        $data['series']=$series; 
         return $data;
     }
 
 
-    public function especialidadesDemandadas(){
+/*     public function especialidadesDemandadas(){
         $actual=Carbon::now();
         $inicio = $actual->subYear()->format('Y-m-d');
         $fin=$actual->format('Y-m-d');
       
         return view('admin.reportes.especialidades',compact('inicio','fin'));
-    }
+    } */
 
-     public function especialidadesDemandadasJson(Request $request){
-        $inicio=$request->input('inicio');
-        $fin=$request->input('fin');
+    /*   public function especialidadesDemandadasJson(Request $request){
+       
 
-/*   SELECT count(especialidad_id) as camtidxES, especialidads.nombre FROM citas 
-    inner join especialidads on citas.especialidad_id=especialidads.id 
-    group by(especialidad_id)  */
+        /*   SELECT count(especialidad_id) as camtidxES, especialidads.nombre FROM citas 
+            inner join especialidads on citas.especialidad_id=especialidads.id 
+            group by(especialidad_id)  
+        
 
-
-
-    $citas = DB::table('citas')
-    ->join('especialidads', 'citas.especialidad_id', '=', 'especialidads.id')
-    ->select( array('especialidads.nombre',DB::raw('count(especialidad_id) as total')))
-    ->whereBetween('fecha_cita',[$inicio,$fin])
-    ->groupBy('especialidad_id','especialidads.nombre')
-    ->get(); 
-
-    $data =[];
-    $data['categorias']=$citas->pluck('nombre');
-    $series=[];
-  
-    $series1['name']='Citas Atendidas';
-    $series1['data'] = $citas->pluck('total');
-    $series[] = $series1;
-    $data['series']=$series;
+        $data =[];
+        $data['categorias']=$citas->pluck('nombre');
+        $series=[];
     
-    dd($data);
-   return $data;
+        $series1['name']='Citas Atendidas';
+        $series1['data'] = $citas->pluck('total');
+        $series[] = $series1;
+        $data['series']=$series;
+        
+        dd($data);
+        return $data;
    
     }
-
-    public function hola(){
-        $from = date('2018-01-01');
-        $to = date('2021-08-07');
-
+    */
+/*     public function hola(){
+        $fecha_actual=date('Y-m-d');
+        $desde =  date('Y-m-d',strtotime($fecha_actual." -6 month")); ;
+    
+        dd($fecha_actual,$desde);
         $citas = DB::table('citas')
         ->join('especialidads', 'citas.especialidad_id', '=', 'especialidads.id')
         ->select( array('especialidads.nombre',DB::raw('count(especialidad_id) as total')))
-        ->whereBetween('fecha_cita',[$from,$to])
+        ->whereBetween('fecha_cita',[$desde,$fecha_actual])
         ->groupBy('especialidad_id','especialidads.nombre')
         ->get();
         dd($citas);
-    }
+    } */
 }
 

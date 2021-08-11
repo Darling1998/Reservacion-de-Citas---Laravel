@@ -24,7 +24,7 @@ class UsersIndex extends Component
         /* select * from users u inner join people p on u.persona_id=p.id */
        
         $users= User::join('people', 'users.persona_id', '=', 'people.id')
-            ->select('users.email','users.id', 'people.nombres','people.apellidos','people.genero')
+            ->select('users.email','users.id', 'people.nombres','people.apellidos','people.genero','users.estado as estado')
             ->where('email','LIKE','%'.$this->search.'%')
             ->orWhere('nombres','LIKE','%'.$this->search.'%')->paginate();
 

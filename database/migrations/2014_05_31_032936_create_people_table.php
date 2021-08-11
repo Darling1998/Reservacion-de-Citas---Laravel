@@ -18,9 +18,10 @@ class CreatePeopleTable extends Migration
             $table->string('nombres');
             $table->string('apellidos'); 
             $table->string('cedula')->nullable();
-            $table->string('genero');
+            $table->string('genero')->nullable();
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable(); 
+            $table->string('estado',1)->default('A');
             
             $table->timestamps();
         });

@@ -35,7 +35,7 @@ class CitaFactory extends Factory
         
         return [
             'descripcion'=>$this->faker->sentence(5),
-            'especialidad_id'=>$this->faker->numberBetween(1,2),
+            'especialidad_id'=>$this->faker->numberBetween(3,3),
             'medico_id'=>$this->faker->randomElement($medicosIds),
             'fecha_cita'=>$fecha_cita,
             'hora_cita'=>$hora_cita,

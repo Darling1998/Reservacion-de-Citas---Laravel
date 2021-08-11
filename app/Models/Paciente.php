@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Person;
+use Illuminate\Support\Facades\DB;
 
 class Paciente extends Model
 {
@@ -23,5 +24,11 @@ class Paciente extends Model
     public function scopePacientes($query)
     {
         $users = User::role('paciente')->get();
+    }
+
+
+    public function validar($cedula){
+        $b= DB::table('people')->where('cedula','=','$cedula');
+
     }
 }

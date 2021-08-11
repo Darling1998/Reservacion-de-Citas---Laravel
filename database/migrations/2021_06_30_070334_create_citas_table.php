@@ -16,7 +16,7 @@ class CreateCitasTable extends Migration
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
   
-            $table->string('descripcion');
+            $table->string('descripcion')->nullable();
 
             $table->date('fecha_cita');
             $table->time('hora_cita');

@@ -15,20 +15,20 @@ class CreateAntecedentesTable extends Migration
     {
         Schema::create('antecedentes', function (Blueprint $table) {
             $table->id();
-            $table->text('antecedentes_personales');
-            $table->text('historia_personal');
+            $table->text('antecedentes_personales')->nullable();
+            $table->text('historia_personal')->nullable();
  
-            $table->integer('menarquia');
-            $table->integer('ciclos');
-            $table->date('fecha_ultima_menstruacion');
-            $table->integer('gestas');
-            $table->integer('cesareas');
-            $table->integer('abortos');
-            $table->integer('hijos');
+            $table->integer('menarquia')->nullable();
+            $table->integer('ciclos')->nullable();
+            $table->date('fecha_ultima_menstruacion')->nullable();
+            $table->integer('gestas')->nullable();
+            $table->integer('cesareas')->nullable();
+            $table->integer('abortos')->nullable();
+            $table->integer('hijos')->nullable();
 
-            $table->boolean('activo');
-            $table->text('habitos_toxicos');
-            $table->text('examen_funcional');
+            $table->boolean('activo')->nullable();
+            $table->text('habitos_toxicos')->nullable();
+            $table->text('examen_funcional')->nullable();
 
             $table->unsignedBigInteger('paciente_id');
             $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');

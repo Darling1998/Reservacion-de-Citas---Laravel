@@ -39,6 +39,7 @@
                             <th>Género</th>
                             <th>Tipo</th>
                             <th>Correo electrónico</th>
+                            <th>Estado</th>
                             <th>Opciones</th> 
                         </tr>
                     </thead>
@@ -68,6 +69,12 @@
                                 @endif
                             </td>
                             <td>{{ $user->email  }}</td>
+                            @if ($user->estado=='A')
+                            <td><span class="badge badge-success">{{$user->estado}}</span></td>
+                            @else
+                            <td><span class="badge badge-warning">{{$user->estado}}</span></td>
+                            @endif
+                           
                             <td width="10px">
                                 <a class="btn btn-primary btn-rounded" href="{{route('admin.users.show',$user->id)}}"><i class="fas fa-eye" style="color: white;"></i></a>
                                 <a class="btn btn-primary btn-rounded" href="{{route('admin.users.edit',$user->id)}}"><i class="fas fa-pencil-alt" style="color: white;"></i></a>

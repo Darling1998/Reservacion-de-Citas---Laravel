@@ -28,7 +28,7 @@ class Person extends Model
 
 
     public function usuario(){
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class,'persona_id');
     }
 
     public function medicos(){
@@ -39,7 +39,7 @@ class Person extends Model
     /* SELECT * FROM people p inner join medicos m on m.persona_id=p.id INNER JOIN users u on p.id=u.persona_id */
     public function scopeDoctores($query){
        return $query->join('medicos','medicos.persona_id','=','people.id')
-       ->join('users','people.id','=','users.persona_id');
+       ->join('users','people.id','=','users.persona_id')->where('medicos.estado','=','A');
    } 
 
    public function pacientes(){
@@ -48,7 +48,7 @@ class Person extends Model
 
     public function scopePaciente($query){
         return $query->join('pacientes','pacientes.persona_id','=','people.id')
-        ->join('users','people.id','=','users.persona_id');
+        ->join('users','people.id','=','users.persona_id')->where('pacientes.estado','=','A');
     } 
  
 

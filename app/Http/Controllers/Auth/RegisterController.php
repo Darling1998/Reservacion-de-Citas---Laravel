@@ -95,12 +95,13 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
+        dd($data['telefono']);
         $persona = Person::create([
             'nombres'=>  $data['nombres'],
             'apellidos'=>  $data['apellidos'],
             'cedula'=>  $data['cedula'],
             'telefono'=>  $data['telefono'],
-             'genero'=>  $data['genero'],
+            'genero'=>  $data['genero'],
         ]);
  
         $paciente=Paciente::create([

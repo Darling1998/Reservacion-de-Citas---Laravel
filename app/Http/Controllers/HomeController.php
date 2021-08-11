@@ -39,10 +39,10 @@ class HomeController extends Controller
     public function index(){
 
 
-        $users = DB::table('users')->count();
+        $users = DB::table('users')->where('estado','=','A')->count();
         $especialidades = DB::table('especialidads')->count();
-        $pacientes = DB::table('pacientes')->count();
-        $medicos = DB::table('medicos')->count();
+        $pacientes = DB::table('pacientes')->where('estado','=','A')->count();
+        $medicos = DB::table('medicos')->where('estado','=','A')->count();
     
         $citasPorDia= Cita::select([
             DB::raw('DAYOFWEEK(fecha_cita) as dias'),

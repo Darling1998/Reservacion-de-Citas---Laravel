@@ -163,7 +163,7 @@ class CitaController extends Controller
         $carbonTime= Carbon::createFromFormat('g:i A',$data['hora_cita']);
         $data['hora_cita']=$carbonTime->format('H:i:s');
         
-        Cita::create($data);
+        $cita= Cita::create($data);
 
         //******************ENVIAR EMAIL DE RESERVA CORRECTA***********************///
         $medico_id=$request->input('medico_id');
@@ -180,6 +180,7 @@ class CitaController extends Controller
             ->get()->first();
 
         $infoCita =[];
+        $infoCita['id']=$cita['id'];
         $infoCita['medico']=$infomedico->nombre_medico;
         $infoCita['especialidad']=$infoEsp->especialidad;
         $infoCita['paciente']=$res->nombre_paciente;
@@ -227,6 +228,7 @@ class CitaController extends Controller
         ->get()->first();
 
         $infoCita =[];
+        $infoCita['id']=$cita->id;
         $infoCita['medico']=$infomedico->nombre_medico;
         $infoCita['especialidad']=$infoEsp->especialidad;
         $infoCita['fecha']=$cita->fecha_cita; 

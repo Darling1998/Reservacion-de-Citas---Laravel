@@ -17,6 +17,13 @@
 @stop
 
 @section('content')
+  <div class="card-body">
+    @if (session('notificacion'))
+      <div class="alert alert-success" role="alert">
+        {{ session('notificacion') }}
+      </div>
+    @endif
+  </div> 
     @livewire('admin.users-index')
 @stop
 

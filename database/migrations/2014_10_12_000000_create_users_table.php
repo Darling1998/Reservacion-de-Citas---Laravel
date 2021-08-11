@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            
+            $table->string('estado',1)->default('A');
             $table->unsignedBigInteger('persona_id');
             $table->foreign('persona_id')->references('id')->on('people')->onDelete('cascade');
 

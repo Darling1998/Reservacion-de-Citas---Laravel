@@ -20,7 +20,7 @@ class CreateConsultaTable extends Migration
             $table->string('presion')->nullable();
             $table->float('talla')->nullable();
             $table->integer('temperatura')->nullable();
-
+            $table->timestamps();
            
             $table->unsignedBigInteger('cita_id');
             $table->foreign('cita_id')->references('id')->on('citas')->onDelete('cascade');
@@ -28,7 +28,7 @@ class CreateConsultaTable extends Migration
             //HCE
             $table->unsignedBigInteger('hce_id');
             $table->foreign('hce_id')->references('id')->on('hce')->onDelete('cascade');
-            $table->timestamps();
+           
         });
     }
 

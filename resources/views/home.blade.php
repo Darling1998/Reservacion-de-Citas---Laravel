@@ -177,7 +177,7 @@
               <table class="table m-0">
                 <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>#</th>
                   <th>Paciente</th>
                   <th>Especialidad</th>
                   
