@@ -270,7 +270,7 @@ return [
                     'text' => 'Pacientes',
                     'url'  => 'pacientes',
                     'icon'=>'fas fa-user-injured',
-                    'can'=> 'admin.pacientes.index',
+                   /*  'can'=> 'admin.pacientes.index', */
                 ],
                 [
                     'text' => 'Horarios',
@@ -330,7 +330,7 @@ return [
                     'text' => 'Consulta Historial Clinico',
                     'url'  => 'historia-clinico',
                     'icon'=>'fas fa-notes-medical',
-                    'can'=> 'agenda.index',
+                    'can'=> 'medico.historial',
                    /*  'submenu' => [
 
                         [

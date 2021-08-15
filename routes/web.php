@@ -43,6 +43,7 @@ Route::middleware(['auth', 'admin' ])->group(function () {
     Route::post('correo/comunicar', [App\Http\Controllers\HomeController::class, 'notificar'])->name('admin.notificar'); 
     /* Route::get('/reportes/citas/lineas',[App\Http\Controllers\Admin\ReporteController::class, 'reporteBarras'])->name('admin.reportes.barra'); */
     Route::get('reportes',[App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('admin.reportes');
+    Route::get('/reportes/especialidades/barras',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadas']);
 
     Route::get('agenda',[App\Http\Controllers\AgendaController::class, 'index'])->name('agenda.index');
     Route::get('agenda/mostrar',[App\Http\Controllers\AgendaController::class, 'show']);
@@ -108,16 +109,20 @@ Route::middleware(['auth', 'asistente'])->group(function () {
 ///REPORTES
 Route::get('/reportes/medicos/barras/infor',[App\Http\Controllers\Admin\ReporteController::class, 'medicosJson']);
 
-Route::get('/reportes/especialidades/torta',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadas']);
-Route::get('/reportes/especialidades/torta/infor',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadasJson']);
+ //vista especialidades
+ 
+ //data de especialidades en json
+ Route::get('/reportes/especialidades/barras/infor',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadasJson']);
 
-/* Route::get('/reportes/hola',[App\Http\Controllers\Admin\ReporteController::class, 'hola']); */
 
-/* Route::get('/dashboard',[App\Http\Controllers\Admin\DashboardController::class, 'index']); */
 
 Route::get('/antecedentes',[App\Http\Controllers\Admin\PacienteController::class,'llenarAntecedentes']);
 
-
+ //vista especialidades
+ Route::get('/reportes/especialidades/barras',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadas']);
+ //data de especialidades en json
+ Route::get('/reportes/especialidades/barras/infor',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadasJson']);
 
 
 //reservar del lado del asistente
+Route::get('medicion/paciente/{id}',[App\Http\Controllers\Admin\PacienteController::class,'verMediciones']);

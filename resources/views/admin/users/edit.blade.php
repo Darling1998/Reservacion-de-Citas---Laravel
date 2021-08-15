@@ -28,7 +28,7 @@
                         <label for="nombres">Nombres</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                            maxlength="150" minlength="4" name="nombres" required  value="{{ $useru->nombres }}" >
+                            maxlength="150" minlength="4" name="nombres" required  value="{{ $useru->nombres }}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -39,7 +39,7 @@
                         <label for="apellidos">Apellidos</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                            maxlength="150" minlength="4" name="apellidos" required  value="{{ $useru->apellidos }}" >
+                            maxlength="150" minlength="4" name="apellidos" required  value="{{ $useru->apellidos }}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
                             @error('apellidos')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -52,7 +52,7 @@
                         <label for="cedula">Cédula</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                            maxlength="150" minlength="4" name="cedula" required  value="{{ $useru->cedula }}" >
+                            maxlength="150" minlength="4" name="cedula" required  value="{{ $useru->cedula }}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror

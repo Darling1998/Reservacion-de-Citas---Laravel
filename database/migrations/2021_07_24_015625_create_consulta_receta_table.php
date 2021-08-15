@@ -25,12 +25,7 @@ class CreateConsultaRecetaTable extends Migration
              $table->unsignedBigInteger('consulta_id');
              $table->foreign('consulta_id')->references('id')->on('consulta')->onDelete('cascade');
  
-            $table->string('cantidad');
-            $table->string('nombre_medicamento');
-            $table->text('indicaciones');
-            
-
-
+        
             $table->timestamps();
         });
     }

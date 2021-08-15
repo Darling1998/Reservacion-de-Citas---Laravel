@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Antecedentes;
-use App\Models\Hce;
+use App\Models\Consulta;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Paciente;
@@ -32,14 +32,15 @@ class PacienteController extends Controller
     }
 
     public function store(Request $request){
-        $yesterday = date('Y-m-d', strtotime('-1 days'));
+        $hoy = date('Y-m-d');
 
+      
         
         $request->validate( [
             'nombres'=>'required',
             'apellidos'=>'required',
             'genero'=>'required',
-            'fecha_nacimiento'=>'required|date_format:Y-m-d|after:'.$yesterday,
+            'fecha_nacimiento'=>'required|date_format:Y-m-d|before_or_equal:'.$hoy,
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'cedula'=>[
                 'unique:people',
@@ -93,19 +94,24 @@ class PacienteController extends Controller
                 }
             ]
         ]);
-
+        $edad= $this->calculaedad($request->input('fecha_nacimiento'));
+        //dd($edad);
         $persona = Person::create([
             'nombres'=>  $request->nombres,
             'apellidos'=>  $request->apellidos,
             'cedula'=>  $request->cedula,
             'telefono'=> $request->telefono,
-             'genero'=>  $request->genero,
-             'fecha_nacimiento'=>$request->fecha_nacimiento,
+            'genero'=>  $request->genero,
+            'direccion'=>$request->direccion,
         ]);
  
 
+
         $paciente=Paciente::create([
             'persona_id'=>$persona['id'], 
+            'fecha_nacimiento'=>$request->input('fecha_nacimiento'),
+            'estado_civil'=>$request->est_civil,
+            'edad'=>$edad,
         ]);
 
         $usuario= User::create([
@@ -114,9 +120,7 @@ class PacienteController extends Controller
             'password' => Hash::make('password'),
         ])->assignRole('paciente');
 
-        $hce=Hce::create([
-            'paciente_id'=>$paciente['id'],
-        ]);
+
 
         $antecedentes= Antecedentes::create([
           'paciente_id'=>$paciente['id']
@@ -125,7 +129,7 @@ class PacienteController extends Controller
         
 
         $paciente->save();
-        $hce->save();
+
         $antecedentes->save();
        
         return redirect()->route('admin.pacientes.index');
@@ -133,21 +137,26 @@ class PacienteController extends Controller
 
     }
 
-    public function edit($id){
+    public function edit($id){//id persona
 
         //obetenr id paciente 
         $idP= DB::table('pacientes')->where('pacientes.persona_id','=',$id)->select('pacientes.id as paci_id')->first();
     
+
+
         //dd($id);
         $paciente = DB::table('pacientes')
-        ->join('hce','pacientes.id','=','hce.paciente_id')
         ->join('people',   'pacientes.persona_id','=','people.id')
         ->join('antecedentes','pacientes.id','=','antecedentes.paciente_id')
         ->join('users',   'people.id','=','users.persona_id')->where('pacientes.id','=',$idP->paci_id)
-        ->select('people.*', 'pacientes.id as pac_id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','hce.id as num_his','antecedentes.*')
+        ->select('people.*', 'pacientes.id as pac_id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','antecedentes.*')
         ->get()->first();
 
         //dd($id,$paciente,$idP->paci_id);
+
+
+
+        
         return view('paciente.edit',compact('paciente'));
     }
 
@@ -184,8 +193,8 @@ class PacienteController extends Controller
     {
         
         $request->validate( [
-            'nombres'=>'required',
-            'apellidos'=>'required',
+            'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+            'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
             'genero'=>'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'cedula'=>[
@@ -256,27 +265,53 @@ class PacienteController extends Controller
 
     public function destroy($id)//persona_id
     {
-      // $infoP= DB::table('pacientes')->where('persona_id','=',$id)->select('pacientes.id as pac_id')->first(); //idpaciente
+        // $infoP= DB::table('pacientes')->where('persona_id','=',$id)->select('pacientes.id as pac_id')->first(); //idpaciente
 
-       //dd($infoP->pac_id);
+        //dd($infoP->pac_id);
 
-       $us= DB::table('users')->where('users.persona_id','=',$id)->select('users.id as user_id')->first();
-       $pac= DB::table('pacientes')->where('pacientes.persona_id','=',$id)->select('pacientes.id as paci_id')->first();
-       dd($us->user_id,$pac->paci_id);
+        $us= DB::table('users')->where('users.persona_id','=',$id)->select('users.id as user_id')->first();
+        $pac= DB::table('pacientes')->where('pacientes.persona_id','=',$id)->select('pacientes.id as paci_id')->first();
+        dd($us->user_id,$pac->paci_id);
 
-       $persona= Person::findOrFail($id);
-       $persona->estado='I';
-       $persona->save();
+        $persona= Person::findOrFail($id);
+        $persona->estado='I';
+        $persona->save();
 
-       $user=User::findOrFail($us->user_id);
-       $user->estado='I';
-       $user->save();
+        $user=User::findOrFail($us->user_id);
+        $user->estado='I';
+        $user->save();
 
-       $pacienteId= Paciente::findOrFail($pac->paci_id);
-       $pacienteId->estado='I';
-       $pacienteId->save();
+        $pacienteId= Paciente::findOrFail($pac->paci_id);
+        $pacienteId->estado='I';
+        $pacienteId->save();
 
         $notificacion = "Paciente eliminado Correctamente";
         return redirect('/pacientes')->with(compact('notificacion'));
-       } 
+       
+    } 
+
+
+    public function verMediciones($id){ //idPaciente
+    
+        $consultas = Consulta::select()->join('citas','consulta.cita_id','citas.id')->where('citas.paciente_id',$id)->get();
+
+        //dd($consultas);
+    
+        return view('paciente.medicion',compact('consultas'));
+    
+    
+    }
+
+
+    function calculaedad($fechanacimiento){
+        list($ano,$mes,$dia) = explode("-",$fechanacimiento);
+        $ano_diferencia  = date("Y") - $ano;
+        $mes_diferencia = date("m") - $mes;
+        $dia_diferencia   = date("d") - $dia;
+        if ($dia_diferencia < 0 || $mes_diferencia < 0)
+          $ano_diferencia--;
+        return $ano_diferencia;
+      }
 }
+
+  

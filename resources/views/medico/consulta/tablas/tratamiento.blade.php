@@ -1,4 +1,5 @@
 <div class="card">
+  
 
   <div class="card-body">
     @if (session('alerta'))
@@ -18,7 +19,7 @@
         <form action="{{ url('consulta/receta') }}" method="post" class="formulario-receta"> 
           
           @csrf
-          
+          <input  name="consulta_id" type="hidden" value="{{$consulta->id}}"> 
             <div class="form-group card-body table-responsive">
                 <label for="receta">
                     Receta Médica
@@ -26,15 +27,24 @@
                 </label>
                 <table class="table table-bordered table-hover" id="tableReceta">
                     <tr>
-                        <th>Descripción</th>
+                        <th>Nombre Medicamento</th>
                         <th>Cantidad</th>
                         <th>Indicaciones</th>
                         <th>Opciones</th>
                     </tr>
                     <tr>
                         <td>
-                          <input  name="consulta_id" type="hidden" value="{{$consulta->id}}"> 
-                            <input type="text" class="form-control" name="descripcion[]">
+                        
+                          <select class="js-example-basic-single" name="medicamentos[]">
+                      
+                              @foreach ($medicamentos as $item)
+                              <option value="{{$item->id}}">{{$item->descripcion}} - {{$item->forma_farmaceutica}} - {{$item->concentracion}}</option>
+                              @endforeach
+                            
+                            </select>
+                          </select>
+                      
+                      
                         </td>
 
                         <td>
@@ -65,7 +75,7 @@
     </div>
   </div>
 
-{{--   <div class="modal fade" id="myModal" style="display: none;" aria-hidden="true">
+  <div class="modal fade" id="myModal" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -87,5 +97,3 @@
     </div>
     <!-- /.modal-dialog -->
   </div>
- --}}
- 

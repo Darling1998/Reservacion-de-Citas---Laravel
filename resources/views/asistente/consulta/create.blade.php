@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="card">
+  <div class="card-body">
+    @if (session('notificacion'))
+    <div class="alert alert-success" role="alert">
+      {{ session('notificacion') }}
+    </div>
+    @endif
+</div> 
     <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
       <div class="card-body">
         <form action="{{ url('signos') }}" method="post"> 
@@ -17,7 +24,7 @@
                     <img src="https://image.flaticon.com/icons/png/512/3209/3209114.png"  class="rounded-circle" width="30px" height="30px">
                   </span>
                 </div>
-                <input type="text" class="form-control" placeholder="12 Cm" id="talla" name="talla" required=""  value="" >
+                <input type="number" class="form-control" placeholder="12" id="talla" name="talla" required=""  value="" >
               </div>
             </div>
             <div class="form-group col-md-3">

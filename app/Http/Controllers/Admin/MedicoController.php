@@ -97,8 +97,8 @@ class MedicoController extends Controller
        // dd($request);
 
         $request->validate( [
-            'nombres'=>'required',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+            'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
             'password' => ['required', 'string', 'min:8'],
             'especialidades'=>'required',
             'cedula'=>[
@@ -216,9 +216,59 @@ class MedicoController extends Controller
     {
         
         $reglas=[
-            'nombres'=>'required|min:3',
-            'apellidos'=>'required|min:3',
-            'cedula'=>'nullable|digits:10',
+            'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+            'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+            'cedula'=>[
+                'unique:people',
+                function ($attribute, $value, $fail) {
+                    $num1 = substr($value,0,1);
+                    $num2 = substr($value,1,1);
+                    $num3 = substr($value,2,1);
+                    $num4 = substr($value,3,1);
+                    $num5 = substr($value,4,1);
+                    $num6 = substr($value,5,1);
+                    $num7 = substr($value,6,1);
+                    $num8 = substr($value,7,1);
+                    $num9 = substr($value,8,1);
+                    $num10 = substr($value,9,1);
+                    $pares = $num2 + $num4 + $num6 + $num8;
+                    // echo $pares;
+                    if(strlen($value) == 10){
+                        if(substr($value,0,2) >= 01 && substr($value,0,2) <= 24){
+                            $num1 = $num1 * 2;
+                            if(($num1) > 9){$num1 = $num1 - 9;}
+                            $num3 = $num3 * 2;
+                            if($num3 > 9){$num3 = $num3 - 9;}
+                            $num5 = $num5 * 2;
+                            if($num5 > 9){$num5 = $num5 - 9;}
+                            $num7 = $num7 * 2;
+                            if($num7 > 9){$num7 = $num7 - 9;}
+                            $num9 = $num9 * 2;
+                            if($num9 > 9){$num9 = $num9 - 9;}
+                            $impares = $num1 + $num3 + $num5 + $num7 + $num9;
+                            $total = $pares + $impares;
+                            $mod = $total % 10;
+                            $numero_validador = 10 - $mod;
+                            // echo $numero_validador;
+                            if($numero_validador == 10){
+                                $numero_validador = 0;
+                            }
+                            if($numero_validador == $num10){
+                            return ;
+                            }else{
+                                $fail('La '.$attribute.' es invalida');
+                                //exit;
+                            }
+                        }else{
+                            $fail('La '.$attribute.' es invalida');
+                            //exit;
+                        }
+
+                    }else{
+                        $fail('La '.$attribute.' es invalida');
+                    }
+                }
+            ],
             'telefono'=>'nullable|min:7',
         
         ];

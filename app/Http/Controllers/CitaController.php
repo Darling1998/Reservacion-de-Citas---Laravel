@@ -245,23 +245,19 @@ class CitaController extends Controller
     }
  
     public function cancel(Cita $cita,Request $request){
-
+ /*
         if($request->has('justificacion')){
-         /*   $cancell = new CitaCL(); 
+           $cancell = new CitaCL(); 
            $cancell->justificacion = $request->input('justificacion');
            $cancell->cancelado_por_id= auth()->id();
        
-           $cita->cancelacion()->save($cancell);*/
-       }
+           $cita->cancelacion()->save($cancell);
+       }*/
       
        $cita->estado='CL';
 
        $guardado = $cita->save();
 
-       if ($guardado){
-        $cita->paciente->enviarFCM('Su cita ha sido CL');
-       }
-      
 
 
        $notificacion='La cita se ha cancelado correctamente';

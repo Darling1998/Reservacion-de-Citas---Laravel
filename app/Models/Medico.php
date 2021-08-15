@@ -25,7 +25,7 @@ class Medico extends Model
     /*RELACIONES*/
     public function persona()
     {
-        return $this->belongsTo(Person::class, 'foreign_key');
+        return $this->belongsTo(Person::class);
     }
 
     public function especialidades(){

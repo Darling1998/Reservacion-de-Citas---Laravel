@@ -10,7 +10,6 @@ use App\Models\Person;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Hce;
 use App\Models\Antecedentes;
 use Illuminate\Support\Facades\Date;
 
@@ -95,7 +94,7 @@ class RegisterController extends Controller
     
     protected function create(array $data)
     {
-        dd($data['telefono']);
+        //dd($data['telefono']);
         $persona = Person::create([
             'nombres'=>  $data['nombres'],
             'apellidos'=>  $data['apellidos'],
@@ -114,9 +113,6 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ])->assignRole('paciente');;
 
-        $hce=Hce::create([
-            'paciente_id'=>$paciente['id'],
-        ]);
          $antecedentes= Antecedentes::create([
             'antecedentes_personales'=>'',
             'historia_personal'=>'',
@@ -135,7 +131,7 @@ class RegisterController extends Controller
     
 
         $paciente->save();
-        $hce->save();
+      
         $antecedentes->save(); 
         return $usuario;
 

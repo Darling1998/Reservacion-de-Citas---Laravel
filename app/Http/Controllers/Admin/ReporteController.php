@@ -59,7 +59,7 @@ class ReporteController extends Controller
     public function medicosJson(Request $request){
         $inicio=$request->input('inicio');
         $fin=$request->input('fin');;
-/*           $nombres= DB::table('medicos')
+      /*           $nombres= DB::table('medicos')
                  ->join('people',   'medicos.persona_id','=','people.id')
                 ->select(DB::raw("CONCAT(people.nombres,' ',people.apellidos) as nombre_medico"))
                 ->take(3)->get();  */
@@ -96,21 +96,24 @@ class ReporteController extends Controller
     }
 
 
-/*     public function especialidadesDemandadas(){
+    public function especialidadesDemandadas(){
         $actual=Carbon::now();
         $inicio = $actual->subYear()->format('Y-m-d');
         $fin=$actual->format('Y-m-d');
       
         return view('admin.reportes.especialidades',compact('inicio','fin'));
-    } */
+    }
 
-    /*   public function especialidadesDemandadasJson(Request $request){
-       
+     public function especialidadesDemandadasJson(Request $request){
+        $inicio=$request->input('inicio');
+        $fin=$request->input('fin');
 
-        /*   SELECT count(especialidad_id) as camtidxES, especialidads.nombre FROM citas 
-            inner join especialidads on citas.especialidad_id=especialidads.id 
-            group by(especialidad_id)  
-        
+        $citas = DB::table('citas')
+        ->join('especialidads', 'citas.especialidad_id', '=', 'especialidads.id')
+        ->select( array('especialidads.nombre',DB::raw('count(especialidad_id) as total')))
+        ->whereBetween('fecha_cita',[$inicio,$fin])
+        ->groupBy('especialidad_id','especialidads.nombre')
+        ->get(); 
 
         $data =[];
         $data['categorias']=$citas->pluck('nombre');
@@ -121,23 +124,9 @@ class ReporteController extends Controller
         $series[] = $series1;
         $data['series']=$series;
         
-        dd($data);
+
         return $data;
    
     }
-    */
-/*     public function hola(){
-        $fecha_actual=date('Y-m-d');
-        $desde =  date('Y-m-d',strtotime($fecha_actual." -6 month")); ;
-    
-        dd($fecha_actual,$desde);
-        $citas = DB::table('citas')
-        ->join('especialidads', 'citas.especialidad_id', '=', 'especialidads.id')
-        ->select( array('especialidads.nombre',DB::raw('count(especialidad_id) as total')))
-        ->whereBetween('fecha_cita',[$desde,$fecha_actual])
-        ->groupBy('especialidad_id','especialidads.nombre')
-        ->get();
-        dd($citas);
-    } */
 }
 

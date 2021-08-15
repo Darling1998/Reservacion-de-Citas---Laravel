@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHceTable extends Migration
+class CreateMedicamentos extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateHceTable extends Migration
      */
     public function up()
     {
-        Schema::create('hce', function (Blueprint $table) {
+        Schema::create('medicamentos', function (Blueprint $table) {
             $table->id();
-            
-            $table->unsignedBigInteger('paciente_id');
-            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
+            $table->string('descripcion');
+            $table->string('forma_farmaceutica',30);
+            $table->string('concentracion');
+            $table->string('via_administracion')->nullable();
+            $table->string('estado',1)->default('A');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateHceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hce');
+        Schema::dropIfExists('medicamentos');
     }
 }

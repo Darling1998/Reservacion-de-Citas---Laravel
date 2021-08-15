@@ -30,8 +30,8 @@
                         <div class="form-group row">
                             <label for="nombres" class="col-sm-4 col-form-label">Nombres</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control danger letras-vd" placeholder="Darling"
-                                maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres')}}" >
+                                <input type="text" class="form-control danger letras-vd" placeholder="Ingrese nombres"
+                                maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
                                 @error('nombres')
                                     <small class="text-danger">*{{$message}}</small>
                                 @enderror
@@ -43,8 +43,8 @@
                     <div class="form-group row">
                         <label for="apellidos" class="col-sm-4 col-form-label">Apellidos</label>
                         <div class="col-sm-8">
-                        <input type="text" class="form-control letras-vd" placeholder="De La Cruz"
-                        maxlength="150" minlength="4"  required name="apellidos" value="{{ old('apellidos')}}">
+                        <input type="text" class="form-control letras-vd" placeholder="Ingrese Apellidos"
+                        maxlength="150" minlength="4"  required name="apellidos" value="{{ old('apellidos')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                         @error('apellidos')
                             <small class="text-danger">*{{$message}}</small>
                         @enderror
@@ -59,7 +59,7 @@
                             <label for="cedula" class="col-sm-4 col-form-label @error('cedula') is-invalid @enderror">Cédula</label>
                             <div class="col-sm-8">
                             <input id="cedula" type="number" class="form-control @error('cedula') is-invalid @enderror" name="cedula" 
-                            value="{{ old('cedula') }}" required autocomplete="cedula" autofocus placeholder="092816837" maxlength="10" minlength="10">
+                            value="{{ old('cedula') }}" required autocomplete="cedula"  maxlength="10" minlength="10" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -86,7 +86,7 @@
                             <label for="telefono" class="col-sm-4 col-form-label">Teléfono</label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control" placeholder="4515095-0986653745"
-                                maxlength="10" minlength="7"  name="telefono" required value="{{ old('telefono')}}">
+                                maxlength="10" minlength="7"  name="telefono" required value="{{ old('telefono')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
                                 @error('telefono')
                                     <small class="text-danger">*{{$message}}</small>
                                 @enderror

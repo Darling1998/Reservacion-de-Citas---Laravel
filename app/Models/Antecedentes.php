@@ -9,6 +9,8 @@ class Antecedentes extends Model
 {
     use HasFactory;
 
+    protected $table="antecedentes";
+    
     protected $fillable=[
     'antecedentes_personales',
     'historia_personal',
@@ -24,4 +26,9 @@ class Antecedentes extends Model
     'examen_funcional',
     'paciente_id'
     ];
+
+
+    public function paciente(){
+        return $this->belongsTo(Paciente::class);
+    }
 }

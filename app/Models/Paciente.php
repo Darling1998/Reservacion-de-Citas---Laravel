@@ -14,7 +14,11 @@ class Paciente extends Model
     
     protected $fillable=[
         'persona_id',
-        'fecha_nacimiento'
+        'fecha_nacimiento',
+        'estado_civil',
+        'ocupacion',
+        'edad',
+        'telefono_familiar'
     ];
 
     public function persona(){
@@ -27,8 +31,13 @@ class Paciente extends Model
     }
 
 
-    public function validar($cedula){
-        $b= DB::table('people')->where('cedula','=','$cedula');
+    public function buscar($cedula){
+        $b= DB::table('people')->where('cedula','=',$cedula)->first();
+        return $b;
+    }
 
+
+    public function antecedentes(){
+        return $this->hasMany(Antecedentes::class);
     }
 }

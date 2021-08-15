@@ -64,26 +64,10 @@
     
   </div>
 
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="card-body">
-          <figure class="highcharts-figure">
-            <div id="containerEspe"></div>
-        </figure>
-        </div>
-      </div>
-    </div>
-    
-  </div>
-
     
 
 @stop
 
-@section('css')
-   
-@stop
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -227,51 +211,6 @@
       });
     </script>
 
-  {{-- especialidades --}}
-  <script>
-    array=@JSON($especial);
-    console.log(array)
-    Highcharts.chart('containerEspe', {
-      chart: {
-          type: 'pie',
-          options3d: {
-              enabled: true,
-              alpha: 45,
-              beta: 0
-          }
-      },
-      title: {
-          text: 'Especialidades más demandadas'
-      },
-      accessibility: {
-          point: {
-              valueSuffix: '%'
-          }
-      },
-      tooltip: {
-          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      plotOptions: {
-          pie: {
-              allowPointSelect: true,
-              cursor: 'pointer',
-              depth: 35,
-              dataLabels: {
-                  enabled: true,
-                  format: '{point.name}'
-              }
-          }
-      },
-      colors: [ '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4','#058DC7', '#50B432', '#ED561B',],
-      series: [ {
-          type: 'pie',
-          name: 'Porcentaje',
-          data: array,
-      } 
-    ]
-  });
-
-</script>
 
 
  

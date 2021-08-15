@@ -18,9 +18,8 @@ class SignosController extends Controller
 
         $citas = DB::table('citas')
         ->join('pacientes','citas.paciente_id','=','pacientes.id')
-        ->join('hce','pacientes.id','=','hce.paciente_id')
         ->where('citas.id','=',$id)
-        ->select('hce.id as hce', 'citas.*')
+        ->select('citas.*')
         ->get()->first();
        
        //dd($citas);
@@ -31,39 +30,29 @@ class SignosController extends Controller
 
     public function guardarSignos(Request $request){
 
-     // dd($request);
-        if ($request->hce_id===null) {
-            $nuevoHce= Hce::create(['paciente_id' => $request->paciente_id]);
-            Consulta::updateOrCreate(
-                [
-                   'cita_id'=>$request->cita_id
-                ],
-                [  
-                    'observacion'=>$request->observacion,
-                    'peso'=>$request->peso,
-                    'presion'=>$request->presion,
-                    'talla'=>$request->talla,
-                    'temperatura'=>$request->temperatura,
-    
-                    'hce_id'=> $nuevoHce->id ,
-                ]
-             );
-        }else{
-            Consulta::updateOrCreate(
-                [
-                   'cita_id'=>$request->cita_id
-                ],
-                [  
-                    'observacion'=>$request->observacion,
-                    'peso'=>$request->peso,
-                    'presion'=>$request->presion,
-                    'talla'=>$request->talla,
-                    'temperatura'=>$request->temperatura,
-    
-                    'hce_id'=> $request->hce_id ,
-                ]
-             );
-        }
+      //dd($request);
+        
+        
+        $request->validate([
+            'talla'=>['required'],
+            'peso'=>['required'],
+            'presion'=>['required'],
+            'temperatura'=>['required'],
+        ]);
+
+        Consulta::updateOrCreate(
+        [
+            'cita_id'=>$request->cita_id
+        ],
+        [  
+            'motivo'=>$request->observacion,
+            'peso'=>$request->peso,
+            'presion'=>$request->presion,
+            'talla'=>$request->talla,
+            'temperatura'=>$request->temperatura,
+        ]
+        );
+        
 
         $notificacion ='Signos registrados correctamente';
         return back()->with(compact('notificacion'));

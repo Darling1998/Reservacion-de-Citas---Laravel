@@ -1,39 +1,5 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <style>
-            .titulo{
-                text-align: center
-            }
-        </style>
-    </head>
 
-    <body>
-        <table style="border: 1px solid black" class="configTableCabeceraAll configBorderItem topCabecera">
-            <tr>
-                <td>
-
-                </td>
-            </tr>
-        </table>
-
-    
-        <table style="position: fixed;bottom:0px">
-            <thead>
-                <tr>
-                    <th style="background-color:white">
-                        Receta Médica
-                    </th>
-                </tr>
-            </thead>
-
-        </table>
-    </body>
-
-</html> 
- --}}
-
-{{-- <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -70,7 +36,7 @@
       #logo img {
         width: 90px;
       }
-      h1 {
+      h3 {
         border-top: 1px solid  #5D6975;
         border-bottom: 1px solid  #5D6975;
         color: #5D6975;
@@ -84,11 +50,11 @@
       #project {
         float: left;
       }
-      #project span {
+      #project label {
         color: #5D6975;
         text-align: right;
         width: 52px;
-        margin-right: 10px;
+        margin-right: 20px;
         display: inline-block;
         font-size: 0.8em;
       }
@@ -96,10 +62,7 @@
         float: right;
         text-align: right;
       }
-      #project div,
-      #company div {
-        white-space: nowrap;        
-      }
+     
       table {
         width: 100%;
         border-collapse: collapse;
@@ -154,221 +117,60 @@
         padding: 8px 0;
         text-align: center;
       }
+      .center {
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
   </head>
   <body>
+    
     <header class="clearfix">
       <div id="logo">
         <img src="img/logo.png">
+        <h4>Dr:{{$infoMedico->apellidos}}{{$infoMedico->nombres}}</h4>
       </div>
-      <h1>INVOICE 3-2-1</h1>
-      <div id="company" class="clearfix">
-        <div>Company Name</div>
-        <div>455 Foggy Heights,<br /> AZ 85004, US</div>
-        <div>(602) 519-0450</div>
-        <div><a href="mailto:company@example.com">company@example.com</a></div>
-      </div>
+      <h3>Receta Médica</h3>
       <div id="project">
-        <div><span>PROJECT</span> Website development</div>
-        <div><span>CLIENT</span> John Doe</div>
-        <div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div>
-        <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div>
-        <div><span>DATE</span> August 17, 2015</div>
-        <div><span>DUE DATE</span> September 17, 2015</div>
+        
+        <div> <strong>Fecha: </strong>  {{$hora->fecha}} {{$hora->hora}}</div>
+        <div> <strong> Paciente: </strong>{{$infoPaciente->nombres}}{{$infoPaciente->apellidos}}</div>
+        <div> <strong>Cédula: </strong> {{$infoPaciente->cedula}}</div>
+        <div> <strong>Diagnosticos: </strong></div>
+          <br>
+          @foreach ($diagnosticos as $item)
+          <div> {{$item->codigo}}-{{$item->descripcion}}</div>    
+          @endforeach
       </div>
-    </header>
 
-      <table>
-        <thead>
-          <tr>
-            <th class="service">SERVICE</th>
-            <th class="desc">DESCRIPTION</th>
-            <th>PRICE</th>
-            <th>QTY</th>
-            <th>TOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="service">Design</td>
-            <td class="desc">Creating a recognizable design solution based on the company's existing visual identity</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">26</td>
-            <td class="total">$1,040.00</td>
-          </tr>
-          <tr>
-            <td class="service">Development</td>
-            <td class="desc">Developing a Content Management System-based Website</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">80</td>
-            <td class="total">$3,200.00</td>
-          </tr>
-          <tr>
-            <td class="service">SEO</td>
-            <td class="desc">Optimize the site for search engines (SEO)</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">20</td>
-            <td class="total">$800.00</td>
-          </tr>
-          <tr>
-            <td class="service">Training</td>
-            <td class="desc">Initial training sessions for staff responsible for uploading web content</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">4</td>
-            <td class="total">$160.00</td>
-          </tr>
-          <tr>
-            <td colspan="4">SUBTOTAL</td>
-            <td class="total">$5,200.00</td>
-          </tr>
-          <tr>
-            <td colspan="4">TAX 25%</td>
-            <td class="total">$1,300.00</td>
-          </tr>
-          <tr>
-            <td colspan="4" class="grand total">GRAND TOTAL</td>
-            <td class="grand total">$6,500.00</td>
-          </tr>
-        </tbody>
-      </table>
-      <div id="notices">
-        <div>NOTICE:</div>
-        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
-      </div>
-    </main>
+    </header>
+    <label style="color: red; text-align:left;">RP</label>
+    <table class="center">
+      <thead>
+        <tr>
+          <th class="service">DESCRIPCION</th>
+          <th class="desc">CANTIDAD</th>
+          <th class="desc">INDICACIONES</th>
+        </tr>
+        
+      </thead>
+      <tbody>
+       
+        @foreach ($medicamentos as $item)
+        <tr>
+          <td class="service">{{$item->descripcion}} {{$item->forma_farmaceutica}}</td>
+          <td class="desc">{{$item->cantidad}}</td>
+          <td style="text-align:left;">{{$item->indicaciones}}</td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+
+
     <footer>
-      Invoice was created on a computer and is valid without the signature and seal.
+     Guayaquil-Ecuador
     </footer>
-    <div style='page-break-after: always;'></div>
-    <header class="clearfix">
-      <div id="logo">
-        <img src="img/logo.png">
-      </div>
-      <h1>INVOICE 3-2-1</h1>
-      <div id="company" class="clearfix">
-        <div>Company Name</div>
-        <div>455 Foggy Heights,<br /> AZ 85004, US</div>
-        <div>(602) 519-0450</div>
-        <div><a href="mailto:company@example.com">company@example.com</a></div>
-      </div>
-      <div id="project">
-        <div><span>PROJECT</span> Website development</div>
-        <div><span>CLIENT</span> John Doe</div>
-        <div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div>
-        <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div>
-        <div><span>DATE</span> August 17, 2015</div>
-        <div><span>DUE DATE</span> September 17, 2015</div>
-      </div>
-    </header>
-    <main>
-      <table>
-        <thead>
-          <tr>
-            <th class="service">SERVICE</th>
-            <th class="desc">DESCRIPTION</th>
-            <th>PRICE</th>
-            <th>QTY</th>
-            <th>TOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="service">Design</td>
-            <td class="desc">Creating a recognizable design solution based on the company's existing visual identity</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">26</td>
-            <td class="total">$1,040.00</td>
-          </tr>
-          <tr>
-            <td class="service">Development</td>
-            <td class="desc">Developing a Content Management System-based Website</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">80</td>
-            <td class="total">$3,200.00</td>
-          </tr>
-          <tr>
-            <td class="service">SEO</td>
-            <td class="desc">Optimize the site for search engines (SEO)</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">20</td>
-            <td class="total">$800.00</td>
-          </tr>
-          <tr>
-            <td class="service">Training</td>
-            <td class="desc">Initial training sessions for staff responsible for uploading web content</td>
-            <td class="unit">$40.00</td>
-            <td class="qty">4</td>
-            <td class="total">$160.00</td>
-          </tr>
-          <tr>
-            <td colspan="4">SUBTOTAL</td>
-            <td class="total">$5,200.00</td>
-          </tr>
-          <tr>
-            <td colspan="4">TAX 25%</td>
-            <td class="total">$1,300.00</td>
-          </tr>
-          <tr>
-            <td colspan="4" class="grand total">GRAND TOTAL</td>
-            <td class="grand total">$6,500.00</td>
-          </tr>
-        </tbody>
-      </table>
   </body>
-</html> --}}
+</html> 
 
 
-<html>
-    <head>
-        <style>
-            /** 
-                Establezca los márgenes de la página en 0, por lo que el pie de página y el encabezado
-                puede ser de altura y anchura completas.
-             **/
-            @page {
-                margin: 0cm 0cm;
-            }
-
-            /** Defina ahora los márgenes reales de cada página en el PDF **/
-            body {
-                margin-top: 3cm;
-                margin-left: 2cm;
-                margin-right: 2cm;
-                margin-bottom: 2cm;
-            }
-
-            /** Definir las reglas del encabezado **/
-            header {
-                position: fixed;
-                top: 0cm;
-                left: 0cm;
-                right: 0cm;
-                height: 3cm;
-            }
-
-            /** Definir las reglas del pie de página **/
-            footer {
-                position: fixed; 
-                bottom: 0cm; 
-                left: 0cm; 
-                right: 0cm;
-                height: 2cm;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- Defina bloques de encabezado y pie de página antes de su contenido -->
-        <header>
-            <img src="header.png" width="100%" height="100%"/>
-        </header>
-
-        <footer>
-            <img src="footer.png" width="100%" height="100%"/>
-        </footer>
-
-        <!-- Envuelva el contenido de su PDF dentro de una etiqueta principal -->
-        <main>
-            <h1>Hello World</h1>
-        </main>
-    </body>
-</html>

@@ -60,8 +60,8 @@ class ReservaController extends Controller
             $nombre_pac='';
 
             $request->validate( [
-                'nombres'=>'required',
-                'apellidos'=>'required',
+                'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+                'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'cedula'=>[
                     'unique:people',
@@ -139,9 +139,7 @@ class ReservaController extends Controller
     
             $email_pac=$usuario['email'];
 
-            $hce=Hce::create([
-                'paciente_id'=>$paciente['id'],
-            ]);
+
             $paciente_id=$paciente['id'];
 
             $antecedentes= Antecedentes::create([
@@ -149,7 +147,7 @@ class ReservaController extends Controller
             ]); 
 
             $paciente->save();
-            $hce->save();
+         
             $antecedentes->save(); 
 
             $nombre_pac=$persona['nombres'];

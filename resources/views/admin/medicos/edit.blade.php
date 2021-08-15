@@ -45,7 +45,7 @@
                             <label for="nombres" class="col-sm-4 col-form-label">Nombres</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control danger letras-vd" placeholder="Darling"
-                                maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres',$medico->nombres)}}" >
+                                maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres',$medico->nombres)}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                             <label for="apellidos" class="col-sm-4 col-form-label">Apellidos</label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control letras-vd" placeholder="De La Cruz"
-                            maxlength="150" minlength="4"  required name="apellidos" value="{{ old('apellidos',$medico->apellidos)}}">
+                            maxlength="150" minlength="4"  required name="apellidos" value="{{ old('apellidos',$medico->apellidos)}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                             <label for="cedula" class="col-sm-4 col-form-label">Cédula</label>
                             <div class="col-sm-8">
                             <input type="number" class="form-control"
-                                maxlength="10" minlength="10"  name="cedula" required value="{{ old('cedula',$medico->cedula)}}">
+                                maxlength="10" minlength="10"  name="cedula" required value="{{ old('cedula',$medico->cedula)}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             </div>
                         </div>
                     </div>

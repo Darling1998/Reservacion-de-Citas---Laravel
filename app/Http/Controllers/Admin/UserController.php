@@ -25,8 +25,8 @@ class UserController extends Controller
     {
         //dd($request);
         $request->validate([
-            'nombres' => ['required', 'string', 'max:100'],
-            'apellidos' => ['required', 'string', 'max:100'],
+            'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
+            'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'genero'=>['required'],

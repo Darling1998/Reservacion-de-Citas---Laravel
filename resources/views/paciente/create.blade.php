@@ -29,19 +29,13 @@
             @csrf
             <div class="card-body">
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="num_his">Historia Clínica N°</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control"  disabled
-                             name="num_his" required value="{{ old('num_his')}}" >
-                        </div>
-                    </div>
+                   
 
                     <div class="form-group col-md-4">
                         <label for="nombres">Nombres</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                            maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres')}}" >
+                            maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -52,8 +46,19 @@
                         <label for="apellidos">Apellidos</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                            maxlength="150" minlength="4" name="apellidos" required value="{{ old('apellidos')}}" >
+                            maxlength="150" minlength="4" name="apellidos" required value="{{ old('apellidos')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('apellidos')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="cedula">Cédula</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" 
+                            maxlength="150" minlength="4" name="cedula" required value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
+                            @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
                         </div>
@@ -61,16 +66,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="cedula">Cédula</label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" 
-                            maxlength="150" minlength="4" name="cedula" required value="{{ old('apellido')}}" >
-                            @error('cedula')
-                                <small class="text-danger">*{{$message}}</small>
-                            @enderror
-                        </div>
-                    </div>
+                   
                     
                     <div class="form-group col-md-4">
                         <label for="genero">Género</label>
@@ -87,7 +83,7 @@
 
                     <div class="form-group col-md-4">
                         <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                        <div class="input-group date" data-provide="datepicker">
+                        <div class="input-group col-sm-9 date" data-provide="datepicker">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                             </div>
@@ -100,6 +96,17 @@
                                 @enderror
                           </div>
                     </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="est_civil">Estado Civil</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"  
+                             name="est_civil" required value="{{ old('est_civil')}}" >
+                             @error('est_civil')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -107,7 +114,7 @@
                         <label for="telefono">Teléfono</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" 
-                             name="telefono" required value="{{ old('telefono')}}" >
+                             name="telefono" required value="{{ old('telefono')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" >
                              @error('telefono')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror

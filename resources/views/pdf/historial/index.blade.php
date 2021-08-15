@@ -1,179 +1,99 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>Historial Clinico</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
-            integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-            <style>
-                .clearfix:after {
-                  content: "";
-                  display: table;
-                  clear: both;
-                }
-                body {
-                  position: relative;
-                  width: 20cm;  
-                  height: 26.7cm; 
-                  margin: 0 auto; 
-                  color: #001028;
-                  background: #FFFFFF; 
-                  font-family: Arial, sans-serif; 
-                  font-size: 12px; 
-                  font-family: Arial;
-                }
-                header {
-                  padding: 10px 0;
-                  margin-bottom: 30px;
-                }
-                #logo {
-                  text-align: left;
-                  margin-bottom: 10px;
-                }
-                #hed{
-                  text-align: center;
-                }
-                #logo img {
-                  width: 90px;
-                }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead></thead>
+    <tbody>
+      <tr>
+        <td class="border-b-4 border-grey-200 pb-5 mb-5">
+            @foreach ($consultas as $item)
+            <tr>
+              <td>
+                <table width="100%" class="mb-5" style="width:100%" border="0" cellpadding="0">
 
-                table {
-                  width: 100%;
-                  border-collapse: collapse;
-                  border-spacing: 0;
-                  margin-bottom: 20px;
-                }
-                table tr:nth-child(2n-1) td {
-                  background: #F5F5F5;
-                }
-                table th,
-                table td {
-                  text-align: center;
-                }
-                table th {
-                  padding: 5px 20px;
-                  color: #5D6975;
-                  border-bottom: 1px solid #C1CED9;
-                  white-space: nowrap;        
-                  font-weight: normal;
-                }
-                table td {
-                  padding: 20px;
-                  text-align: right;
-                }
-                               
-              </style>
-    </head>
-      {{--     <body>
-        <div class="container body-content">
-            <div class="container">
-                <div class="row justify-content-end" style="padding-top:10px;">
-                    <h1></h1>
-                </div>
-                <div class="row" style="padding-top:10px;">
-                    <div class="col-6" style="padding-top:10px;">
-                        <img witdth="100px" height="100px"src="{{ public_path('img/logo.png') }}" />
-                    </div>
-                </div>
+                  <table style="width: 90%" border="1">
+                    <thead>
+                      <tr>
+                          <td><strong> APELLIDOS </strong> <br>
+                            {{$paciente->persona->apellidos}}
+                          </td>
+                          <td> <strong>NOMBRES </strong> <br>
+                            {{$paciente->persona->apellidos}}
+                          </td>
+                          <td rowspan="2"></td>
+                          
+                      </tr>
+                      <tr>
+                          <td> <strong>TELÉFONO </strong> <br>
+                            {{$paciente->persona->telefono}}
+                          </td>
+                          <td> <strong>CÉDULA </strong> <br>
+                            {{$paciente->persona->cedula}}
+                          </td>
+                      </tr>
+                      <tr  colspan="2">
+                          <td> <strong>DIRECCIÓN </strong><br>
+                            {{$paciente->persona->direccion}}
+                          </td>
+                          <td> <strong>ESTADO CIVIL </strong> <br>
+                              
+                          </td>
+                          <td> <strong>OCUPACIÓN </strong> <br>
 
-         
-                <table>
-                    <tbody>
-                        <tr>
-                            Nombres y Apellidos: {{$infoPaciente->nombres}}{{$infoPaciente->apellidos}}
-                        </tr>
-                    </tbody>
-                </table>
-        
-                
-                
-            </div>
-        </div>
-     </body> --}}
+                          </td>
+                      </tr>
+                    </thead>
 
-    <body>
-        <header class="clearfix">
-            <div id="logo">
-                <img src="img/logo.png">
-            </div>
-            <div id=hed>
-                <strong>HISTORIA CLINICA</strong>
-            </div>
-    
-        </header>
-    
-        <table style="width: 90%" border="1">
-            <thead>
-                <tr>
-                    <th><strong> APELLIDOS </strong> <br>
-                        {{$infoPaciente->apellidos}}
-                    </th>
-                    <th> <strong>NOMBRES </strong> <br>
-                        {{$infoPaciente->nombres}}
-                    </th>
-                    <td rowspan="2"></td>
-                    
-                </tr>
-                <tr>
-                    <th> <strong>TELÉFONO </strong> <br>
-                        {{$infoPaciente->telefono}}
-                    </th>
-                    <th> <strong>CÉDULA </strong> <br>
-                        {{$infoPaciente->cedula}}
-                    </th>
-                </tr>
-                <tr  colspan="2">
-                    <th> <strong>DIRECCIÓN </strong><br>
-                        {{$infoPaciente->direccion}}
-                    </th>
-                    <th> <strong>ESTADO CIVIL </strong> <br>
-                        
-                    </th>
-                    <th> <strong>OCUPACIÓN </strong> <br>
+                  </table>
+               </table>
 
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        <div><strong>MOTIVO DE CONSULTA</strong></div>
-        <div class="row">
-          <div>
-              <label for=""> {{$consult->motivo}}</label>
-          </div>
-          <br>
-          <br>
-        </div>
-        <div><strong>Enfermedad Actual</strong></div>
-          <div class="row">
-            <div>
-                <label for=""> </label>
-            </div>
-            <br>
-            <br>
-          </div>
-        <div><strong>DIAGNOSTICOS</strong></div>
-        <div class="row">
-            <div>
-                @foreach ($diagnosticos as $item)
-                    <label>  {{$item->codigo}} {{$item->descripcion}}</label> <br>
-                @endforeach
-            </div>
-            <br><br>
-            <br><br>
-        </div>
-       
-        
-        <footer>
-          <div class="row">
-            <table>
-              <tr>
-                <th> <strong>Fecha:</strong> {{$consult->fecha}} </th>
-                <th> <strong> Nombre Médico:</strong>  {{$infoC->nombres}} {{$infoC->apellidos}}</th>
-              </tr>
-            </table>
-          </div>
-        </footer>
+               <div><strong> Antecedentes</strong> </div>
+               @foreach ($antecedentes as $item)
+               <div class="markdown text-grey-700"></div>
+               <label>Antecedentes Personales:{{$item->antecedentes_personales}}</label><br><br>
+               <label>Historia Personal:{{$item->historia_personal}}</label><br><br>
+               <label>Habitos Tóxicos:{{$item->habitos_toxicos}}</label><br><br>
+               <label>Exámen Funcional:{{$item->examen_funcional}}</label><br><br>
+               @endforeach
+              
+ 
+                <div><strong>Motivo de Consulta</strong> </div>
+                {{$item->motivo}}
+                <br>
+                <div> <strong> Enfermedad Actual</strong></div>
+                <br>
+                <div><strong>Diagnosticos</strong> </div>
 
-      </body>
+
+
+                <div style=" text-align: center;"><strong>Exámen Fisico</strong> </div>
+                <label> TA:  {{$item->presion}}    mmHg   &nbsp; &nbsp; &nbsp; &nbsp;    Peso:  {{$item->peso}} kg  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;   Talla: {{$item->talla}}  cms</label>
+                <br>
+                <br>
+                <div >FECHA:</span><span > ____________________________________</span><span>  </span><span >NOMBRE DEL MEDICO:</span><span >  ______________________1</span></div>
+                <div></div>
+              </td>
+              
+            </tr>
+            
+            @endforeach
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
 </html>

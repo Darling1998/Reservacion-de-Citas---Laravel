@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 use App\Models\Cita;
 use App\Models\Consulta;
 use App\Models\ConsultaReceta;
+use App\Models\DetalleReceta;
 use App\Models\Diagnostico;
+use App\Models\Medicamento;
+use App\Models\Medico;
+use App\Models\Paciente;
 use PDF;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -28,21 +32,19 @@ class ConsultaController extends Controller
         //llevo el moctivo de la consulta al tab2 del médico
         $citas = DB::table('citas')
         ->join('pacientes','citas.paciente_id','=','pacientes.id')
-        ->join('hce','pacientes.id','=','hce.paciente_id')
         ->where('citas.id','=',$id)
-        ->select('citas.id as cita_id','hce.id as hce', 'citas.descripcion as motivo' ,'citas.examen as examen')
+        ->select('citas.id as cita_id', 'citas.descripcion as motivo' ,'citas.examen as examen')
         ->get()->first();
 
-        
-        //cargo los signos vitales de esa consulta
-        $consulta=DB::table('consulta')
-        ->where('cita_id','=',$id)
-        ->get()->first();;
+        $consulta= Consulta::updateOrCreate(
+            [
+                'cita_id'=>$id
+            ]
+        );
 
-        //cargarmos el select con CIE-10
         $diagnosticos= Diagnostico::all();
 
-       /*  dd($consulta); */
+ 
      
         $id_diagnosticos = DB::table('diagnosticos')
         ->join('consulta_diagnostico','diagnosticos.id','=','consulta_diagnostico.diagnostico_id')
@@ -50,35 +52,11 @@ class ConsultaController extends Controller
         ->select('consulta_diagnostico.diagnostico_id as id')
         ->get()->pluck('id'); 
 
-        return view('medico.consulta.index' ,compact('citas','consulta','id_diagnosticos','diagnosticos','info'));
+        $medicamentos= Medicamento::all();
+
+        return view('medico.consulta.index' ,compact('citas','consulta','id_diagnosticos','diagnosticos','info','medicamentos'));
     }
 
-/* 
-    public function show( $id){
-
-        $info= DB::table('citas')
-        ->select('people.cita_id as cita_id','people.hce as hce','people.motivo as sexo','pacientes.id as paciente_id')
-        ->join('pacientes',   'citas.paciente_id','=','pacientes.id')
-        ->join('people',   'people.id','=','pacientes.persona_id')
-        ->where('citas.id','=',$id)
-        ->get()->toArray();
-
-        $affected = Cita::findorFail($id);
-        $idp=$affected->paciente_id;
-       
-        $existe = DB::table('pacientes')
-           ->whereExists(function ($query) use($idp) {
-               $query->select(DB::raw(1))
-                     ->from('antecedentes')
-                     ->where('antecedentes.paciente_id',$idp);
-           })
-           ->get();
-
-     return view('medico.consulta.index',compact('info'));
-        
-
-       
-    } */
 
 
     public function guardarDiagnostico(Request $request){
@@ -86,44 +64,80 @@ class ConsultaController extends Controller
         $consulta= Consulta::findorFail($request->consulta_id);
          $consulta->diagnosticos()->attach($request->input('diagnosticos') ,['observacion' => $request->observacion] );
         $notificacion = 'Diagnosticos asignados correctamente';
-        return back()->with(compact('notificacion'));
-      
+
+        return redirect()->back()->with(compact('notificacion'))->withInput(['tab' => 'consulta']);
+       
     }
 
     public function guardarReceta(Request $request){
-        
+
+        //dd($request);
         $dateh = Carbon::now();
         $date = $dateh->format('Y-m-d');
 
-        $descripcion = $request->descripcion;
+        //CREO LA CONSULTA_RECETE
+        $con_rec=ConsultaReceta::create([
+            'consulta_id'=>$request->consulta_id,
+            'fecha'=>$date,
+            'hora'=> $date = Carbon::now()->toDateTimeString()
+        ]);
+        
+
+
+
+        $medicamentos = $request->medicamentos;
         $cantidad = $request->cantidad;
         $indicaciones = $request->indicaciones;
         $consulta_id=$request->consulta_id;
-      for($count = 0; $count < count($descripcion); $count++)
+
+      for($count = 0; $count < count($medicamentos); $count++)
       {
        $data = array(
-        'consulta_id'=>$consulta_id,
-        'nombre_medicamento' => $descripcion[$count],
+        'receta_id'=>$con_rec['id'],
+        'medicamento_id' => $medicamentos[$count],
         'cantidad'  => $cantidad[$count],
         'indicaciones'=>$indicaciones[$count],
-        'fecha'=>$date,
-        'hora'=> $date = Carbon::now()->toDateTimeString()
+        
        );
        $insert_data[] = $data; 
       } 
-        
-        ConsultaReceta::insert($insert_data);
+        DetalleReceta::insert($insert_data);
         $alerta="Receta Creada Correctamente";
-        return back()->with(compact('alerta'));
 
-
+        return redirect()->back()->with(compact('alerta'))->withInput(['tab' => 'tratamiento']);
+        
     }
 
-    public function imprimir($id){
+    public function imprimir($id){//consulta_id
+
         $medicamentos = DB::table('consulta_receta')
-        ->where('consulta_id',$id)
+        ->join('detalle_receta','consulta_receta.id','detalle_receta.receta_id')
+        ->join('medicamentos','detalle_receta.medicamento_id','medicamentos.id')
+        ->where('consulta_receta.consulta_id',$id)
         ->get();
-        $data=compact('medicamentos');
+
+        $hora=DB::table('consulta_receta')
+        ->join('detalle_receta','consulta_receta.id','detalle_receta.receta_id')
+        ->join('medicamentos','detalle_receta.medicamento_id','medicamentos.id')
+        ->where('consulta_receta.consulta_id',$id)->select('fecha','hora')->first();
+
+        $infoc=Consulta::findOrFail($id); //toda la informacion de la consulra () $infoc->->consultaReceta //toda la info de la recete y consulta //consultaReceta
+
+        $infoCi=Cita::findOrFail($infoc->cita_id); //toda la informacion de la cita queremos el id paciente para buscra la persona
+
+        $parcienteInfo=Paciente::findOrFail($infoCi->paciente_id);
+
+        $medicoI=Medico::findOrFail($infoCi->medico_id);
+       
+        $diagnosticos=$infoc->diagnosticos;
+     
+        $infoPaciente=$parcienteInfo->persona;
+        $infoMedico=$medicoI->persona;
+       
+        //   dd($medicamentos,$infoc->cita_id,$infoCi->paciente_id,$parcienteInfo->persona,$hora);
+
+
+        $data=compact('medicamentos','infoPaciente','hora','diagnosticos','infoMedico');
         
         $pdf = PDF::loadView('pdf.receta.receta', $data);
         //return $pdf->download('invoice.pdf');

@@ -1,4 +1,11 @@
 <div class="card">
+  <div class="card-body">
+    @if (session('notificacion'))
+    <div class="alert alert-success" role="alert">
+      {{ session('notificacion') }}
+    </div>
+    @endif
+</div> 
     <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
       <div class="card-body">
         <form action="{{ url('consulta/diagnostico') }}" method="post"> 

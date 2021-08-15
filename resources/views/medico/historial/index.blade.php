@@ -31,8 +31,6 @@
                     <tr>
                         <th scope="col">Cédula</th>
                         <th scope="col">Nombres/Apellidos</th>
-                        <th scope="col">Motivo Consulta</th>
-                        <th scope="col">Fecha</th>
                         <th scope="col">Opciones</th>
                     </tr>
                 </thead>
@@ -47,17 +45,11 @@
                                 {{$item->nombres}}
                             </td>
                             <td>
-                                {{$item->motivo}}
-                            </td>
-                            <td>
-                                {{$item->fecha}}
-                            </td>
-                            <td>
                                 <form action="{{ url('/historia-pdf') }}" method="post" target="_blank">
                                     
                                     @csrf
                                     <input  name="cedula" type="hidden" value="{{$item->cedula}}"> 
-                                    <input  name="cita_id" type="hidden" value="{{$item->cita_id}}"> 
+                                    <input  name="pac_id" type="hidden" value="{{$item->pac_id}}"> 
                                     
                                     <button type="submit" class="btn btn-primary">  <i class="fas fa-cloud-download-alt"></i></button>
                                 </form>

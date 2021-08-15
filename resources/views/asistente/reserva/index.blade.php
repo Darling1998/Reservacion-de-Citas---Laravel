@@ -29,7 +29,7 @@
                                 <button type="button" class="btn btn-success"><i class="fas fa-search"></i></button>
                             </div>
                             
-                            <input type="number" class="form-control"  name="cedula" value="{{ old('cedula')}}">
+                            <input type="number" class="form-control"  name="cedula" value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -42,7 +42,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="nombres">Nombres</label>
-                            <input type="text" class="form-control" placeholder="Ingrese Nombres"  name="nombres" value="{{ old('nombres')}}">
+                            <input type="text" class="form-control" placeholder="Ingrese Nombres"  name="nombres" value="{{ old('nombres')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -51,7 +51,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Apellidos</label>
-                            <input type="text" class="form-control" placeholder="Ingrese Apellidos"  name="apellidos" value="{{ old('apellidos')}}">
+                            <input type="text" class="form-control" placeholder="Ingrese Apellidos" name="apellidos" value="{{ old('apellidos')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('apellidos')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -61,7 +61,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                         <label for="exampleInputEmail1">Teléfono</label>
-                        <input type="tel" class="form-control" placeholder="Ingrese Telefono"  name="telefono" value="{{ old('telefono')}}">
+                        <input type="tel" class="form-control" placeholder="Ingrese Telefono" pattern="[0-9 ]{1,10}" name="telefono" value="{{ old('telefono')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
                         @error('telefono')
                             <small class="text-danger">*{{$message}}</small>
                         @enderror

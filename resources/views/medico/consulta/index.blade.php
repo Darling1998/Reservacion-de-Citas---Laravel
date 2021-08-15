@@ -10,15 +10,6 @@
 
 @section('content')
 
-  <div class="card">
-    <div class="card-body">
-      @if (session('notificacion'))
-      <div class="alert alert-success" role="alert">
-        {{ session('notificacion') }}
-      </div>
-      @endif
-    </div> 
-
     <div class="card card-primary card-outline">
       <div class="card-header row align-items-center">
         <h3 class="card-title">
@@ -80,9 +71,17 @@
   <script>
     
        $(document).ready(function() {
-       
+        $('#custom-content-below-tab a[href="#{{ old('tab') }}"]').tab('show');
+
           $('.multiple-select').select2({
             placeholder: 'Seleccione Cie-10',
+            width: '100%',
+            theme: "classic",
+            dropdownAutoWidth : true
+          });
+
+          $('.js-example-basic-single').select2({
+            placeholder: 'Seleccione Medicamento',
             width: '100%',
             theme: "classic",
             dropdownAutoWidth : true
@@ -94,8 +93,8 @@
          
    
   </script>
+  
   <script>
-
     $( document ).ready(function(){
       $("#btnNuevoMedicamento").on('click',funcNuevoMedicamento);
       $("table").on('click',".btn-danger",functEliminarFila)
@@ -104,8 +103,9 @@
     function functEliminarFila(){
       $(this).parent().parent().remove();
     }
-
     function funcNuevoMedicamento(){
+      console.log(@JSON($medicamentos));
+      
       $("#tableReceta")
       .append
       (
@@ -115,7 +115,8 @@
           $('<td>')
           .append
           (
-            $('<input>').attr('type','text').addClass('form-control').attr('name','descripcion[]')
+            $('<select>').append('<option value="1">One</option>').addClass('js-example-basic-single').attr('name','medicamentos[]')
+            
           )
         )
         .append
@@ -156,7 +157,6 @@
         'success'
       )
     </script>
-
       
   @endif --}}
 
@@ -172,7 +172,6 @@
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si,Imprimir!'
       }).then((result) => {
-
         if(result.value){
           this.submit();
         }
@@ -182,4 +181,3 @@
 
 
 @stop
-

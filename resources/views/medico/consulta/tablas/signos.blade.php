@@ -1,4 +1,5 @@
  <div class="card">
+    
     <div class="collapse show" id="collapsedos" aria-labelledby="headidos" data-parent="#accordion" style="">
       <div class="card-body">
         <form action="{{ url('consulta/signos') }}" method="post"> 
@@ -52,7 +53,7 @@
           <div class="form-row">
             <div class="form-group col-md-12">
               <label class="col-form-label"><strong>Observación:</strong></label> 
-              {!! Form::textarea('observacion', $consulta->observacion, ['class'=>'form-control','disabled']) !!}
+              {!! Form::textarea('observacion', $consulta->motivo, ['class'=>'form-control','disabled']) !!}
              </div>
           </div>
            @if ( auth()->user()->hasRole('asistente'))  

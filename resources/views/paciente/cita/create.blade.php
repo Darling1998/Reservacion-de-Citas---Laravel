@@ -50,7 +50,7 @@
 
         <div class="form-group">
           <label for="descripcion">Descripción</label>
-          <input name="descripcion" value="{{ old('descripcion') }}" id="descripcion" type="text" class="form-control" placeholder="Describe brevemente la consulta" required>
+          <input name="descripcion" value="{{ old('descripcion') }}" id="descripcion" type="text" class="form-control" placeholder="Describe brevemente la consulta">
         </div>
 
         <div class="form-row">

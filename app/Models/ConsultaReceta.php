@@ -13,12 +13,17 @@ class ConsultaReceta extends Model
     protected $fillable=[
         'id',	
         'consulta_id',	
-        'cantidad'	
-        ,'nombre_medicamento'
-        ,'indicaciones',
         'fecha',
         'hora',
     ];
 
-    
+    public function consulta(){
+        return $this->belongsTo(Consulta::class,'recete_id');
+    }
+
+    public function detalleR(){
+        return $this->hasMany(DetalleReceta::class,'receta_id');
+    }
+
+
 }

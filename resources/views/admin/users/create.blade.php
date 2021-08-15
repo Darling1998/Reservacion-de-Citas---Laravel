@@ -24,7 +24,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nombres">Nombres</label>
-                            <input type="text" class="form-control"  placeholder="Ingrese Nombre" name="nombres"  value="{{ old('nombres') }}">
+                            <input type="text" class="form-control"  placeholder="Ingrese Nombre" name="nombres"  value="{{ old('nombres') }}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                              @enderror
@@ -33,7 +33,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="apellidos">Apellidos</label>
-                            <input type="text" class="form-control"  placeholder="Ingrese Apellidos" name="apellidos"  value="{{ old('apellidos') }}">
+                            <input type="text" class="form-control"  placeholder="Ingrese Apellidos" name="apellidos"  value="{{ old('apellidos') }}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -44,7 +44,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="">Cédula</label>
-                            <input type="number" class="form-control" placeholder="Ingrese Cédula" name="cedula"  value="{{ old('cedula') }}">
+                            <input type="number" class="form-control" placeholder="Ingrese Cédula" name="cedula"  value="{{ old('cedula') }}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -53,7 +53,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="">Teléfono</label>
-                            <input type="tel" class="form-control" placeholder="Ingrese Teléfono" name="telefono"  value="{{ old('telefono') }}">
+                            <input type="tel" class="form-control" placeholder="Ingrese Teléfono" name="telefono"  value="{{ old('telefono') }}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
                             @error('telefono')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror

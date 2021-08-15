@@ -15,8 +15,9 @@ class CreateConsultaTable extends Migration
     {
         Schema::create('consulta', function (Blueprint $table) {
             $table->id();
-            $table->text('observacion')->nullable();
+            $table->text('motivo')->nullable();
             $table->float('peso')->nullable();
+            $table->float('enfermedad_actual')->nullable();
             $table->string('presion')->nullable();
             $table->float('talla')->nullable();
             $table->integer('temperatura')->nullable();
@@ -25,10 +26,6 @@ class CreateConsultaTable extends Migration
             $table->unsignedBigInteger('cita_id');
             $table->foreign('cita_id')->references('id')->on('citas')->onDelete('cascade');
 
-            //HCE
-            $table->unsignedBigInteger('hce_id');
-            $table->foreign('hce_id')->references('id')->on('hce')->onDelete('cascade');
-           
         });
     }
 
