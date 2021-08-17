@@ -35,11 +35,11 @@
                     <tr>
                         <td>
                         
-                          <select class="js-example-basic-single" name="medicamentos[]">
+                          <select id="" class="js-example-basic-single selectMedicamento" name="medicamentos[]">
                       
-                              @foreach ($medicamentos as $item)
+                            {{--   @foreach ($medicamentos as $item)
                               <option value="{{$item->id}}">{{$item->descripcion}} - {{$item->forma_farmaceutica}} - {{$item->concentracion}}</option>
-                              @endforeach
+                              @endforeach --}}
                             
                             </select>
                           </select>

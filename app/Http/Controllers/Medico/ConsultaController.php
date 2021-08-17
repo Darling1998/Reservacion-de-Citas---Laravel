@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Medico;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RecetaMMailable;
 use App\Models\Antecedentes;
 use Illuminate\Http\Request;
 use App\Models\Cita;
@@ -13,9 +14,11 @@ use App\Models\Diagnostico;
 use App\Models\Medicamento;
 use App\Models\Medico;
 use App\Models\Paciente;
+use App\Models\User;
 use PDF;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class ConsultaController extends Controller
 {
@@ -52,9 +55,21 @@ class ConsultaController extends Controller
         ->select('consulta_diagnostico.diagnostico_id as id')
         ->get()->pluck('id'); 
 
-        $medicamentos= Medicamento::all();
+        $medicamentos= Medicamento::all();//aqui mando la lista a la vista
 
         return view('medico.consulta.index' ,compact('citas','consulta','id_diagnosticos','diagnosticos','info','medicamentos'));
+    }
+
+    public function cargarSelect2Ajax(){
+        //Este metodo retoranra un JSON
+        $mensaje ="Ocurrió un error inesperado";//Este mensahe es en caso que haya un error
+        $validar = false; //Este booleano espara verificar si todo salió bien
+        $medicamentos= Medicamento::all();
+        return response()->json([
+            'medicamentos'=>$medicamentos,
+            'mensaje'=>$mensaje,
+            'validar'=>$validar
+        ]);
     }
 
 
@@ -71,7 +86,7 @@ class ConsultaController extends Controller
 
     public function guardarReceta(Request $request){
 
-        //dd($request);
+       // dd($request);
         $dateh = Carbon::now();
         $date = $dateh->format('Y-m-d');
 
@@ -82,8 +97,6 @@ class ConsultaController extends Controller
             'hora'=> $date = Carbon::now()->toDateTimeString()
         ]);
         
-
-
 
         $medicamentos = $request->medicamentos;
         $cantidad = $request->cantidad;
@@ -116,11 +129,13 @@ class ConsultaController extends Controller
         ->where('consulta_receta.consulta_id',$id)
         ->get();
 
+        //;
+
         $hora=DB::table('consulta_receta')
         ->join('detalle_receta','consulta_receta.id','detalle_receta.receta_id')
         ->join('medicamentos','detalle_receta.medicamento_id','medicamentos.id')
         ->where('consulta_receta.consulta_id',$id)->select('fecha','hora')->first();
-
+        //dd($medicamentos,$hora);
         $infoc=Consulta::findOrFail($id); //toda la informacion de la consulra () $infoc->->consultaReceta //toda la info de la recete y consulta //consultaReceta
 
         $infoCi=Cita::findOrFail($infoc->cita_id); //toda la informacion de la cita queremos el id paciente para buscra la persona
@@ -133,19 +148,37 @@ class ConsultaController extends Controller
      
         $infoPaciente=$parcienteInfo->persona;
         $infoMedico=$medicoI->persona;
+        
+        $userEmail=User::where('persona_id', '=',$infoPaciente->id)->firstOrFail();
+        $emailTo= $userEmail->email;
        
-        //   dd($medicamentos,$infoc->cita_id,$infoCi->paciente_id,$parcienteInfo->persona,$hora);
+          //dd($medicamentos,$infoc->cita_id,$infoCi->paciente_id,$parcienteInfo->persona,$hora);
 
 
         $data=compact('medicamentos','infoPaciente','hora','diagnosticos','infoMedico');
         
         $pdf = PDF::loadView('pdf.receta.receta', $data);
-        //return $pdf->download('invoice.pdf');
 
-        return $pdf->stream();
+        Mail::send('emails.receta',$data, function ($mail) use ($pdf,$emailTo) {
+            $mail->to($emailTo);
+            $mail->attachData($pdf->output(),'receta.pdf');
+        });
+       
+
+        return $pdf->stream('receta.pdf');
+
+      
 
         
     }
+
+    public function enviarRecetaMail($email){
+        $correo = new RecetaMMailable();
+        Mail::to($email)->send($correo);
+
+    }
+
+
 
 
     public function terminarConsulta(Request $request){

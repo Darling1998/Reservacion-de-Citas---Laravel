@@ -27,8 +27,8 @@
            {{ $cita->hora_cita }}
          </td>
          <td>
-           @if ( $cita->estado  == "C")
-             Confirmada 
+           @if ( $cita->estado  == "CL")
+             Cancelada
            @elseif($cita->estado  == "A")  
              Atendida
            @endif

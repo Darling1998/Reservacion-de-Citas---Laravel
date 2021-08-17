@@ -68,9 +68,48 @@
 @section('js')
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    //var ArrayMedicamentos;
+    function cargarSelect2(idSelect){
+     // var studentSelect = $('#mySelect2');
+      $.ajax({
+          type: 'GET',
+          url: '{{url("medicamentos")}}',
+      }).then(function (data) {
+        console.log(data)
+
+        var selectMedicamentos = $('.'+idSelect);
+        console.log(selectMedicamentos)
+
+          // create the option and append to Select2
+          //var optionText =data.medicamentos.descripcion+"-"+data.medicamentos.forma_farmaceutica;
+          //var option = new Option(optionText, data.medicamentos.id, true, true);
+          //selectMedicamentos.append(option).trigger('change');
+
+          // manually trigger the `select2:select` event
+          $.each(data.medicamentos, function( index, value ) {
+            var optionText =value.descripcion+"-"+value.forma_farmaceutica;
+            var option = new Option(optionText, value.id, true, true);
+            selectMedicamentos.append(option).trigger('change');
+            //alert( index + ": " + value );
+          });
+          selectMedicamentos.select2();
+         /* selectMedicamentos.trigger({
+              type: 'select2:select',
+              params: {
+                  data: data
+              }
+          });*/
+      });
+    }
+  </script>
   <script>
     
        $(document).ready(function() {
+        cargarSelect2('selectMedicamento')
+
+
         $('#custom-content-below-tab a[href="#{{ old('tab') }}"]').tab('show');
 
           $('.multiple-select').select2({
@@ -85,7 +124,7 @@
             width: '100%',
             theme: "classic",
             dropdownAutoWidth : true
-          });
+          });//aqui los cargo
         });
  
         $('#select-diagnostico').val(@json($id_diagnosticos));
@@ -104,8 +143,18 @@
       $(this).parent().parent().remove();
     }
     function funcNuevoMedicamento(){
-      console.log(@JSON($medicamentos));
+      console.log(@JSON($medicamentos));//esta es la funcion para agregar filas //traigo la data
       
+
+      var data = {
+    id: 1,
+    text: 'Barn owl'
+};
+
+
+var newOption = new Option(data.text, data.id, false, false);
+$('#mySelect2').append(newOption).trigger('change');
+
       $("#tableReceta")
       .append
       (
@@ -115,7 +164,8 @@
           $('<td>')
           .append
           (
-            $('<select>').append('<option value="1">One</option>').addClass('js-example-basic-single').attr('name','medicamentos[]')
+            
+            $('<select class="js-example-basic-single selectMedicamento" >').append('<option>Cargando..</option>').attr('name','medicamentos[]')
             
           )
         )
@@ -124,7 +174,7 @@
           $('<td>')
           .append
           (
-            $('<input>').attr('type','text').addClass('form-control').attr('name','cantidad[]')
+            $('<input>').attr('type','text').addClass('form-control').attr('name','cantidad[]')//aqui la inetnto cargral, borre el foreach
           )
         )
         .append
@@ -144,6 +194,7 @@
           )
         )
       );
+      cargarSelect2('selectMedicamento');
     }
   
   </script>

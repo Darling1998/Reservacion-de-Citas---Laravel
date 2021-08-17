@@ -97,16 +97,20 @@
                           </div>
                     </div>
 
+
                     <div class="form-group col-md-4">
-                        <label for="est_civil">Estado Civil</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control"  
-                             name="est_civil" required value="{{ old('est_civil')}}" >
-                             @error('est_civil')
-                                <small class="text-danger">*{{$message}}</small>
-                            @enderror
+                        <label for="estado_civil">Estado Civil</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="estado_civil">
+                                <option value="Soltero">Soltero</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viudo">Viudo</option>
+                                <option value="No_Especifica">No especifica</option>
+                            </select>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="form-row">
@@ -141,7 +145,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="ocupacion">Ocupación</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                             name="ocupacion" required value="{{ old('ocupacion')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
+                             @error('ocupacion')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="telefono_familiar">Telefono Familiar</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" 
+                             name="telefono_familiar" required value="{{ old('telefono_familiar')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" >
+                             @error('telefono_familiar')
+                                <small class="text-danger">*{{$message}}</small>
+                            @enderror
+                        </div>
+                    </div>
 
+                </div>
             </div>
             <div class="container">
                 <div class="row">

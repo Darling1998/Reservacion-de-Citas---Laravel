@@ -22,11 +22,11 @@ class Consulta extends Model
     ];
 
     public function diagnosticos(){
-        return $this->belongsToMany(Diagnostico::class/* ,'especialidad_medico','especialidad_id' */)->withTimestamps();
+        return $this->belongsToMany(Diagnostico::class)->withTimestamps();
      }
  
      public function consultaReceta(){
-        return $this->hasMany(ConsultaReceta::class,'consulta_id');
+        return $this->hasMany(ConsultaReceta::class);
     }
 
     public function cita(){

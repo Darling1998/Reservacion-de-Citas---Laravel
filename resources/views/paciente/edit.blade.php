@@ -13,7 +13,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card card-primary card-outline card-tabs">
                     <div class="card-header p-0 pt-1 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
@@ -49,7 +49,11 @@
                                                         <label for="nombres">Nombres</label>
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control" 
-                                                            maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres',$paciente->nombres)}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)" >
+                                                            maxlength="150" minlength="4" name="nombres" required value="{{ old('nombres',$paciente->nombres)}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)"
+                                                             >
+                                                            @error('nombres')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 
@@ -58,6 +62,9 @@
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control" 
                                                             maxlength="150" minlength="4" name="apellidos" required value="{{ old('nombres',$paciente->apellidos)}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
+                                                            @error('apellidos')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -68,6 +75,10 @@
                                                         <div class="col-sm-9">
                                                             <input type="number" class="form-control" 
                                                             maxlength="150" minlength="4" name="cedula" required value="{{ old('cedula',$paciente->cedula)}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)" >
+
+                                                            @error('cedula')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     
@@ -85,6 +96,9 @@
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control"  
                                                              name="direccion" value="{{ old('direccion',$paciente->direccion)}}" >
+                                                             @error('direccion')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
             
@@ -96,6 +110,9 @@
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control" 
                                                              name="telefono" required value="{{ old('telefono',$paciente->telefono)}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" >
+                                                            @error('telefono')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-4">
@@ -103,6 +120,9 @@
                                                         <div class="col-sm-9">
                                                             <input type="text" class="form-control" 
                                                              name="email" required value="{{ old('email',$paciente->email)}}"  >
+                                                             @error('email')
+                                                                <small class="text-danger">*{{$message}}</small>
+                                                            @enderror
                                                         </div>
                                                     </div>
             
@@ -117,7 +137,50 @@
                                                                 name="fecha_nacimiento"
                                                                 value="{{ old('fecha_nacimiento',$paciente->fecha_nacimiento)}}"
                                                                >
+                                                               @error('fecha_nacimiento')
+                                                               <small class="text-danger">*{{$message}}</small>
+                                                           @enderror
                                                           </div>
+                                                    </div>
+            
+            
+                                                </div>
+                                                {{--Nuevo--}}
+                                                <div class="form-row">
+                                                    {{-- <div class="form-group col-md-4">
+                                                        <label for="estado_civil">Estado Civil</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" 
+                                                             name="estado_civil" required value="{{ old('estado_civil',$paciente->estado_civil)}}" >
+                                                        </div>
+                                                    </div> --}}
+
+                                                    <div class="form-group col-md-4">
+                                                        <label for="estado_civil">Estado Civil</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" name="estado_civil">
+                                                                <option value="Soltero" @if($paciente->estado_civil == 'Soltero')selected @endif>Soltero</option>
+                                                                <option value="Casado" @if($paciente->estado_civil == 'Casado')selected @endif>Casado</option>
+                                                                <option value="Divorciado" @if($paciente->estado_civil == 'Divorciado')selected @endif>Divorciado</option>
+                                                                <option value="Viudo" @if($paciente->estado_civil == 'Viudo')selected @endif>Viudo</option>
+                                                                <option value="No_Especifica" @if($paciente->estado_civil == 'No_Especifica')selected @endif>No especifica</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label for="ocupacion">Ocupación</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" 
+                                                             name="ocupacion"  value="{{ old('ocupacion',$paciente->ocupacion)}}"  >
+                                                        </div>
+                                                    </div>
+            
+                                                    <div class="form-group col-md-4">
+                                                        <label for="telefono_familiar">Telefono Familiar</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control" 
+                                                             name="telefono_familiar"  value="{{ old('telefono_familiar',$paciente->telefono_familiar)}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"  >
+                                                        </div>
                                                     </div>
             
             
@@ -152,7 +215,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label" for="ante_per"><strong>Antecedentes Personales:</strong> <small>Clínicos, Quirúrgicos</small></label>
-                                                    {!! Form::textarea('antecedentes_personales', $paciente->antecedentes_personales, ['class'=>'form-control']) !!}
+                                                    {!! Form::textarea('antecedentes_personales', $paciente->antecedentes_personales, ['class'=>'form-control rows="5"']) !!}
                                                    {{--  <textarea class="form-control" name="antecedentes_personales" value="{{ old('antecedentes_personales',)}}"></textarea> --}}
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -167,7 +230,7 @@
                                                     <div class="form-group col-md-3">
                                                         <label class="col-form-label"><strong>Ciclos:</strong></label>
                                                         <div class="input-group">
-                                                        <input type="text" class="form-control"   name="ciclos" value="{{ old('ciclos',$paciente->ciclos)}}">
+                                                        <input type="number" class="form-control"   name="ciclos" value="{{ old('ciclos',$paciente->ciclos)}}">
                                                         </div>
                                                     </div>
                                                     {{--                                     <div class="form-group col-md-3">
@@ -185,40 +248,40 @@
                                                     <div class="form-group col-md-3">
                                                         <label class="col-form-label"><strong>Gestas:</strong></label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" name="gestas" value="{{ old('gestas',$paciente->gestas)}}">
+                                                            <input type="number" class="form-control" name="gestas" value="{{ old('gestas',$paciente->gestas)}}">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-md-3">
+                                                   {{--    <div class="form-group col-md-3">
                                                         <label class="col-form-label"><strong>Parto:</strong></label>
-                                                    {{--   <div class="input-group">
+                                                    <div class="input-group">
                                                             <input type="text" class="form-control"  name="parto"  value="{{ old('parto',$paciente->parto)}}" >
-                                                        </div> --}}
-                                                    </div>
+                                                        </div> 
+                                                    </div>--}}
                                                 </div>
                                                 
                                                 <div class="form-row">
                                                     <div class="form-group col-md-2">
                                                         <label class="col-form-label"><strong>Menarquia:</strong></label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control"  name="menarquia" value="{{ old('menarquia',$paciente->menarquia)}}">
+                                                            <input type="number" class="form-control"  name="menarquia" value="{{ old('menarquia',$paciente->menarquia)}}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="col-form-label"><strong>Cesáreas:</strong></label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control"  name="cesareas" value="{{ old('cesareas',$paciente->cesareas)}}">
+                                                            <input type="number" class="form-control"  name="cesareas" value="{{ old('cesareas',$paciente->cesareas)}}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-3">
                                                         <label class="col-form-label"><strong>Abortos:</strong></label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control"  name="abortos" value="{{ old('abortos',$paciente->abortos)}}"  >
+                                                            <input type="number" class="form-control"  name="abortos" value="{{ old('abortos',$paciente->abortos)}}"  >
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="col-form-label"><strong>Hijos:</strong></label>
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control"  name="hijos" value="{{ old('hijos',$paciente->hijos)}}" >
+                                                            <input type="number" class="form-control"  name="hijos" value="{{ old('hijos',$paciente->hijos)}}" >
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-2">
@@ -242,13 +305,13 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label"><strong>Hábitos Psicobiologicos:</strong> <small>Uso de drogas, Alcohol</small></label>
-                                                    {!! Form::textarea('habitos_toxicos', $paciente->habitos_toxicos, ['class'=>'form-control']) !!}
+                                                    {!! Form::textarea('habitos_toxicos', $paciente->habitos_toxicos, ['class'=>'form-control rows="5"']) !!}
                                                     {{-- <textarea class="form-control"  name="habitos_toxicos" ></textarea> --}}
                                                 </div>
                                 
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label"><strong>Examen Funcional:</strong></label>
-                                                    {!! Form::textarea('examen_funcional', $paciente->examen_funcional, ['class'=>'form-control']) !!}
+                                                    {!! Form::textarea('examen_funcional', $paciente->examen_funcional, ['class'=>'form-control ']) !!}
                                                    {{--  <textarea class="form-control"  name="examen_funcional" ></textarea> --}}
                                                 </div>
                                             </div>
@@ -272,17 +335,19 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <p>Número de Consultas</p>
+                <div class="info-box mb-3 bg-warning">
+                    <span class="info-box-icon"><i class="fas fa-sort-numeric-up"></i></span>
+      
+                    <div class="info-box-content">
+                      <span class="info-box-text">Número de Consultas</span>
+                      <span class="info-box-number">{{$numc->numero_consulta}}</span>
                     </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                </div>
-                
+                    <!-- /.info-box-content -->
+                  </div>
+
+{{--             
                 <div class="small-box bg-danger">
                     <div class="inner">        
                         <p>Mediciones</p>
@@ -295,7 +360,23 @@
                       </a> 
                    
                 </div>
-            
+             --}}
+                <div class="info-box mb-3 bg-primary">
+                  
+      
+                    <div class="info-box-content">
+                      <span class="info-box-text">Historia Clìnica</span>
+                      <form action="{{ url('/historia-pdf') }}" method="post" target="_blank">
+                                    
+                        @csrf
+                     
+                        <input  name="pac_id" type="hidden" value="{{$paciente->id}}"> 
+                        
+                        <button type="submit" class="btn btn-primary">  <i class="fas fa-cloud-download-alt"></i></button>
+                    </form>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
             </div>
         </div>
       
@@ -304,6 +385,7 @@
 @stop
 
 @section('js')
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script >
      $.fn.datepicker.defaults.format = "yyyy-mm-dd"; 

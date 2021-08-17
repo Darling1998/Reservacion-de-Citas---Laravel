@@ -49,13 +49,16 @@ Route::middleware(['auth', 'admin' ])->group(function () {
     Route::get('agenda/mostrar',[App\Http\Controllers\AgendaController::class, 'show']);
 });
 
+Route::resource('pacientes', PacienteController::class)->names('admin.pacientes');
 
+/* RUTAS DEL ASISTENTE GUARDAR SINGOS Y ANTECEDDENTES */
 Route::middleware(['auth', 'asistente'])->group(function () {
     Route::post('pacientes/antecedentes', [App\Http\Controllers\Admin\PacienteController::class,'guardarAntecedentes'])->name('asistente.guardarAntecedentes');
     Route::post('signos', [App\Http\Controllers\Asistente\SignosController::class, 'guardarSignos'])->name('asistente.guardarSignos');
+  
 });
-
-//medicos
+ 
+/* RUTAS DEL DOCTOR GUARDAR DIAGNOSTICOS */
 Route::middleware(['auth'  ,'doctor'])->group(function () {
     Route::get('horarios',[App\Http\Controllers\Medico\HorarioController::class, 'edit'])->name('medicos.horarios.edit');
     Route::post('horarios',[App\Http\Controllers\Medico\HorarioController::class, 'store'])->name('medicos.horarios.store');
@@ -79,18 +82,16 @@ Route::middleware(['auth'  ,'doctor'])->group(function () {
   /* Route::post('correo/comunicar', [App\Http\Controllers\Admin\DashboardController::class,'notificar']);  */
   
 
- ///para reservar DE LADO DE PACIENTE
+/* RUTAS DEL PACIENTE GENERAR UNA RESER5VA */
 Route::middleware(['auth' ,'paciente'])->group(function () {
     Route::get('reserva/create',[App\Http\Controllers\CitaController::class, 'create']) ->name('pacientes.reserva.index') ;
     Route::post('reserva',[App\Http\Controllers\CitaController::class, 'store'])->name('pacientes.reserva.create');
 });
 
+Route::post('/citas/{cita}/cancelar' ,[App\Http\Controllers\CitaController::class, 'cancel']);//cancela la cita medica con motivo
 
-Route::middleware(['auth', 'asistente','admin'])->group(function () {
-   
-});
+Route::get('/citas/{cita}/cancelarSM' ,[App\Http\Controllers\CitaController::class, 'cancelarSinMotivo']);//cancela la cita medica con motivo
 
-Route::resource('pacientes', PacienteController::class)->names('admin.pacientes');
 Route::get('citas',[App\Http\Controllers\CitaController::class, 'index'])->name('citas.listar');
 //JSON
 Route::get('/especialidades/{especialidad}/medicos',[App\Http\Controllers\Api\EspecialidadController::class, 'medicos']);
@@ -98,12 +99,13 @@ Route::get('/horarios/horas',[App\Http\Controllers\Api\HorarioController::class,
 
 
 
- Route::put('/pacientes/{paciente}',[App\Http\Controllers\Admin\PacienteController::class, 'update']); //actualiza un paciente
+ /* Route::put('/pacientes/{paciente}',[App\Http\Controllers\Admin\PacienteController::class, 'update']); */ //actualiza un paciente
 
 Route::middleware(['auth', 'asistente'])->group(function () {
     Route::get('signos/consulta/{id}/create', [App\Http\Controllers\Asistente\SignosController::class,'create'])->name('medico.consulta.create');
     Route::get('asistente/reservar',[App\Http\Controllers\Asistente\ReservaController::class,'index'])->name('asistente.reserva.create');
     Route::post('asistente/reservar/guardar',[App\Http\Controllers\Asistente\ReservaController::class,'store'])->name('asistente.reserva.store');
+    Route::get('/antecedentes',[App\Http\Controllers\Admin\PacienteController::class,'llenarAntecedentes']);
 });
 
 ///REPORTES
@@ -116,7 +118,7 @@ Route::get('/reportes/medicos/barras/infor',[App\Http\Controllers\Admin\ReporteC
 
 
 
-Route::get('/antecedentes',[App\Http\Controllers\Admin\PacienteController::class,'llenarAntecedentes']);
+
 
  //vista especialidades
  Route::get('/reportes/especialidades/barras',[App\Http\Controllers\Admin\ReporteController::class, 'especialidadesDemandadas']);
@@ -126,3 +128,5 @@ Route::get('/antecedentes',[App\Http\Controllers\Admin\PacienteController::class
 
 //reservar del lado del asistente
 Route::get('medicion/paciente/{id}',[App\Http\Controllers\Admin\PacienteController::class,'verMediciones']);
+
+Route::get('medicamentos', [App\Http\Controllers\Medico\ConsultaController::class,'cargarSelect2Ajax']);

@@ -16,10 +16,10 @@ class CreateConsultaTable extends Migration
         Schema::create('consulta', function (Blueprint $table) {
             $table->id();
             $table->text('motivo')->nullable();
-            $table->float('peso')->nullable();
-            $table->float('enfermedad_actual')->nullable();
+            $table->text('peso')->nullable();
+            $table->text('enfermedad_actual')->nullable();
             $table->string('presion')->nullable();
-            $table->float('talla')->nullable();
+            $table->text('talla')->nullable();
             $table->integer('temperatura')->nullable();
             $table->timestamps();
            

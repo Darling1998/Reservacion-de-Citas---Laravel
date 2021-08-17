@@ -29,7 +29,7 @@
                                 <button type="button" class="btn btn-success"><i class="fas fa-search"></i></button>
                             </div>
                             
-                            <input type="number" class="form-control"  name="cedula" value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
+                            <input type="number" class="form-control" id="cedulaB"  name="cedula" value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
                             @error('cedula')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -155,5 +155,12 @@
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="{{ asset('/js/citas/create.js') }}"></script>
+  <script>
+
+     function buscarC(){
+        var name = $("#cedulaB").val();    
+        console.log(name)    
+     }
+  </script>
 @stop
 

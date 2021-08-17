@@ -270,7 +270,7 @@ return [
                     'text' => 'Pacientes',
                     'url'  => 'pacientes',
                     'icon'=>'fas fa-user-injured',
-                   /*  'can'=> 'admin.pacientes.index', */
+                     'can'=> 'admin.pacientes.index', 
                 ],
                 [
                     'text' => 'Horarios',
@@ -327,10 +327,10 @@ return [
                     'can'=> 'agenda.index',
                 ],
                 [
-                    'text' => 'Consulta Historial Clinico',
+              /*       'text' => 'Consulta Historial Clinico',
                     'url'  => 'historia-clinico',
                     'icon'=>'fas fa-notes-medical',
-                    'can'=> 'medico.historial',
+                    'can'=> 'medico.historial', */
                    /*  'submenu' => [
 
                         [
@@ -351,6 +351,13 @@ return [
                     'text' => 'General',
                     'url'  => 'reportes',
                     'icon'=>'fas fa-tachometer-alt'
+                ],
+                
+                [
+                    'text' => 'Oferta',
+                    'url'  => 'reportes/especialidades/barras',
+                    'icon'=>'fas fa-tachometer-alt text-red',
+                    'can'=> 'admin.reportes.barra',
                 ]
             ],
         ],

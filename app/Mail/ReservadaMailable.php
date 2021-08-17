@@ -23,7 +23,7 @@ class ReservadaMailable extends Mailable
     {
         $this->info=array();
         $this->info=$data;
-    
+     
     }
 
     /**

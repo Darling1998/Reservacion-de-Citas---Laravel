@@ -40,7 +40,7 @@ class PacienteController extends Controller
             'nombres'=>'required',
             'apellidos'=>'required',
             'genero'=>'required',
-            'fecha_nacimiento'=>'required|date_format:Y-m-d|before_or_equal:'.$hoy,
+            'fecha_nacimiento'=>'date_format:Y-m-d|before_or_equal:'.$hoy,
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'cedula'=>[
                 'unique:people',
@@ -94,7 +94,7 @@ class PacienteController extends Controller
                 }
             ]
         ]);
-        $edad= $this->calculaedad($request->input('fecha_nacimiento'));
+       
         //dd($edad);
         $persona = Person::create([
             'nombres'=>  $request->nombres,
@@ -106,12 +106,13 @@ class PacienteController extends Controller
         ]);
  
 
-
         $paciente=Paciente::create([
             'persona_id'=>$persona['id'], 
             'fecha_nacimiento'=>$request->input('fecha_nacimiento'),
-            'estado_civil'=>$request->est_civil,
-            'edad'=>$edad,
+            'estado_civil'=>$request->estado_civil,
+           
+            'ocupacion'=>$request->ocupacion,
+            'telefono_familiar'=>$request->telefono_familiar,
         ]);
 
         $usuario= User::create([
@@ -127,7 +128,6 @@ class PacienteController extends Controller
         ]); 
 
         
-
         $paciente->save();
 
         $antecedentes->save();
@@ -149,15 +149,22 @@ class PacienteController extends Controller
         ->join('people',   'pacientes.persona_id','=','people.id')
         ->join('antecedentes','pacientes.id','=','antecedentes.paciente_id')
         ->join('users',   'people.id','=','users.persona_id')->where('pacientes.id','=',$idP->paci_id)
-        ->select('people.*', 'pacientes.id as pac_id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','antecedentes.*')
+        ->select('people.*', 'pacientes.id as pac_id','pacientes.fecha_nacimiento as fecha_nacimiento','users.email as email','antecedentes.*','pacientes.ocupacion','pacientes.telefono_familiar','pacientes.estado_civil')
         ->get()->first();
 
         //dd($id,$paciente,$idP->paci_id);
 
+        $numc=DB::table('consulta')
+        ->select(DB::raw('count(consulta.id) as numero_consulta'))
+        ->join('citas','consulta.cita_id','citas.id')
+        ->where('citas.paciente_id', '=', $idP->paci_id)
+        ->where('citas.estado','=','A')
+        ->first();
 
+       // dd($numc);
 
         
-        return view('paciente.edit',compact('paciente'));
+        return view('paciente.edit',compact('paciente','numc'));
     }
 
     public function guardarAntecedentes(Request $request){
@@ -189,16 +196,17 @@ class PacienteController extends Controller
             return redirect()->route('admin.pacientes.index')->with(compact('notificacion'));
     }
 
-     public function update(Request $request, $id)
+     public function update(Request $request, $id) //pacinete_id
     {
-        
+       
+        $hoy = date('Y-m-d');
         $request->validate( [
             'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
             'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
             'genero'=>'required',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', ],
+            'fecha_nacimiento'=>'required|date_format:Y-m-d|before_or_equal:'.$hoy,
             'cedula'=>[
-                'unique:people',
                 function ($attribute, $value, $fail) {
                     $num1 = substr($value,0,1);
                     $num2 = substr($value,1,1);
@@ -248,15 +256,29 @@ class PacienteController extends Controller
                     }
                 }
             ],
-            'telefono'=>'required'
+            
         ]);
 
-        $person=Person::paciente()->findOrFail($id);
-        //dd($request,$person);
+         $pacienteB= Paciente::findOrFail($id);
+        
+        Person ::where('id','=',$pacienteB->persona_id)->update([
+            'nombres'=>$request->nombres,
+            'apellidos'=>$request->apellidos,
+            'cedula'=>$request->cedula,
+            'telefono'=>$request->telefono,
+            'direccion'=>$request->direccion,
+            'genero'=>$request->genero,
+        ]);
 
-        $data = $request->only('nombres','apellidos','cedula','telefono','genero','direccion');
-        $person->fill($data);
-        $person->save(); // UPDATE
+         Paciente::where('id','=',$id)->update(
+        [
+                'fecha_nacimiento'=>$request->fecha_nacimiento,
+                'estado_civil'=>$request->estado_civil,
+                'ocupacion'=>$request->ocupacion,
+                'edad'=>$edad,
+                'telefono_familiar'=>$request->telefono_familiar
+        ]);
+
 
         $notificacion = 'La información del paciente se ha actualizado correctamente.';
     
@@ -295,23 +317,26 @@ class PacienteController extends Controller
     
         $consultas = Consulta::select()->join('citas','consulta.cita_id','citas.id')->where('citas.paciente_id',$id)->get();
 
-        //dd($consultas);
-    
-        return view('paciente.medicion',compact('consultas'));
+        
+        $dataPoints = [];
+        $fechas=[];
+
+        foreach ($consultas as $item) {
+            
+            $dataPoints[] = $item->peso;
+            $fechas[] = $item->fecha_cita;
+
+        }
+
+
+        
+        return view('paciente.medicion',compact('consultas','dataPoints','fechas'));
     
     
     }
 
 
-    function calculaedad($fechanacimiento){
-        list($ano,$mes,$dia) = explode("-",$fechanacimiento);
-        $ano_diferencia  = date("Y") - $ano;
-        $mes_diferencia = date("m") - $mes;
-        $dia_diferencia   = date("d") - $dia;
-        if ($dia_diferencia < 0 || $mes_diferencia < 0)
-          $ano_diferencia--;
-        return $ano_diferencia;
-      }
+  
 }
 
   

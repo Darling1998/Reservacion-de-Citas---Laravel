@@ -18,7 +18,7 @@ class ConsultaReceta extends Model
     ];
 
     public function consulta(){
-        return $this->belongsTo(Consulta::class,'recete_id');
+        return $this->belongsTo(Consulta::class,'receta_id');
     }
 
     public function detalleR(){

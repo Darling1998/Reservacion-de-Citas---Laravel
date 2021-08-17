@@ -21,7 +21,8 @@ class Cita extends Model
         'especialidad_id',
         'estado',
         'tipo',
-        'examen'
+        'examen',
+        'motivo_cancel'
         
     ];
     

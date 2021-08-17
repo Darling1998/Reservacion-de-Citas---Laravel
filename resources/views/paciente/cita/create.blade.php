@@ -20,7 +20,13 @@
 @endsection
 
 @section('content')
-
+<div class="card-body">
+  @if (session('notificacion'))
+  <div class="alert alert-success" role="alert">
+    {{ session('notificacion') }}
+  </div>
+  @endif
+</div> 
 <div class="card shadow">
     <div class="card-header border-0">
       <div class="row align-items-center">

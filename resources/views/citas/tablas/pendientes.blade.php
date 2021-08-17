@@ -51,7 +51,7 @@
               </a> 
               @endif
               
-              @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('doctor')) 
+              @if (auth()->user()->hasRole('doctor')) 
               <form action="{{ url('/reserva/'.$cita->id.'/confirmar') }}"
                 method="POST" class="d-inline-block">
                 @csrf
@@ -61,13 +61,18 @@
                 </button>
               </form>
             @endif    
+            @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('doctor')) 
+              <form action=" {{url('citas/'.$cita->id.'/cancelar') }}" 
+                method="POST" class="d-inline-block">
+                @csrf
+    
+                <button class="btn btn-sm btn-danger" type="submit" 
+                  data-toggle="tooltip" title="Cancelar cita">
+                  <i class="ni ni-fat-delete">Cancelar</i>
+                </button>
+              </form>        
 
-              <a class="btn btn-sm btn-danger" title="Cancelar cita" 
-                href="{{ url('/reserva/'.$cita->id.'/cancelar') }}">
-                  Cancelar
-              </a>
-
-
+            @endif 
 
             </td>
           </tr>
@@ -76,3 +81,4 @@
     </table>
   </div>
 </div>
+

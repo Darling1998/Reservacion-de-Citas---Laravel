@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    hola saludos
+   Ultimas Noticias!!!!
     <p>{{$info['cuerpo']}}</p>
 </body>
 </html>

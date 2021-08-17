@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\HorarioServicioInterface;
+use App\Mail\CanceladaMailable;
 use App\Mail\ConfirmadaMailable;
 use App\Mail\ReservadaMailable;
 use App\Models\Cita;
 use App\Models\Especialidad;
+use App\Models\Paciente;
+use App\Models\Person;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -217,9 +221,6 @@ class CitaController extends Controller
             ->get()->first();
 
 
-
-
-
         $res= DB::table('pacientes')
         ->join('people',   'pacientes.persona_id','=','people.id')
         ->join('users','people.id','=','users.persona_id')
@@ -245,24 +246,38 @@ class CitaController extends Controller
     }
  
     public function cancel(Cita $cita,Request $request){
- /*
-        if($request->has('justificacion')){
-           $cancell = new CitaCL(); 
-           $cancell->justificacion = $request->input('justificacion');
-           $cancell->cancelado_por_id= auth()->id();
-       
-           $cita->cancelacion()->save($cancell);
-       }*/
-      
-       $cita->estado='CL';
-
-       $guardado = $cita->save();
 
 
+        $personaP= Paciente::findOrFail($cita->paciente_id);
+        $correoP=User::where('persona_id','=',$personaP->persona_id)->first();
+        // $correoP->email;
 
-       $notificacion='La cita se ha cancelado correctamente';
-      // dd($cita,$request);
-       return redirect('/citas')->with(compact('notificacion'));
-   }
+        //dd($correoP->email);
+        if($request->has('motivo_cancel')){
+            $cita->estado='CL'; 
+            $cita->motivo_cancel=$request->motivo_cancel;
+            $cita->save();
+           
+            $infoCita =[];
+            $infoCita['id']=$cita['id'];
+            $infoCita['fecha']=$cita['fecha_cita'];
+            $infoCita['hora']=$cita['hora_cita'];
+            $infoCita['motivo_cancel']=$request->motivo_cancel;
+
+            $correo = new CanceladaMailable($infoCita);
+            Mail::to($correoP->email)->send($correo);
+        }
+        
+        $cita->estado='CL';
+        $cita->motivo_cancel=$request->motivo_cancel;
+        $cita->save();
+
+        
+
+
+        $notificacion='La cita se ha cancelado correctamente';
+        // dd($cita,$request);
+        return redirect('/citas')->with(compact('notificacion'));
+    }
 
 }

@@ -18,7 +18,8 @@ class Diagnostico extends Model
     protected $table ="diagnosticos"; 
 
     public function consultas(){
-        return $this->belongsToMany(Consulta::class)->withTimestamps();
+        return $this->belongsToMany(Consulta::class,'diagnostico_id')->withTimestamps();
      }
+     
  
 }

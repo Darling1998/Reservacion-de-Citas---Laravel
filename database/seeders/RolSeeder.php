@@ -58,8 +58,8 @@ class RolSeeder extends Seeder
        Permission::create(['name'=>'medico.comfirmarCita','descripcion'=>'Confirmar Cita'])->syncRoles($rol3,$rol1);
        Permission::create(['name'=> 'medico.consulta.receta','descripcion'=>'Generar Receta'])->syncRoles($rol3);
 
-       Permission::create(['name'=>'medico.historial','descripcion'=>'Ver  Historial'])->syncRoles($rol3);
-       Permission::create(['name'=> 'medico.historial.generate','descripcion'=>'Generar Doc Historial'])->syncRoles($rol3);
+       Permission::create(['name'=>'medico.historial','descripcion'=>'Ver  Historial'])->syncRoles($rol3,$rol1,$rol4);
+       Permission::create(['name'=> 'medico.historial.generate','descripcion'=>'Generar Doc Historial'])->syncRoles($rol3,$rol1,$rol4);
 
        
 

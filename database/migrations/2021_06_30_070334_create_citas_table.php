@@ -40,6 +40,7 @@ class CreateCitasTable extends Migration
 
             $table->string('examen')->nullable();
 
+            $table->text('motivo_cancel')->nullable();
 
             $table->timestamps();
         });
