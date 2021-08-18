@@ -58,7 +58,7 @@
       </div>
 
       <div style="position:absolute;left:35.40px;top:420.33px" class="cls_009"><span class="cls_009"> <strong>SIGNOS VITALES:</strong> </span><br><br>
-        <label> TA:  {{$item->presion}}    mmHg   &nbsp; &nbsp; &nbsp; &nbsp;    Peso:  {{$item->peso}} kg  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;   Talla: {{$item->talla}}  mts</label>
+        <label> TA:  {{$item->presion}}      &nbsp; &nbsp; &nbsp; &nbsp;    Peso:  {{$item->peso}}   &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;   Talla: {{$item->talla}}  </label>
      </div>
      
       <div style="position:absolute;left:35.40px;top:630.35px" class="cls_009"> <strong>FECHA:</strong> <label>{{$item->fecha_cita}}  &nbsp; &nbsp; &nbsp; <strong>MÉDICO:</strong> {{$item->nombres}}{{$item->apellidos}} </label></div>

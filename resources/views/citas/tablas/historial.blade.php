@@ -36,7 +36,7 @@
          </td>
          <td>
              <a class="btn btn-sm btn-primary" title="Ver cita" 
-               href="{{ url('/citas/'.$cita->id) }}">
+               href="{{ url('/citasmostrar/'.$cita->id) }}">
                  Ver
              </a>
          </td>

@@ -44,14 +44,14 @@
 
             <td>
 
-              @if(auth()->user()->hasRole('admin'))
+{{--               @if(auth()->user()->hasRole('admin'))
                 <a class="btn btn-sm btn-primary" title="Ver cita" 
                 href="{{ url('/reserva/'.$cita->id) }}">
                   Ver
               </a> 
-              @endif
+              @endif --}}
               
-              @if (auth()->user()->hasRole('doctor')) 
+              @if (auth()->user()->hasRole('admin') ||auth()->user()->hasRole('doctor')) 
               <form action="{{ url('/reserva/'.$cita->id.'/confirmar') }}"
                 method="POST" class="d-inline-block">
                 @csrf

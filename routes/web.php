@@ -57,6 +57,12 @@ Route::middleware(['auth', 'asistente'])->group(function () {
     Route::post('signos', [App\Http\Controllers\Asistente\SignosController::class, 'guardarSignos'])->name('asistente.guardarSignos');
   
 });
+
+
+
+Route::middleware(['auth','doctor','admin'])->group(function () {
+    Route::post('/reserva/{cita}/confirmar', [App\Http\Controllers\CitaController::class, 'postConfirmar'])->name('medico.comfirmarCita');
+});
  
 /* RUTAS DEL DOCTOR GUARDAR DIAGNOSTICOS */
 Route::middleware(['auth'  ,'doctor'])->group(function () {
@@ -66,7 +72,7 @@ Route::middleware(['auth'  ,'doctor'])->group(function () {
     Route::post('consulta/diagnostico', [App\Http\Controllers\Medico\ConsultaController::class,'guardarDiagnostico'])->name('medico.guardarDiagnostico');
     Route::post('consulta/receta', [App\Http\Controllers\Medico\ConsultaController::class,'guardarReceta'])->name('medico.guardarReceta');
     Route::post('consulta/terminar',[App\Http\Controllers\Medico\ConsultaController::class,'terminarConsulta'])->name('medico.terminarConsulta');
-    Route::post('/reserva/{cita}/confirmar', [App\Http\Controllers\CitaController::class, 'postConfirmar'])->name('medico.comfirmarCita'); 
+    
     Route::resource('consulta', ConsultaController::class)->names('medicos.citas');
 
     Route::get('/historia-clinico',[App\Http\Controllers\Medico\HistorialController::class,'index'])->name('medico.historial');
@@ -88,9 +94,10 @@ Route::middleware(['auth' ,'paciente'])->group(function () {
     Route::post('reserva',[App\Http\Controllers\CitaController::class, 'store'])->name('pacientes.reserva.create');
 });
 
-Route::post('/citas/{cita}/cancelar' ,[App\Http\Controllers\CitaController::class, 'cancel']);//cancela la cita medica con motivo
+Route::get('/citas/{cita}/cancelar',[App\Http\Controllers\CitaController::class, 'mostrarFormCancelar']); //muestra el formulario de cancelar el textarea pra la notificacion
+Route::post('/citas/{cita}/cancelar' ,[App\Http\Controllers\CitaController::class, 'cancel']);//cancela la cita medica
 
-Route::get('/citas/{cita}/cancelarSM' ,[App\Http\Controllers\CitaController::class, 'cancelarSinMotivo']);//cancela la cita medica con motivo
+
 
 Route::get('citas',[App\Http\Controllers\CitaController::class, 'index'])->name('citas.listar');
 //JSON
@@ -134,4 +141,4 @@ Route::get('medicamentos', [App\Http\Controllers\Medico\ConsultaController::clas
 
 //BUSQUEDA DE PACIENTE EN LA RESERVA
 Route::get('search', [App\Http\Controllers\Asistente\ReservaController::class,'search']);
-Route::get('citas/{cita}',[App\Http\Controllers\CitaController::class,'mostrarDetalle']); //mostrar informacion de una cita especifica
+Route::get('citasmostrar/{cita}',[App\Http\Controllers\CitaController::class,'mostrarDetalle']); //mostrar informacion de una cita especifica

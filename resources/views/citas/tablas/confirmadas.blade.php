@@ -42,20 +42,6 @@
             </td>
 
             <td>
-              {{--  @if ($role == 1) 
-                <a class="btn btn-sm btn-primary" title="Ver cita" 
-                  href="{{ url('/citas/'.$cita->id) }}">
-                    Ver
-                </a> 
-              @endif  --}}
-{{--               <a class="btn btn-sm btn-danger" title="Cancelar cita" 
-                href="{{ url('/citas/'.$cita->id.'/cancelar') }}">
-                  Cancelar
-              </a> --}}
-
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"  onclick="obtenrIDModal({{$cita->id}})">
-               Cancelar
-              </button>
 
               @if (auth()->user()->hasRole('asistente') ) 
               <a class="btn btn-sm btn-primary" title="Registrar Signos" href="{{url('signos/consulta/'.$cita->id.'/create')}}">
@@ -68,7 +54,13 @@
                 Ir a Consulta
               </a> 
               @endif  
+              @if (auth()->user()->hasRole('doctor') ||auth()->user()->hasRole('admin')  ) 
+              <a class="btn btn-sm btn-danger" title="Cancelar cita" 
+              href="{{ url('/citas/'.$cita->id.'/cancelar') }}">
+                Cancelar
+              </a> 
 
+              @endif  
             </td>
           </tr>
        @endforeach  
@@ -77,7 +69,7 @@
   </div>
 </div>
 
-
+{{-- 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form  method="POST" id="formCancel">
@@ -108,9 +100,10 @@
 
 
 <script >
+  
 
    function obtenrIDModal(id){
     var url='{{url("/citas/'+id+'/cancelar")}}';
     $('#formCancel').attr("action",url)
    }
-</script>
+</script> --}}

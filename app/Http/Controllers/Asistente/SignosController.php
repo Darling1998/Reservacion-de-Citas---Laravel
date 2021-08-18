@@ -30,7 +30,7 @@ class SignosController extends Controller
 
     public function guardarSignos(Request $request){
 
-      dd($request);
+     // dd($request);
         
         
         $request->validate([

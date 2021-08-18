@@ -20,7 +20,7 @@ class CreateConsultaTable extends Migration
             $table->text('enfermedad_actual')->nullable();
             $table->string('presion')->nullable();
             $table->text('talla')->nullable();
-            $table->integer('temperatura')->nullable();
+            $table->text('temperatura')->nullable();
             $table->timestamps();
            
             $table->unsignedBigInteger('cita_id');

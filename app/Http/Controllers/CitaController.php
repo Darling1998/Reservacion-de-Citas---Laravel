@@ -66,6 +66,7 @@ class CitaController extends Controller
     {
         $especialidades=Especialidad::all();
 
+
         $especialidadId=old('especialidad_id');
 
         if($especialidadId){
@@ -92,8 +93,12 @@ class CitaController extends Controller
 
         $id_ses_paci= auth()->id();
 
+        $hoy = date('Y-m-d');
+        
+
         $reglas=[
             'hora_cita'=>'required',
+            'fecha_cita'=>'date_format:Y-m-d|after_or_equal:'.$hoy,
             'medico_id'=>'exists:medicos,id',
             'especialidad_id'=>'exists:especialidads,id',
             'examen'=>'image|max:2048'
@@ -101,7 +106,8 @@ class CitaController extends Controller
 
         $mensajes=[
             'hora_cita.required'=>'Selecciona una hora válida para su cita',
-            'examen.image'=>'Formato no permitido'
+            'examen.image'=>'Formato no permitido',
+            'fecha_cita.after_or_equal'=>'Ingrese una fecha válida'
         ];
         
         $validator=Validator::make($request->all(),$reglas,$mensajes);
@@ -245,7 +251,7 @@ class CitaController extends Controller
     }
  
     public function cancel(Cita $cita,Request $request){
-
+       // dd($cita,$request);
 
         $personaP= Paciente::findOrFail($cita->paciente_id);
         $correoP=User::where('persona_id','=',$personaP->persona_id)->first();
@@ -268,7 +274,7 @@ class CitaController extends Controller
         }
         
         $cita->estado='CL';
-        $cita->motivo_cancel=$request->motivo_cancel;
+        
         $cita->save();
 
         
@@ -282,6 +288,15 @@ class CitaController extends Controller
     public function mostrarDetalle(Cita $cita){
        
         return view('citas.mostrarcita',compact('cita'));
+    }
+
+    public function mostrarFormCancelar(Cita $cita){
+        if($cita->estado == 'C'){
+       
+           return view ('citas.cancel',compact('cita'));
+        }
+        
+        return redirect('/citas');
     }
 
 }
