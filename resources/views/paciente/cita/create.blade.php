@@ -136,9 +136,7 @@
 
         <div class="card-body" id="section-radio-no">
           <input type="file" name="examen" accept="image/*">
-          @error('examen')
-              <small class="text-danger">{{$mensajes}}</small>
-          @enderror
+         
         </div>
       
         <button type="submit" class="btn btn-primary">

@@ -9,6 +9,15 @@
 
 
 @section('content')
+    @if ($errors->any())
+    <div class="alert alert-danger" role="alert">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+    </div>
+    @endif
     <div class="card">
         <form action="{{ url('asistente/reservar/guardar') }}" method="post"> 
             @csrf
@@ -17,32 +26,36 @@
                 <div class="alert alert-success" role="alert">
                   {{ session('notificacion') }}
                 </div>
-                @endif
-          
+                @endif       
 
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                        <label for="cedula">Cédula</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-success"><i class="fas fa-search"></i></button>
+                   {{--  <form action="" method="get" id="buscarCedula"> --}}
+                        <div class="col-md-3">
+                            <div id="mensajeFiltro"></div>
+                            <div class="form-group">
+                            <label for="cedula">Cédula</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button onclick="buscarUsaurioPorCedula();" type="button" class="btn btn-success"><i class="fas fa-search"></i></button>
+                                </div>
+                                
+                                <input type="number" class="form-control" id="cedula"  name="cedula" value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
+                                @error('cedula')
+                                    <small class="text-danger">*{{$message}}</small>
+                                @enderror
                             </div>
-                            
-                            <input type="number" class="form-control" id="cedulaB"  name="cedula" value="{{ old('cedula')}}" onkeypress="return (event.charCode != 43 && event.charCode != 46  && event.charCode != 45)">
-                            @error('cedula')
-                                <small class="text-danger">*{{$message}}</small>
-                            @enderror
+                            </div>
                         </div>
-                        </div>
-                    </div>
+                  {{--   </form> --}}
+
+
                 </div>
 
                 <div class="row">             
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="nombres">Nombres</label>
-                            <input type="text" class="form-control" placeholder="Ingrese Nombres"  name="nombres" value="{{ old('nombres')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
+                            <input type="text" class="form-control" placeholder="Ingrese Nombres" id="nombres" name="nombres" value="{{ old('nombres')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('nombres')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -51,7 +64,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Apellidos</label>
-                            <input type="text" class="form-control" placeholder="Ingrese Apellidos" name="apellidos" value="{{ old('apellidos')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
+                            <input type="text" class="form-control" placeholder="Ingrese Apellidos" id="apellidos" name="apellidos" value="{{ old('apellidos')}}" onkeypress="return (event.charCode >= 65 && event.charCode <= 90)|| (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32)">
                             @error('apellidos')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -61,7 +74,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                         <label for="exampleInputEmail1">Teléfono</label>
-                        <input type="tel" class="form-control" placeholder="Ingrese Telefono" pattern="[0-9 ]{1,10}" name="telefono" value="{{ old('telefono')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
+                        <input type="tel" class="form-control" placeholder="Ingrese Telefono" pattern="[0-9 ]{1,10}" id="telefono" name="telefono" value="{{ old('telefono')}}" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
                         @error('telefono')
                             <small class="text-danger">*{{$message}}</small>
                         @enderror
@@ -70,7 +83,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" placeholder="Ingrese Correo"  name="email" value="{{ old('email')}}">
+                            <input type="email" class="form-control" placeholder="Ingrese Correo" id="email"  name="email" value="{{ old('email')}}">
                             @error('email')
                                 <small class="text-danger">*{{$message}}</small>
                             @enderror
@@ -156,11 +169,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="{{ asset('/js/citas/create.js') }}"></script>
   <script>
+       function buscarUsaurioPorCedula(){       
+        var cedula = $("#cedula").val();
+        //var _token = document.getElementsByName('_token')[0].value;
+            $.ajax({
+                url : '{{url("search")}}',
+                type: 'get',
+                dataType: 'JSON',
+                data:{cedula:cedula},
+                beforeSend: function(){
+                    $("#mensajeFiltro").html('');
+                    $("#nombres").val('');
+                    $("#apellidos").val('');
+                    $("#email").val('');
+                    $("#telefono").val('');
 
-     function buscarC(){
-        var name = $("#cedulaB").val();    
-        console.log(name)    
-     }
+                },
+                uploadProgress: function(event,position,total,percentComplete){
+
+                },
+                success: function(data){  
+                    if(data.validar == true){
+                        console.log(data.paciente);
+                        $("#nombres").val(data.paciente.nombres);
+                        $("#apellidos").val(data.paciente.apellidos);
+                         $("#email").val(data.paciente.email);
+                         $("#telefono").val(data.paciente.telefono);
+                    }else{
+                        $("#mensajeFiltro").html('<div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>ERROR '+data.mensaje+'</div>');
+                    }
+                    
+                    
+                },
+                complete: function(){
+
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    
+                    $("#mensajeFiltro").html('<div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>ERROR '+xhr.status+': '+xhr.statusText+'</div>');
+                }
+            }); 
+        
+    }
+
   </script>
 @stop
 

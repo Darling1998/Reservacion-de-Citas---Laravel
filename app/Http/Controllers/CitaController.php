@@ -93,7 +93,6 @@ class CitaController extends Controller
         $id_ses_paci= auth()->id();
 
         $reglas=[
-            'descripcion'=>'required',
             'hora_cita'=>'required',
             'medico_id'=>'exists:medicos,id',
             'especialidad_id'=>'exists:especialidads,id',
@@ -278,6 +277,11 @@ class CitaController extends Controller
         $notificacion='La cita se ha cancelado correctamente';
         // dd($cita,$request);
         return redirect('/citas')->with(compact('notificacion'));
+    }
+
+    public function mostrarDetalle(Cita $cita){
+       
+        return view('citas.mostrarcita',compact('cita'));
     }
 
 }

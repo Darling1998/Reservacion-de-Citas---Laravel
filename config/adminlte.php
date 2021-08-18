@@ -251,7 +251,7 @@ return [
         [
             'text'    => 'Registro',
             'icon'    => 'fas fa-address-book text-teal',
-            'can'=> '',
+            'can'=> 'admin.pacientes.edit',
             'submenu' => [
 
                 [

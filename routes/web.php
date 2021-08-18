@@ -130,3 +130,8 @@ Route::get('/reportes/medicos/barras/infor',[App\Http\Controllers\Admin\ReporteC
 Route::get('medicion/paciente/{id}',[App\Http\Controllers\Admin\PacienteController::class,'verMediciones']);
 
 Route::get('medicamentos', [App\Http\Controllers\Medico\ConsultaController::class,'cargarSelect2Ajax']);
+
+
+//BUSQUEDA DE PACIENTE EN LA RESERVA
+Route::get('search', [App\Http\Controllers\Asistente\ReservaController::class,'search']);
+Route::get('citas/{cita}',[App\Http\Controllers\CitaController::class,'mostrarDetalle']); //mostrar informacion de una cita especifica

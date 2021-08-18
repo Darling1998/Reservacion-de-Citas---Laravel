@@ -50,7 +50,8 @@ class ReservaController extends Controller
    public function store(Request $request,HorarioServicioInterface $horaI){
 
         $user = Person::where('cedula', '=', $request->cedula)->first();
-        
+        $hoy = date('Y-m-d');
+      
 
         $infoG=DB::table('people');
       
@@ -63,6 +64,7 @@ class ReservaController extends Controller
                 'nombres' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
                 'apellidos' => ['required', 'string', 'max:100','regex:/^[a-zA-Z\s]+$/u'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                
                 'cedula'=>[
                     'unique:people',
                     function ($attribute, $value, $fail) {
@@ -152,7 +154,7 @@ class ReservaController extends Controller
 
             $nombre_pac=$persona['nombres'];
             $reglas=[
-                
+                'fecha_cita'=>'date_format:Y-m-d|after_or_equal:'.$hoy,
                 'hora_cita'=>'required',
                 'medico_id'=>'exists:medicos,id',
                 'especialidad_id'=>'exists:especialidads,id',
@@ -161,7 +163,7 @@ class ReservaController extends Controller
     
             $mensajes=[
                 'hora_cita.required'=>'Selecciona una hora válida para su cita',
-               
+               'fecha_cita.after_or_equal'=>'Ingrese una fecha válida'
             ];
             
             $validator=Validator::make($request->all(),$reglas,$mensajes);
@@ -231,7 +233,7 @@ class ReservaController extends Controller
         }else{
 
             $reglas=[
-               
+                'fecha_cita'=>'date_format:Y-m-d|after_or_equal:'.$hoy,
                 'hora_cita'=>'required',
                 'medico_id'=>'exists:medicos,id',
                 'especialidad_id'=>'exists:especialidads,id',
@@ -240,7 +242,8 @@ class ReservaController extends Controller
     
             $mensajes=[
                 'hora_cita.required'=>'Selecciona una hora válida para su cita',
-                'examen.image'=>'Formato no permitido'
+                'fecha_cita.after_or_equal'=>'Ingrese una fecha válida'
+               
             ];
             
             $validator=Validator::make($request->all(),$reglas,$mensajes);
@@ -324,4 +327,30 @@ class ReservaController extends Controller
         return back()->with(compact('notificacion'));
 
    }
+
+
+   public function search(Request $request) {
+        $mensaje  ="Error interno de la aplicación";
+        $validar = false;
+        $cedula = $request->input('cedula');
+        if(empty($cedula)){
+            $mensaje ="Por favor ingresa la identificación";
+        }else{
+            
+            $paciente = DB::table('people')->join('users','people.id','users.persona_id')->where('cedula', '=', $cedula)->first();
+            $mensaje = "";
+            $validar = true;
+
+            //return response()->json($paciente);
+            return response()->json([
+                'paciente'=>$paciente,
+                'mensaje' => $mensaje,
+                'validar' => $validar,
+            ]);
+        }
+        return response()->json([
+            'mensaje' => $mensaje,
+            'validar' => $validar,
+        ]);
+    }
 }
